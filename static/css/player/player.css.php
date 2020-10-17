@@ -297,16 +297,19 @@
 
 /* 人声倒放 */
 .reverse-sound-o {
-  background-color: #000;
-  height: 1.6px;
-  margin-top: -7px;
-  margin-left: 3px;
-  margin-right: 3px;
+	background-color: #000;
+	height: 0.1367em;
+	margin-top: 0.2em;
+	margin-left: 0.3111em;
+	margin-right: 0.3111em;
 }
 .reverse-sound-i {
-  color: #000;
-  margin-top: -11px;
-  display: block;
+	background-color: #000;
+	height: 0.1367em;
+	width: 0.9em;
+	transform: rotate(-45deg);
+	margin-left: 0.2em;
+	margin-top: -0.8em;
 }
 
 .para{

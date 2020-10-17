@@ -56,6 +56,6 @@
   background-color: <?php echo $color ?>;
 }
 .lrc-active .reverse-sound-i {
-  color: <?php echo $color ?>;
+  background-color: <?php echo $color ?>;
 }
 /*</style>*/

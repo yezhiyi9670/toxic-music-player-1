@@ -35,6 +35,7 @@
 	G_csrf_s2 = '<?php echo $GLOBALS['token']; ?>';
 	G_version = '<?php echo VERSION; ?>';
 	G_csv_version = '<?php echo CSV_VERSION; ?>';
+	G_is_wap = <?php echo is_wap() ? 'true' : 'false' ?>;
 	</script>
 	<?php if($isNewLook) { ?>
 	<!--New styles-->

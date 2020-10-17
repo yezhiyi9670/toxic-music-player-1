@@ -156,6 +156,10 @@ $('document').ready(function(){
 	A.load();
 	//A.loop="loop";
 
+	if(!localStorage['txmp-zoom'] && !G_is_wap) {
+		localStorage['txmp-zoom'] = '1.2';
+	}
+
 	if(localStorage['txmp-volume']) A.volume=localStorage['txmp-volume'];
 	if(localStorage['txmp-zoom']) $('.lrc-content').css('font-size',(localStorage['txmp-zoom']*15)+'px');
 
@@ -625,22 +629,21 @@ function playPreInit() {
 			addPlaytimes('finish-'+song_id);
 		}
 	}
-	
+
 	var transform_lyric_html = function() {
-	  $('.reverse-sound').each(function(i){
-	    console.log(this);
-	    this.outerHTML = `
-	    <ruby>
-	      ${this.innerHTML}
-	      <rt>
-	        <i class="fa fa-chevron-left reverse-sound-i"></i>
-	        <div class="reverse-sound-o"></div>
-	      </rt>
-	    </ruby>
-	    `;
-	  });
+		$('.reverse-sound').each(function(i){
+			this.outerHTML = `
+			<ruby>
+				${this.innerHTML}
+				<rt>
+					<div class="reverse-sound-i"></div>
+					<div class="reverse-sound-o"></div>
+				</rt>
+			</ruby>
+			`;
+		});
 	};
-	
+
 	transform_lyric_html();
 }
 

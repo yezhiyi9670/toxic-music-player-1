@@ -130,9 +130,29 @@ strong, b{
 	color: #FFF;
 }
 
+.txmp-tag.tag-green-g {
+	border-color: #4CAF50;
+	background-color: #4CAF50;
+	color: #FFF;
+}
+
 .txmp-tag.tag-orange-g {
 	border-color: #FFC107;
 	background-color: #FFC107;
+	color: #FFF;
+}
+
+.txmp-tag.tag-deep-orange-l {
+	border-color: #FB8C00;
+	background-color: #FB8C00;
+	box-shadow: 0 0 4px 0px #FB8C00BB;
+	color: #FFF;
+}
+
+.txmp-tag.tag-red-l {
+	border-color: #F44336;
+	background-color: #F44336;
+	box-shadow: 0 0 4px 0px #F44336BB;
 	color: #FFF;
 }
 

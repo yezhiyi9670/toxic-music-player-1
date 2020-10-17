@@ -16,6 +16,7 @@ class TopLevelRouter {
 		/setting - 设置
 		/list-maker - 歌单构造程序
 		/K_playlist - 酷我RemotePlay歌单专用浏览页
+		/version-history - 版本历史（如果存在）
 		/(\w+) - 音乐常规页面
 	*/
 
@@ -51,6 +52,9 @@ class TopLevelRouter {
 		}
 		if($type == 'K_playlist') {
 			return $this -> routeKPlaylist();
+		}
+		if($type == 'version-history') {
+			return $this -> routeVersionHistory();
 		}
 		require(ROUTER . 'SingleMusicRouter.class.php');
 		$router = new SingleMusicRouter($this->url);
@@ -147,6 +151,20 @@ class TopLevelRouter {
 			tpl('remote_playlist/kuwo');
 			include_footer();
 		}
+
+		return true;
+	}
+
+	private function routeVersionHistory() {
+		checkUrlEnd(stripFirstUrl($this->url));
+
+		if(!file_exists(CHANGELOG)) {
+			return false;
+		}
+
+		include_header();
+		tpl('common/version_history');
+		include_footer();
 
 		return true;
 	}

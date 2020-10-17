@@ -1,0 +1,10 @@
+{
+    "music\/index": true,
+    "music\/code": true,
+    "music\/audio\/out": true,
+    "music\/audio\/dl": true,
+    "music\/json": false,
+    "music\/download_doc": true,
+    "music\/getdoc": true,
+    "admin\/edit": false
+}

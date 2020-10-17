@@ -8,7 +8,7 @@ error_reporting(E_ALL & (~E_NOTICE));
 */
 
 define("IN_SYSTEM",'yezhiyi9670/txmp');
-define("VERSION","126d-pre7");
+define("VERSION","126d-pre8");
 define("CSV_VERSION","1");
 define("BASIC_PATH",str_replace("\\","/",__DIR__)."/");
 define("LIB_PATH",BASIC_PATH."app/");
@@ -20,13 +20,16 @@ define("VLUSER",LIB_PATH."vluser/");
 define("DATA_PATH",BASIC_PATH."data/");
 define("FILES",DATA_PATH."music/");
 define("REMOTE_CACHE",DATA_PATH."remotecache/");
-if(!file_exists(REMOTE_CACHE)) mkdir(REMOTE_CACHE); //对117a以下的版本，防止文件夹不存在。
+if(!file_exists(REMOTE_CACHE) && file_exists(DATA_PATH)) mkdir(REMOTE_CACHE); //对117a以下的版本，防止文件夹不存在。
 define("STATISTICS",DATA_PATH."stat/");
 define("RAW",LIB_PATH."raw/");
 define("USER_DATA",DATA_PATH."user/");
-if(!file_exists(USER_DATA)) mkdir(USER_DATA); //对124a以下的版本，防止文件夹不存在。
+if(!file_exists(USER_DATA) && file_exists(DATA_PATH)) mkdir(USER_DATA); //对124a以下的版本，防止文件夹不存在。
+define("CHANGELOG",BASIC_PATH.'changelog/versions.json');
 
-if(!file_exists(USER_DATA)) mkdir(USER_DATA);
+if(!file_exists(DATA_PATH)) {
+	die('Data Path Not Exist');
+}
 
 require(ROUTER."TopLevelRouter.class.php");
 require(FUNCTIONS."index.function.php");

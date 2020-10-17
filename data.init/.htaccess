@@ -1,0 +1,10 @@
+Deny from All
+<FilesMatch ".txt$">
+Deny from All
+</FilesMatch>
+<FilesMatch ".xml$">
+Deny from All
+</FilesMatch>
+<FilesMatch ".json$">
+Deny from All
+</FilesMatch>
