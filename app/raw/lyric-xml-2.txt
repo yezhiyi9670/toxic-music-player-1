@@ -1,0 +1,16 @@
+                <w:p>
+                    <w:pPr>
+                        <w:pStyle w:val="a%{xid}"/>
+                        <w:rPr>
+                            <w:rFonts w:hint="fareast"/>
+                            <w:lang w:val="EN-US" w:fareast="ZH-CN"/>
+                        </w:rPr>
+                    </w:pPr>
+                    <w:r>
+                        <w:rPr>
+                            <w:rFonts w:hint="fareast"/>
+                            <w:lang w:val="EN-US" w:fareast="ZH-CN"/>
+                        </w:rPr>
+                        <w:t>%{c}</w:t>
+                    </w:r>
+                </w:p>

@@ -1,0 +1,8 @@
+                <w:sectPr>
+                    <w:type w:val="continuous" />
+                    <w:pgSz w:w="11906" w:h="16838" />
+                    <w:pgMar w:top="850" w:right="850" w:bottom="1134" w:left="850" w:header="0" w:footer="595" w:gutter="0" />
+                    <w:cols w:num="2" w:sep="on" w:space="425" />
+                    <w:docGrid w:type="lines" w:line-pitch="312" />
+                </w:sectPr>
+            </wx:sect>

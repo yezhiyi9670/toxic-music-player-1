@@ -1,0 +1,80 @@
+                    <w:tr>
+                        <w:tblPrEx>
+                            <w:tblBorders>
+                                <w:top w:val="single" w:sz="4" wx:bdrwidth="10" w:space="0" w:color="auto" />
+                                <w:left w:val="single" w:sz="4" wx:bdrwidth="10" w:space="0" w:color="auto" />
+                                <w:bottom w:val="single" w:sz="4" wx:bdrwidth="10" w:space="0" w:color="auto" />
+                                <w:right w:val="single" w:sz="4" wx:bdrwidth="10" w:space="0" w:color="auto" />
+                                <w:insideH w:val="single" w:sz="4" wx:bdrwidth="10" w:space="0" w:color="auto" />
+                                <w:insideV w:val="single" w:sz="4" wx:bdrwidth="10" w:space="0" w:color="auto" /></w:tblBorders>
+                            <w:tblCellMar>
+                                <w:top w:w="0" w:type="dxa" />
+                                <w:left w:w="108" w:type="dxa" />
+                                <w:bottom w:w="0" w:type="dxa" />
+                                <w:right w:w="108" w:type="dxa" /></w:tblCellMar>
+                        </w:tblPrEx>
+                        <w:trPr/>
+                        <w:tc>
+                            <w:tcPr>
+                                <w:tcW w:w="1632" w:type="dxa" />
+                                <w:shd w:val="clear" w:color="auto" w:fill="auto" /></w:tcPr>
+                            <w:p>
+                                <w:pPr>
+                                    <w:pStyle w:val="a15" />
+                                    <w:rPr>
+                                        <w:rFonts w:hint="fareast" />
+                                        <w:vertAlign w:val="baseline" />
+                                        <w:lang w:val="EN-US" w:fareast="ZH-CN" /></w:rPr>
+                                </w:pPr>
+                                <w:r>
+                                    <w:rPr>
+                                        <w:rFonts w:hint="fareast" />
+                                        <w:vertAlign w:val="baseline" />
+                                        <w:lang w:val="EN-US" w:fareast="ZH-CN" /></w:rPr>
+                                    <w:t>%{G}</w:t>
+                                </w:r>
+                            </w:p>
+                        </w:tc>
+                        <w:tc>
+                            <w:tcPr>
+                                <w:tcW w:w="2526" w:type="dxa" />
+                                <w:shd w:val="clear" w:color="auto" w:fill="auto" /></w:tcPr>
+                            <w:p>
+                                <w:pPr>
+                                    <w:pStyle w:val="a15" />
+                                    <w:rPr>
+                                        <w:rFonts w:hint="fareast" />
+                                        <w:vertAlign w:val="baseline" />
+                                        <w:lang w:val="EN-US" w:fareast="ZH-CN" /></w:rPr>
+                                </w:pPr>
+                                <w:r>
+                                    <w:rPr>
+                                        <w:rFonts w:hint="fareast" />
+                                        <w:vertAlign w:val="baseline" />
+                                        <w:lang w:val="EN-US" w:fareast="ZH-CN" /></w:rPr>
+                                    <w:t>%{N} - %{S}</w:t>
+                                </w:r>
+                            </w:p>
+                        </w:tc>
+                        <w:tc>
+                            <w:tcPr>
+                                <w:tcW w:w="750" w:type="dxa" />
+                                <w:shd w:val="clear" w:color="auto" w:fill="auto" /></w:tcPr>
+                            <w:p>
+                                <w:pPr>
+                                    <w:pStyle w:val="a15" />
+                                    <w:rPr>
+                                        <w:rFonts w:hint="fareast" />
+                                        <w:vertAlign w:val="baseline" />
+                                        <w:lang w:val="EN-US" w:fareast="ZH-CN" /></w:rPr>
+                                </w:pPr>
+                                <w:r>
+                                    <w:rPr>
+                                        <w:rFonts w:hint="fareast" />
+                                        <w:vertAlign w:val="baseline" />
+                                        <w:lang w:val="EN-US" w:fareast="ZH-CN" /></w:rPr>
+                                    <w:t></w:t>
+                                </w:r>
+                            </w:p>
+                        </w:tc>
+                    </w:tr>
