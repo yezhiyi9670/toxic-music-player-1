@@ -20,11 +20,18 @@ div.codeblock {
 	font-family: Monaco,Menlo,Consolas,"Courier New",FontAwesome,monospace;
 }
 </style>
+<link rel="stylesheet" href="<?php echo BASIC_URL ?>static/css/common/cdp-page.css" />
 
-<div class="cdp-header" style="height:48px;padding:16px; margin-bottom:16px;">
+<div class="cdp-header">
 	<a style="width:32px;font-size:19px;padding-right:32px;" onclick="prev_page()"><i class="fa fa-chevron-left"></i></a>
 	<div id="cdp-header-text" style="display:inline-block;width:128px;font-size:19px;text-align:center">
-		页面 <span id="page-now">?</span>/<span id="page-tot">?</span>：<span id="page-name">未定义页面</span>
+		<span class="am-dropdown" data-am-dropdown>
+			<a style="color:#000" class="am-dropdown-toggle">页面 <span id="page-now">?</span>/<span id="page-tot">?</span>：<span id="page-name">未定义页面</span></a>
+			<ul class="am-dropdown-content" id="cdp-header-nav" style="overflow:auto;font-size:15px;max-height:500px;" onclick="$('.am-dropdown').dropdown('close')">
+				<li class="am-dropdown-header">快速导航</li>
+				<!---->
+			</ul>
+		</span>
 	</div>
 	<a style="width:32px;font-size:19px;padding-left:32px;" onclick="next_page()"><i class="fa fa-chevron-right cl-g-2"></i></a>
 </div>
@@ -186,39 +193,8 @@ $dbg = parseCmpLyric(preSubstr($_GET["_lnk"],"/"),true,true);
 </div>
 <?php } ?>
 
+<script src="<?php echo BASIC_URL ?>static/js/common/cdp-page.js"></script>
 <script>
-var currpage = 1;
-var pagecount = 0;
-$('.cdp-page').each(function(){
-	$(this).attr('data-cdp-id',++pagecount);
-});
-$('.cdp-page').css('display','none');
-$('[data-cdp-id=1]').css('display','block');
-
-$('#page-now').text(currpage);
-$('#page-tot').text(pagecount);
-$('#page-name').text($('[data-cdp-id=1]').attr('data-cdp-name'));
-
-function turn_page(p) {
-	var g = currpage + p;
-	if(g < 1 || g > pagecount) return;
-	currpage = g;
-	$('.cdp-page').css('display','none');
-	$('[data-cdp-id='+currpage+']').css('display','block');
-	
-	$('#page-now').text(currpage);
-	$('#page-tot').text(pagecount);
-	$('#page-name').text($('[data-cdp-id='+currpage+']').attr('data-cdp-name'));
-}
-
-function prev_page() {
-	turn_page(-1);
-}
-
-function next_page() {
-	turn_page(1);
-}
-
 function code_refresh_cache() {
 	if($('.force-refresh-logo').hasClass('fa-spin')) return;
 	var url = '<?php echo BASIC_URL ?>' + '<?php echo cid() ?>' + '/refresh-cache';

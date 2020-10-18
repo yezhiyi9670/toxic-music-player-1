@@ -1,7 +1,7 @@
 var pagecount = 0;
 $('.cdp-page').each(function(){
 	$(this).attr('data-cdp-id',++pagecount);
-	if(!cdp_nav_gettext) {
+	if(!window.cdp_nav_gettext) {
 		$('#cdp-header-nav').append($(`
 			<li class="cdp-nav-item" id="cdp-nav-${pagecount}"><a onclick="turn_page(${pagecount} - currpage)">${pagecount}：${$(this).attr('data-cdp-name')}</a></li>
 		`));
@@ -13,11 +13,11 @@ $('.cdp-page').each(function(){
 });
 var currpage = 1;
 $('.cdp-page').css('display','none');
-$('[data-cdp-id='+pagecount+']').css('display','block');
+$('[data-cdp-id='+1+']').css('display','block');
 
 $('#page-now').text(currpage);
 $('#page-tot').text(pagecount);
-$('#page-name').text($('[data-cdp-id='+pagecount+']').attr('data-cdp-name'));
+$('#page-name').text($('[data-cdp-id='+1+']').attr('data-cdp-name'));
 
 function turn_page(p) {
 	var g = currpage + p;
@@ -45,5 +45,5 @@ function next_page() {
 }
 
 setInterval(function(){
-	$('#cdp-header-text').width($('body').width() - 132);
+	$('#cdp-header-text').width($('body').width() - 130);
 },500);

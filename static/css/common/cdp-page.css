@@ -1,0 +1,14 @@
+.cdp-page {
+	margin-top: 60px;
+}
+.cdp-header {
+	height:48px;
+	padding:16px;
+	margin-top:-60px;
+	margin-bottom:16px;
+	position:fixed;
+	z-index:100;
+	white-space:nowrap;
+	background-color: #FFFA;
+	box-shadow: 0 0 8px 16px #FFFA;
+}

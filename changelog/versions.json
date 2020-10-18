@@ -1,13 +1,56 @@
 {
-	"current": "v126d-pre8",
+	"current": "v126d",
 	"versions": {
-		"v126d-pre8": {
-			"version": "v126d-pre8",
+		"v126d": {
+			"version": "v126d",
 			"tag": [
+				"STABLE",
 				"OFFLINE_DEV"
 			],
-			"date": "2020/10/17",
+			"date": "2020/10/18",
 			"changes": [
+				{
+					"text": "再次公开发布。",
+					"tag": [
+						"PUBLISH"
+					]
+				},
+				{
+					"text": "修改版本号为 v126d（正式版）。",
+					"tag": [
+						"PUBLISH"
+					]
+				},
+				{
+					"text": "歌词代码页面现在有快速导航。",
+					"tag": [
+						"CHANGE"
+					]
+				},
+				{
+					"text": "版本历史与歌词代码页面的翻页组件不再随页面滚动而移动。",
+					"tag": [
+						"CHANGE"
+					]
+				},
+				{
+					"text": "调整版本历史页面布局。",
+					"tag": [
+						"CHANGE"
+					]
+				},
+				{
+					"text": "版本历史页面现在正序书写每个版本的的更改。",
+					"tag": [
+						"CHANGE"
+					]
+				},
+				{
+					"text": "正式版（2020/10/18）",
+					"tag": [
+						"MILESTONE"
+					]
+				},
 				{
 					"text": "现在更新日志放置到 changelog 文件夹下。",
 					"tag": [
@@ -34,15 +77,13 @@
 					"tag": [
 						"CHANGE"
 					]
-				}
-			]
-		},
-		"v126d-pre7": {
-			"version": "v126d-pre7",
-			"tag": [],
-			"featured": "更好的可打印文档",
-			"date": "2020/10/16",
-			"changes": [
+				},
+				{
+					"text": "v126d-pre8（2020/10/17）",
+					"tag": [
+						"MILESTONE"
+					]
+				},
 				{
 					"text": "修复RemotePlay歌词中 &lt; &gt; &amp; 被编码的问题（现在不需要）。",
 					"tag": [
@@ -127,32 +168,25 @@
 							"text": "在 lrc 文件中表达为尖括号。"
 						}
 					]
-				}
-			]
-		},
-		"v126d-pre6": {
-			"version": "v126d-pre6",
-			"tag": [
-				"OFFLINE_DEV"
-			],
-			"date": "2020/10/15",
-			"changes": [
+				},
+				{
+					"text": "v126d-pre7（2020/10/16）",
+					"tag": [
+						"MILESTONE"
+					]
+				},
 				{
 					"text": "修复单曲 edit 和 permission 页面无法显示的问题。",
 					"tag": [
 						"FIX"
 					]
-				}
-			]
-		},
-		"v126d-pre5": {
-			"version": "v126d-pre5",
-			"tag": [
-				"UNUSABLE",
-				"OFFLINE_DEV"
-			],
-			"date": "2020/10/12",
-			"changes": [
+				},
+				{
+					"text": "v126d-pre6（2020/10/15）",
+					"tag": [
+						"MILESTONE"
+					]
+				},
 				{
 					"text": "重写 Router 类",
 					"tag": [
@@ -213,16 +247,13 @@
 							"text": "移除了新文件模板中的 A 命令。"
 						}
 					]
-				}
-			]
-		},
-		"v126d-pre4": {
-			"version": "v126d-pre4",
-			"tag": [
-				"OFFLINE_DEV"
-			],
-			"date": "2020/10/10",
-			"changes": [
+				},
+				{
+					"text": "v126d-pre5（2020/10/12）",
+					"tag": [
+						"MILESTONE"
+					]
+				},
 				{
 					"text": "修复播放等按钮的色彩问题。",
 					"tag": [
@@ -236,16 +267,13 @@
 							"text": "颜色转换时间现在是 0.25s。"
 						}
 					]
-				}
-			]
-		},
-		"v126d-pre3": {
-			"version": "v126d-pre3",
-			"tag": [
-				"OFFLINE_DEV"
-			],
-			"date": "2020/10/10",
-			"changes": [
+				},
+				{
+					"text": "v126d-pre4（2020/10/10）",
+					"tag": [
+						"MILESTONE"
+					]
+				},
 				{
 					"text": "修复缓存与“禁用主题色变换”之间的问题。",
 					"tag": [
@@ -256,17 +284,13 @@
 							"text": "“禁用主题色变换”不再影响歌词文件编译结果。"
 						}
 					]
-				}
-			]
-		},
-		"v126d-pre2": {
-			"version": "v126d-pre2",
-			"tag": [
-				"UNUSABLE",
-				"OFFLINE_DEV"
-			],
-			"date": "2020/10/10",
-			"changes": [
+				},
+				{
+					"text": "v126d-pre3（2020/10/10）",
+					"tag": [
+						"MILESTONE"
+					]
+				},
 				{
 					"text": "系统现在首选采用 csv 格式存储歌单。",
 					"tag": [
@@ -352,16 +376,13 @@
 							"text": "仅应用于顶栏以及歌单构造器的聚焦高亮。其他组件仍然使用默认主题色（MAIN_COLOR 或 A）"
 						}
 					]
-				}
-			]
-		},
-		"v126d-pre1": {
-			"version": "v126d-pre1",
-			"tag": [
-				"OFFLINE_DEV"
-			],
-			"date": "2020/10/09",
-			"changes": [
+				},
+				{
+					"text": "v126d-pre2（2020/10/10）",
+					"tag": [
+						"MILESTONE"
+					]
+				},
 				{
 					"text": "现在PC端上歌单构造器的歌曲列表宽度限制为 900px。",
 					"tag": [
@@ -435,6 +456,12 @@
 						{
 							"text": "《修复》了反复切换状态导致折叠按钮紊乱的问题。"
 						}
+					]
+				},
+				{
+					"text": "v126d-pre1（2020/10/09）",
+					"tag": [
+						"MILESTONE"
 					]
 				}
 			]
@@ -936,9 +963,7 @@
 		},
 		"v126a": {
 			"version": "v126a",
-			"tag": [
-				"STABLE"
-			],
+			"tag": [],
 			"date": "2019/12/29",
 			"changes": [
 				{

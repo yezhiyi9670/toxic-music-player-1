@@ -2,15 +2,16 @@
 <script>
 	document.title="版本历史 - <?php echo htmlspecial2(_C()['app_name_title']) ?>";
 </script>
+<link rel="stylesheet" href="<?php echo BASIC_URL ?>static/css/common/cdp-page.css" />
 
-<div class="cdp-header" style="height:48px;padding:16px; margin-bottom:16px;">
+<div class="cdp-header">
 	<a style="width:32px;font-size:19px;padding-right:32px;" onclick="prev_page()"><i class="fa fa-chevron-left"></i></a>
 	<div id="cdp-header-text" style="display:inline-block;width:128px;font-size:19px;text-align:center">
 		<span class="am-dropdown" data-am-dropdown>
 			<a style="color:#000" class="am-dropdown-toggle">页面 <span id="page-now">?</span>/<span id="page-tot">?</span>：<span id="page-name">未定义页面</span></a>
 			<ul class="am-dropdown-content" id="cdp-header-nav" style="overflow:auto;font-size:15px;max-height:500px;" onclick="$('.am-dropdown').dropdown('close')">
 				<li class="am-dropdown-header">快速导航</li>
-				
+				<!---->
 			</ul>
 		</span>
 	</div>
@@ -23,12 +24,28 @@
 	}
 	ul>li>ul {
 		margin-top: 0.3em;
+		margin-bottom: 0.5em;
+	}
+	li {
+		margin-top: 0.2em;
 	}
 	.txmp-tag {
 		vertical-align: top;
 		display: inline-block;
 		margin-top: 2px;
 		padding-top: 0;
+	}
+	li.milestone {
+		margin-left: -23px;
+		margin-top: 1.2em;
+		margin-bottom: 0.5em;
+	}
+	li.milestone::marker {
+		font-size: 0;
+	}
+	li.milestone::before {
+		content: '✅ ';
+		font-weight: 700;
 	}
 </style>
 
@@ -58,13 +75,24 @@
 	function print_items($r) {
 		echo '<ul class="verh-list">';
 		foreach($r as $item) {
-			echo '<li>';
+			$is_mile = false;
+			if(isset($item['tag'])) {
+				foreach($item['tag'] as $tag) {
+					if($tag == 'MILESTONE') {
+						$is_mile = true;
+					}
+				}
+			}
+			if(!$is_mile) echo '<li>';
+			else echo '<li class="milestone">';
 			if(isset($item['tag'])) {
 				foreach($item['tag'] as $tag) {
 					print_tag($tag);
 				}
 			}
+			if($is_mile) echo '<strong>里程：';
 			echo htmlspecial2($item['text']);
+			if($is_mile) echo '</strong>';
 			
 			if(isset($item['extra'])) {
 				echo '<br>';
@@ -89,6 +117,7 @@
 		echo '<p class="ver-header"><strong>';
 		echo htmlspecial2($ver);
 		echo '</strong>';
+		echo '&nbsp;(' . count($item['changes']) . ')';
 		echo '&nbsp;&nbsp;';
 		if(isset($item['date'])) {
 			echo '<span class="txmp-tag tag-default">';
@@ -122,7 +151,7 @@
 			echo htmlspecial2($item['featured']);
 			echo '</p>';
 		}
-		print_items($item['changes']);
+		print_items(array_reverse($item['changes']));
 		echo '</div>';
 		echo '</div>';
 	}
@@ -130,7 +159,7 @@
 <?php if(isset($data['issues'])) { ?>
 <div class="cdp-page" data-cdp-name="已知问题">
 	<div class="txmp-page-full">
-		<p class="ver-header"><strong>已知问题</strong></p>
+		<p class="ver-header"><strong>已知问题</strong>&nbsp;(<?php echo count($data['issues']) ?>)</p>
 		<?php print_items($data['issues']) ?>
 	</div>
 </div>

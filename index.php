@@ -8,7 +8,7 @@ error_reporting(E_ALL & (~E_NOTICE));
 */
 
 define("IN_SYSTEM",'yezhiyi9670/txmp');
-define("VERSION","126d-pre8");
+define("VERSION","126d");
 define("CSV_VERSION","1");
 define("BASIC_PATH",str_replace("\\","/",__DIR__)."/");
 define("LIB_PATH",BASIC_PATH."app/");
