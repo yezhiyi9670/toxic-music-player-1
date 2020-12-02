@@ -1,0 +1,24 @@
+#right-container {
+	margin-top: 13px;
+}
+.song-avatar {
+	border-radius: 50%;
+}
+.am-btn:not(.am-btn-primary):not(.am-btn-secondary):not(.am-btn-warning):not(.am-btn-danger) {
+	border: 1px solid #AAA;
+}
+#preview {
+	padding-bottom: 1px;
+}
+
+.am-list-news {
+	max-width:900px;
+	padding: 16px 24px;
+	margin-left: auto;
+	margin-right: auto;
+	box-shadow: 0 0 4px 2px #00000033;
+	transition: box-shadow .3s;
+}
+.am-list-news:focus {
+	box-shadow: 0 0 4px 2px #00000055;
+}

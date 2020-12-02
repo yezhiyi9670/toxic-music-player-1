@@ -1,0 +1,6 @@
+button.am-btn{
+    margin-bottom:8px;
+}
+input[type=file] {
+	outline: none;
+}

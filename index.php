@@ -1,39 +1,43 @@
 <?php
-error_reporting(E_ALL & (~E_NOTICE));
-//error_reporting(~E_ALL);
-
-/*
-  最小接受的实际分辨率是：942x550
-  仅支持缩放至 100% 125% 150% 250% 的页面
-*/
+error_reporting(~E_ALL);
 
 define("IN_SYSTEM",'yezhiyi9670/txmp');
-define("VERSION","126d");
+define("VERSION","127a-pre4");
 define("CSV_VERSION","1");
 define("BASIC_PATH",str_replace("\\","/",__DIR__)."/");
-define("LIB_PATH",BASIC_PATH."app/");
+
+define("LIB_PATH",BASIC_PATH."lib/");
 define("ROUTER",LIB_PATH."router/");
 define("TEMPLATE",LIB_PATH."template/");
 define("FUNCTIONS",LIB_PATH."function/");
 define("CRAWLER",LIB_PATH."crawler/");
 define("VLUSER",LIB_PATH."vluser/");
+define("I18N",LIB_PATH."i18n/lang/");
+
 define("DATA_PATH",BASIC_PATH."data/");
 define("FILES",DATA_PATH."music/");
 define("REMOTE_CACHE",DATA_PATH."remotecache/");
-if(!file_exists(REMOTE_CACHE) && file_exists(DATA_PATH)) mkdir(REMOTE_CACHE); //对117a以下的版本，防止文件夹不存在。
+if(!file_exists(REMOTE_CACHE) && file_exists(DATA_PATH)) mkdir(REMOTE_CACHE); //117a
 define("STATISTICS",DATA_PATH."stat/");
 define("RAW",LIB_PATH."raw/");
 define("USER_DATA",DATA_PATH."user/");
-if(!file_exists(USER_DATA) && file_exists(DATA_PATH)) mkdir(USER_DATA); //对124a以下的版本，防止文件夹不存在。
+if(!file_exists(USER_DATA) && file_exists(DATA_PATH)) mkdir(USER_DATA); //124a
+define("I18N_USER",DATA_PATH."i18n/");
+
+define("STATICS",BASIC_PATH."static/");
+
 define("CHANGELOG",BASIC_PATH.'changelog/versions.json');
 
 if(!file_exists(DATA_PATH)) {
 	die('Data Path Not Exist');
 }
 
-require(ROUTER."TopLevelRouter.class.php");
 require(FUNCTIONS."index.function.php");
-require(BASIC_PATH.'configuration.php');
+require(LIB_PATH.'dev_config.php');
+require(BASIC_PATH.'internal_config/config_basic.php');
+require(LIB_PATH.'i18n/i18nCore.php');
+require(ROUTER."TopLevelRouter.class.php");
+require(BASIC_PATH.'internal_config/config_misc.php');
 if(!defined('GC_COLOR_1')) {
 	define("GC_COLOR_1","NULL");
 }
@@ -43,6 +47,10 @@ if(!defined('GC_COLOR_2')) {
 require(CRAWLER."index.crawler.php");
 require(VLUSER."index.vluser.php");
 
+/**
+ * 默认配置函数
+ * 注意：请勿修改其中的配置选项。要修改配置，使用 configuration.php。
+ */
 function _CT($i){
 	if(isset(_C()[$i])) return _C()[$i];
 	else return array(
@@ -62,7 +70,22 @@ function _CT($i){
 		"offline_usage" => false,
 
 		"compiled_cache" => false, // 对已转换的歌词文件进行缓存
+
+		"debug" => false, // 是否调试模式
 	)[$i];
+}
+
+if(_CT('debug')) {
+	error_reporting(E_ALL & (~E_NOTICE));
+}
+
+// 不允许没有密钥
+if(!defined('PASS_KEY') || strlen(PASS_KEY) <= 10) {
+	die(LNG('init.empty_key'));
+}
+// 不允许没有应用前缀
+if(!defined('APP_PREFIX')) {
+	die(LNG('init.empty_prefix'));
 }
 
 $cleaner=new GarbageCleaner();

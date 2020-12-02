@@ -1,0 +1,10 @@
+body {
+	user-select: none;
+}
+
+code,
+.lrc-content,
+.codeblock,
+.allow-select {
+	user-select: text;
+}

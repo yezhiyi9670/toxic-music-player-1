@@ -5,7 +5,7 @@ Allow from 127.0.0.1
 Deny from All
 
 php_value display_errors On
-RewriteBase /software_build/txmp/
+RewriteBase /project/txmp/
 RewriteEngine On
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d

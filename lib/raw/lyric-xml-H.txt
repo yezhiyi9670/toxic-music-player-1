@@ -1,0 +1,427 @@
+            <wx:sect>
+                <w:p>
+                    <w:pPr>
+                        <w:pStyle w:val="a20" />
+                        <w:pBdr>
+                            <w:bottom w:val="single" w:sz="4" wx:bdrwidth="10" w:space="0" w:color="auto" /></w:pBdr>
+                        <w:rPr>
+                            <w:rFonts w:hint="default" /></w:rPr>
+                    </w:pPr>
+                    <w:r>
+                        <w:rPr>
+                            <w:rFonts w:hint="fareast" />
+                            <w:sz w:val="32" />
+                            <w:lang w:val="EN-US" w:fareast="ZH-CN" /></w:rPr>
+                        <w:pict>
+                            <v:shape id="_x0000_s1133" o:spid="_x0000_s1026" o:spt="202" type="#_x0000_t202" style="position:absolute;left:0pt;margin-left:7.5pt;margin-top:159.85pt;height:117.7pt;width:539.25pt;mso-position-vertical-relative:page;z-index:251660288;mso-width-relative:page;mso-height-relative:page;"
+                            filled="f" stroked="f" coordsize="21600,21600">
+                                <v:path/>
+                                <v:fill on="f" focussize="0,0" />
+                                <v:stroke on="f" weight="0.5pt" />
+                                <v:imagedata o:title="" />
+                                <o:lock v:ext="edit" aspectratio="f" />
+                                <v:textbox>
+                                    <w:txbxContent>
+                                        <w:p>
+                                            <w:pPr>
+                                                <w:jc w:val="center" />
+                                                <w:rPr>
+                                                    <w:rFonts w:ascii=@fontname w:h-ansi=@fontname w:fareast=@fontname w:cs=@fontname w:hint="default" />
+                                                    <w:b/>
+                                                    <w:b-cs/>
+                                                    <w:sz w:val="72" />
+                                                    <w:sz-cs w:val="44" /></w:rPr>
+                                            </w:pPr>
+                                            <w:r>
+                                                <w:rPr>
+                                                    <w:rFonts w:ascii=@fontname w:h-ansi=@fontname w:fareast=@fontname w:cs=@fontname w:hint="fareast" />
+                                                    <w:b/>
+                                                    <w:b-cs/>
+                                                    <w:sz w:val="72" />
+                                                    <w:sz-cs w:val="44" /></w:rPr>
+                                                <w:t>%{name}</w:t>
+                                            </w:r>
+                                        </w:p>
+                                        <w:p>
+                                            <w:pPr>
+                                                <w:jc w:val="center" />
+                                                <w:rPr>
+                                                    <w:rFonts w:ascii=@fontname w:h-ansi=@fontname w:fareast=@fontname w:cs=@fontname w:hint="default" />
+                                                    <w:sz w:val="28" />
+                                                    <w:sz-cs w:val="20" />
+                                                    <w:lang w:val="EN-US" w:fareast="ZH-CN" /></w:rPr>
+                                            </w:pPr>
+                                            <w:r>
+                                                <w:rPr>
+                                                    <w:rFonts w:ascii=@fontname w:h-ansi=@fontname w:fareast=@fontname w:cs=@fontname w:hint="fareast" />
+                                                    <w:sz w:val="28" />
+                                                    <w:sz-cs w:val="20" />
+                                                    <w:lang w:val="EN-US" w:fareast="ZH-CN" /></w:rPr>
+                                                <w:t>%{subname}</w:t>
+                                            </w:r>
+                                        </w:p>
+                                    </w:txbxContent>
+                                </v:textbox>
+                            </v:shape>
+                        </w:pict>
+                    </w:r>
+                    <w:r>
+                        <w:rPr>
+                            <w:rFonts w:hint="fareast" />
+                            <w:sz w:val="32" />
+                            <w:lang w:val="EN-US" w:fareast="ZH-CN" /></w:rPr>
+                        <w:pict>
+                            <v:shape id="_x0000_s1134" o:spid="_x0000_s1027" o:spt="202" type="#_x0000_t202" style="position:absolute;left:0pt;margin-left:8.25pt;margin-top:749.4pt;height:65.9pt;width:539.25pt;mso-position-vertical-relative:page;z-index:251664384;mso-width-relative:page;mso-height-relative:page;"
+                            filled="f" stroked="f" coordsize="21600,21600">
+                                <v:path/>
+                                <v:fill on="f" focussize="0,0" />
+                                <v:stroke on="f" weight="0.5pt" />
+                                <v:imagedata o:title="" />
+                                <o:lock v:ext="edit" aspectratio="f" />
+                                <v:textbox>
+                                    <w:txbxContent>
+                                        <w:p>
+                                            <w:pPr>
+                                                <w:spacing w:line="120" w:line-rule="auto" />
+                                                <w:jc w:val="center" />
+                                                <w:rPr>
+                                                    <w:rFonts w:ascii=@fontname w:h-ansi=@fontname w:fareast=@fontname w:cs=@fontname w:hint="default" />
+                                                    <w:sz w:val="24" />
+                                                    <w:sz-cs w:val="18" /></w:rPr>
+                                            </w:pPr>
+                                            <w:r>
+                                                <w:rPr>
+                                                    <w:rFonts w:ascii=@fontname w:h-ansi=@fontname w:fareast=@fontname w:cs=@fontname w:hint="fareast" />
+                                                    <w:sz w:val="24" />
+                                                    <w:sz-cs w:val="18" />
+                                                    <w:lang w:val="EN-US" w:fareast="ZH-CN" /></w:rPr>
+                                                <w:t>%{author}</w:t>
+                                            </w:r>
+                                            <w:r>
+                                                <w:rPr>
+                                                    <w:rFonts w:ascii=@fontname w:h-ansi=@fontname w:fareast=@fontname w:cs=@fontname w:hint="fareast" />
+                                                    <w:sz w:val="24" />
+                                                    <w:sz-cs w:val="18" /></w:rPr>
+                                                <w:br w:type="text-wrapping" /></w:r>
+                                            <w:r>
+                                                <w:rPr>
+                                                    <w:rFonts w:ascii=@fontname w:h-ansi=@fontname w:fareast=@fontname w:cs=@fontname w:hint="fareast" />
+                                                    <w:b/>
+                                                    <w:b-cs/>
+                                                    <w:sz w:val="24" />
+                                                    <w:sz-cs w:val="18" /></w:rPr>
+                                                <w:t>%{press}</w:t>
+                                            </w:r>
+                                        </w:p>
+                                    </w:txbxContent>
+                                </v:textbox>
+                            </v:shape>
+                        </w:pict>
+                    </w:r>
+                    <w:r>
+                        <w:rPr>
+                            <w:rFonts w:hint="fareast" />
+                            <w:lang w:val="EN-US" w:fareast="ZH-CN" /></w:rPr>
+                        <w:br w:type="page" /></w:r>
+                    <w:r>
+                        <w:rPr>
+                            <w:rFonts w:hint="fareast" />
+                            <w:b/>
+                            <w:b-cs/></w:rPr>
+                        <w:t>本图书在版编目 (CIP) 数据</w:t>
+                    </w:r>
+                    <w:r>
+                        <w:rPr>
+                            <w:rFonts w:hint="fareast" /></w:rPr>
+                        <w:t></w:t>
+                    </w:r>
+                </w:p>
+                <w:p>
+                    <w:pPr>
+                        <w:pStyle w:val="a20" />
+                        <w:rPr>
+                            <w:lang w:val="EN-US" w:fareast="ZH-CN" /></w:rPr>
+                    </w:pPr>
+                    <w:r>
+                        <w:rPr>
+                            <w:rFonts w:hint="fareast" />
+                            <w:lang w:val="EN-US" w:fareast="ZH-CN" /></w:rPr>
+                        <w:t>%{name} / %{author}. ——%{city}：%{press}</w:t>
+                    </w:r>
+                </w:p>
+                <w:p>
+                    <w:pPr>
+                        <w:pStyle w:val="a20" />
+                        <w:rPr>
+                            <w:rFonts w:hint="default" />
+                            <w:lang w:val="EN-US" w:fareast="ZH-CN" /></w:rPr>
+                    </w:pPr>
+                    <w:r>
+                        <w:rPr>
+                            <w:rFonts w:hint="fareast" />
+                            <w:lang w:val="EN-US" w:fareast="ZH-CN" /></w:rPr>
+                        <w:t>ISBN %{isbn}</w:t>
+                    </w:r>
+                </w:p>
+                <w:p>
+                    <w:pPr>
+                        <w:pStyle w:val="a20" />
+                        <w:rPr>
+                            <w:lang w:val="EN-US" w:fareast="ZH-CN" /></w:rPr>
+                    </w:pPr>
+                    <w:r>
+                        <w:rPr>
+                            <w:rFonts w:hint="fareast" />
+                            <w:lang w:val="EN-US" w:fareast="ZH-CN" /></w:rPr>
+                        <w:t>I. ①%{cipname} II. ①%{cipauthor} III. ①%{cipcate} IV. ①%{cipgb}</w:t>
+                    </w:r>
+                </w:p>
+                <w:p>
+                    <w:pPr>
+                        <w:pStyle w:val="a20" />
+                        <w:rPr>
+                            <w:lang w:val="EN-US" w:fareast="ZH-CN" /></w:rPr>
+                    </w:pPr>
+                    <w:r>
+                        <w:rPr>
+                            <w:rFonts w:hint="fareast" />
+                            <w:lang w:val="EN-US" w:fareast="ZH-CN" /></w:rPr>
+                        <w:t>%{press} CIP数据核字 (%{year}) 第%{number} 号</w:t>
+                    </w:r>
+                </w:p>
+                <w:p>
+                    <w:pPr>
+                        <w:pStyle w:val="a20" />
+                        <w:rPr>
+                            <w:lang w:val="EN-US" w:fareast="ZH-CN" /></w:rPr>
+                    </w:pPr>
+                </w:p>
+                <w:p>
+                    <w:pPr>
+                        <w:pStyle w:val="a20" />
+                        <w:rPr>
+                            <w:lang w:val="EN-US" w:fareast="ZH-CN" /></w:rPr>
+                    </w:pPr>
+                </w:p>
+                <w:p>
+                    <w:pPr>
+                        <w:pStyle w:val="a20" />
+                        <w:rPr>
+                            <w:lang w:val="EN-US" w:fareast="ZH-CN" /></w:rPr>
+                    </w:pPr>
+                </w:p>
+                <w:p>
+                    <w:pPr>
+                        <w:pStyle w:val="a20" />
+                        <w:rPr>
+                            <w:lang w:val="EN-US" w:fareast="ZH-CN" /></w:rPr>
+                    </w:pPr>
+                </w:p>
+                <w:p>
+                    <w:pPr>
+                        <w:pStyle w:val="a20" />
+                        <w:rPr>
+                            <w:lang w:val="EN-US" w:fareast="ZH-CN" /></w:rPr>
+                    </w:pPr>
+                </w:p>
+                <w:p>
+                    <w:pPr>
+                        <w:pStyle w:val="a20" />
+                        <w:rPr>
+                            <w:lang w:val="EN-US" w:fareast="ZH-CN" /></w:rPr>
+                    </w:pPr>
+                </w:p>
+                <w:p>
+                    <w:pPr>
+                        <w:pStyle w:val="a20" />
+                        <w:rPr>
+                            <w:lang w:val="EN-US" w:fareast="ZH-CN" /></w:rPr>
+                    </w:pPr>
+                </w:p>
+                <w:p>
+                    <w:pPr>
+                        <w:pStyle w:val="a20" />
+                        <w:rPr>
+                            <w:lang w:val="EN-US" w:fareast="ZH-CN" /></w:rPr>
+                    </w:pPr>
+                </w:p>
+                <w:p>
+                    <w:pPr>
+                        <w:pStyle w:val="a20" />
+                        <w:rPr>
+                            <w:rFonts w:hint="fareast" />
+                            <w:lang w:val="EN-US" w:fareast="ZH-CN" /></w:rPr>
+                    </w:pPr>
+                </w:p>
+                <w:p>
+                    <w:pPr>
+                        <w:pStyle w:val="a20" />
+                        <w:rPr>
+                            <w:rFonts w:hint="fareast" />
+                            <w:lang w:val="EN-US" w:fareast="ZH-CN" /></w:rPr>
+                    </w:pPr>
+                </w:p>
+                <w:p>
+                    <w:pPr>
+                        <w:pStyle w:val="a20" />
+                        <w:rPr>
+                            <w:lang w:val="EN-US" w:fareast="ZH-CN" /></w:rPr>
+                    </w:pPr>
+                </w:p>
+                <w:p>
+                    <w:pPr>
+                        <w:pStyle w:val="a20" />
+                        <w:pBdr>
+                            <w:bottom w:val="nil" /></w:pBdr>
+                        <w:rPr>
+                            <w:rFonts w:hint="default" />
+                            <w:lang w:val="EN-US" w:fareast="ZH-CN" /></w:rPr>
+                    </w:pPr>
+                    <w:r>
+                        <w:rPr>
+                            <w:rFonts w:hint="fareast" />
+                            <w:lang w:val="EN-US" w:fareast="ZH-CN" /></w:rPr>
+                        <w:t>%{ititle}</w:t>
+                    </w:r>
+                </w:p>
+                <w:p>
+                    <w:pPr>
+                        <w:pStyle w:val="a20" />
+                        <w:pBdr>
+                            <w:top w:val="single" w:sz="4" wx:bdrwidth="10" w:space="0" w:color="auto" />
+                            <w:bottom w:val="single" w:sz="4" wx:bdrwidth="10" w:space="0" w:color="auto" /></w:pBdr>
+                        <w:rPr>
+                            <w:rFonts w:hint="fareast" />
+                            <w:lang w:val="EN-US" w:fareast="ZH-CN" /></w:rPr>
+                    </w:pPr>
+                    <w:r>
+                        <w:rPr>
+                            <w:rFonts w:hint="fareast" />
+                            <w:lang w:val="EN-US" w:fareast="ZH-CN" /></w:rPr>
+                        <w:t>%{isubtitle}</w:t>
+                    </w:r>
+                </w:p>
+                <w:p>
+                    <w:pPr>
+                        <w:pStyle w:val="a20" />
+                        <w:rPr>
+                            <w:rFonts w:hint="fareast" />
+                            <w:lang w:val="EN-US" w:fareast="ZH-CN" /></w:rPr>
+                    </w:pPr>
+                    <w:r>
+                        <w:rPr>
+                            <w:rFonts w:hint="fareast" />
+                            <w:lang w:val="EN-US" w:fareast="ZH-CN" /></w:rPr>
+                        <w:t>出版者：%{press}</w:t>
+                    </w:r>
+                </w:p>
+                <w:p>
+                    <w:pPr>
+                        <w:pStyle w:val="a20" />
+                        <w:rPr>
+                            <w:rFonts w:hint="default" />
+                            <w:lang w:val="EN-US" w:fareast="ZH-CN" /></w:rPr>
+                    </w:pPr>
+                    <w:r>
+                        <w:rPr>
+                            <w:rFonts w:hint="fareast" />
+                            <w:lang w:val="EN-US" w:fareast="ZH-CN" /></w:rPr>
+                        <w:t>地址：%{address}</w:t>
+                    </w:r>
+                </w:p>
+                <w:p>
+                    <w:pPr>
+                        <w:pStyle w:val="a20" />
+                        <w:rPr>
+                            <w:rFonts w:hint="fareast" />
+                            <w:lang w:val="EN-US" w:fareast="ZH-CN" /></w:rPr>
+                    </w:pPr>
+                    <w:r>
+                        <w:rPr>
+                            <w:rFonts w:hint="fareast" />
+                            <w:lang w:val="EN-US" w:fareast="ZH-CN" /></w:rPr>
+                        <w:t>官方网址：%{website}</w:t>
+                    </w:r>
+                </w:p>
+                <w:p>
+                    <w:pPr>
+                        <w:pStyle w:val="a20" />
+                        <w:rPr>
+                            <w:rFonts w:hint="default" />
+                            <w:lang w:val="EN-US" w:fareast="ZH-CN" /></w:rPr>
+                    </w:pPr>
+                    <w:r>
+                        <w:rPr>
+                            <w:rFonts w:hint="fareast" />
+                            <w:lang w:val="EN-US" w:fareast="ZH-CN" /></w:rPr>
+                        <w:t>版本：%{version}</w:t>
+                    </w:r>
+                </w:p>
+                <w:p>
+                    <w:pPr>
+                        <w:pStyle w:val="a20" />
+                        <w:rPr>
+                            <w:rFonts w:hint="default" />
+                            <w:lang w:val="EN-US" w:fareast="ZH-CN" /></w:rPr>
+                    </w:pPr>
+                    <w:r>
+                        <w:rPr>
+                            <w:rFonts w:hint="fareast" />
+                            <w:lang w:val="EN-US" w:fareast="ZH-CN" /></w:rPr>
+                        <w:t>开本：A4</w:t>
+                    </w:r>
+                </w:p>
+                <w:p>
+                    <w:pPr>
+                        <w:pStyle w:val="a20" />
+                        <w:rPr>
+                            <w:rFonts w:hint="default" />
+                            <w:lang w:val="EN-US" w:fareast="ZH-CN" /></w:rPr>
+                    </w:pPr>
+                    <w:r>
+                        <w:rPr>
+                            <w:rFonts w:hint="fareast" />
+                            <w:lang w:val="EN-US" w:fareast="ZH-CN" /></w:rPr>
+                        <w:t>印张：%{printpapers}</w:t>
+                    </w:r>
+                </w:p>
+                <w:p>
+                    <w:pPr>
+                        <w:pStyle w:val="a20" />
+                        <w:rPr>
+                            <w:rFonts w:hint="default" />
+                            <w:lang w:val="EN-US" w:fareast="ZH-CN" /></w:rPr>
+                    </w:pPr>
+                    <w:r>
+                        <w:rPr>
+                            <w:rFonts w:hint="fareast" />
+                            <w:lang w:val="EN-US" w:fareast="ZH-CN" /></w:rPr>
+                        <w:t>书号：ISBN %{isbn}</w:t>
+                    </w:r>
+                </w:p>
+                <w:p>
+                    <w:pPr>
+                        <w:pStyle w:val="a20" />
+                        <w:rPr>
+                            <w:lang w:val="EN-US" w:fareast="ZH-CN" /></w:rPr>
+                    </w:pPr>
+                    <w:r>
+                        <w:rPr>
+                            <w:rFonts w:hint="fareast" />
+                            <w:lang w:val="EN-US" w:fareast="ZH-CN" /></w:rPr>
+                        <w:t>定价：%{price}</w:t>
+                    </w:r>
+                </w:p>
+                <w:p>
+                    <w:pPr>
+                        <w:pStyle w:val="a20" />
+                        <w:sectPr>
+                            <w:type w:val="continuous" />
+                            <w:pgSz w:w="11906" w:h="16838" />
+                            <w:pgMar w:top="850" w:right="850" w:bottom="1134" w:left="850" w:header="0" w:footer="595" w:gutter="0" />
+                            <w:pgNumType/>
+                            <w:cols w:space="425" />
+                            <w:docGrid w:type="lines-and-chars" w:line-pitch="312" /></w:sectPr>
+                    </w:pPr>
+                </w:p>
+            </wx:sect>

@@ -1,0 +1,26 @@
+.txmp-page-left {
+	width: calc(100% - 320px);
+	height: 100%;
+}
+.txmp-page-right {
+	position:absolute;
+	left:calc(100% - 320px);
+	width:320px;
+	height:100%;
+}
+.song-title {
+	font-size: 25px;
+}
+.right-first-row {
+	margin-top: 0;
+	margin-bottom: 0;
+}
+.right-second-row {
+	margin-top: 16px;
+}
+.right-third-row {
+	display: block;
+}
+.lrc-area {
+	padding: 28px;
+}

@@ -1,5 +1,4 @@
-<?php
-	error_reporting(E_ALL & (~E_NOTICE));
+<?php if(!defined('IN_SYSTEM')) exit;//Silence is golden ?><?php
 	header("Content-Type:text/css");
 	$color="#1eaaf1";
 	$color2="#ffffff";

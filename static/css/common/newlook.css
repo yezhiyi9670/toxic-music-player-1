@@ -1,0 +1,75 @@
+.toxic-dialog-inner,
+.codeblock,
+.tooltip-box,
+.am-btn,
+input[type=text], input[type=password], input[type=select],
+input[type=number],select{
+	border-radius:0;
+}
+input[type=text], input[type=password], input[type=select],
+input[type=number],select {
+	outline:none;
+	border: 1.5px dashed #888;
+}
+input[type=text]:focus,
+input[type=password]:focus,
+input[type=select]:focus,
+input[type=number]:focus,
+select:focus {
+	border: 1.5px dashed #000;
+}
+
+input[type=text]:disabled,
+input[type=password]:disabled,
+input[type=select]:disabled,
+input[type=number]:disabled,
+select:disabled {
+	border: 1.5px dotted #888;
+	background-color: #77777722;
+}
+
+.am-dropdown-content,
+[data-am-widget=header],
+.toxic-dialog-inner,
+.codeblock,
+.tooltip-box,
+.am-btn,
+.txmp-tag,
+input[type=text], input[type=password], input[type=select],
+input[type=number],select,
+.follow-field{
+	box-shadow: none;
+}
+.am-btn {
+	transition: background-color 0.1s;
+}
+
+
+.lrc-content,
+.lrc-overview {
+	border: 1.5px dashed #bbbbbb;
+}
+.lrc-content, .lrc-overview {
+	padding:7px;
+}
+
+.txmp-header {
+	transition: background-color 1.5s;
+}
+a {
+	transition: color .25s;
+}
+.lrc-item,.para-title {
+	transition: color .3s;
+}
+.para {
+	transition: background-color .3s;
+}
+
+.maker-list>li {
+	transition: background-color .3s;
+}
+
+.player-processbar-i {
+	transition: background-color .25s, width .2s;
+}

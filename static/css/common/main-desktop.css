@@ -1,0 +1,13 @@
+.txmp-page-left{
+	padding:16px;
+	width:50%;
+	position:absolute;
+	height:100%;
+}
+.txmp-page-right{
+	position:absolute;
+	left:50%;
+	width:50%;
+	height:100%;
+	padding:16px;
+}

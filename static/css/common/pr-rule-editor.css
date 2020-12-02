@@ -1,0 +1,9 @@
+.pr-rule-editor {
+	display: none;
+	border:1px dashed #CCC;
+	padding:12px;
+	font-family:'Consolas','Source Code Pro','Courier New';
+}
+.pr-rule-editor input {
+	font-family:'Consolas','Source Code Pro','Courier New';
+}
