@@ -2,8 +2,10 @@
 
 // 码率与品质的关系。返回品质描述词。
 function bitrate_tag($x,$useName=true) {
-	if($x <= 0) {
+	if($x <= -1) {
 		return '<span class="txmp-tag tag-quality-ll">' . ($useName ? LNG('quality.400') : $x . 'k') . '</span>';
+	} else if($x <= 32) {
+		return '<span class="txmp-tag tag-deep-orange-l">' . ($useName ? LNG('quality.24') : $x . 'k') . '</span>';
 	} else if($x <= 64) {
 		return '<span class="txmp-tag tag-quality-lq">' . ($useName ? LNG('quality.48') : $x . 'k') . '</span>';
 	} else if($x <= 160) {

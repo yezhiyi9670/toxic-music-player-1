@@ -98,13 +98,19 @@ load_js('js/resource/resourceapp');
 	<div class="txmp-page-left" style="position:<?php echo is_wap()?"auto":"fixed" ?>;">
 		<!--主音频-->
 		<p>
+			<?php
+				$main_path = getAudioPath(FILES.$id.'/song');
+			?>
+			<span style="float:right;">
+				<?php audioFileAnalysisTags(analyzeAudio($main_path)) ?>
+			</span>
 			<strong><?php LNGe('editor.upload.main') ?></strong>
 			<select name="yp-operation">
 				<option value="no"><?php LNGe('editor.upload.no') ?></option>
 				<option value="upload"><?php LNGe('editor.upload.upload') ?></option>
-				<?php if(getAudioPath(FILES.$id.'/song')) { ?><option value="delete"><?php LNGe('editor.upload.delete') ?></option><?php } ?>
+				<?php if($main_path) { ?><option value="delete"><?php LNGe('editor.upload.delete') ?></option><?php } ?>
 			</select>
-			<?php if(!getAudioPath(FILES.$id.'/song')) { ?><span style="color:#F00;" class="wid-lp-8">(<?php LNGe('editor.upload.tan90') ?>)</span><?php } ?>
+			<?php if(!$main_path) { ?><span style="color:#F00;" class="wid-lp-8">(<?php LNGe('editor.upload.tan90') ?>)</span><?php } ?>
 		</p>
 		<p>
 			<?php LNGe('editor.upload.tip') ?>
@@ -117,13 +123,19 @@ load_js('js/resource/resourceapp');
 
 		<!--从音频-->
 		<p>
+			<?php
+				$back_path = getAudioPath(FILES.$id.'/back');
+			?>
+			<span style="float:right;">
+				<?php audioFileAnalysisTags(analyzeAudio($back_path)) ?>
+			</span>
 			<strong><?php LNGe('editor.upload.back') ?></strong>
 			<select name="back-operation">
 				<option value="no"><?php LNGe('editor.upload.no') ?></option>
 				<option value="upload"><?php LNGe('editor.upload.upload') ?></option>
-				<?php if(getAudioPath(FILES.$id.'/back')) { ?><option value="delete"><?php LNGe('editor.upload.delete') ?></option><?php } ?>
+				<?php if($back_path) { ?><option value="delete"><?php LNGe('editor.upload.delete') ?></option><?php } ?>
 			</select>
-			<?php if(!getAudioPath(FILES.$id.'/back')) { ?><span style="color:#F00;" class="wid-lp-8">(<?php LNGe('editor.upload.tan90') ?>)</span><?php } ?>
+			<?php if(!$back_path) { ?><span style="color:#F00;" class="wid-lp-8">(<?php LNGe('editor.upload.tan90') ?>)</span><?php } ?>
 		</p>
 		<p>
 			<?php LNGe('editor.upload.tip') ?>
@@ -133,13 +145,19 @@ load_js('js/resource/resourceapp');
 
 		<!--摘要图片-->
 		<p>
+			<?php
+				$avatar_path = getPicturePath(FILES.$id.'/avatar');
+			?>
+			<?php if($avatar_path) { ?>
+				<img style="float:right;height:100px;" src="<?php echo BASIC_URL . $id . '/avatar' ?>" />
+			<?php } ?>
 			<strong><?php LNGe('editor.upload.avatar') ?></strong>
 			<select name="avatar-operation">
 				<option value="no"><?php LNGe('editor.upload.no') ?></option>
 				<option value="upload"><?php LNGe('editor.upload.upload') ?></option>
-				<?php if(getAudioPath(FILES.$id.'/song')) { ?><option value="delete"><?php LNGe('editor.upload.delete') ?></option><?php } ?>
+				<?php if($avatar_path) { ?><option value="delete"><?php LNGe('editor.upload.delete') ?></option><?php } ?>
 			</select>
-			<?php if(!getPicturePath(FILES.$id.'/avatar')) { ?><span style="color:#F00;" class="wid-lp-8">(<?php LNGe('editor.upload.tan90') ?>)</span><?php } ?>
+			<?php if(!$avatar_path) { ?><span style="color:#F00;" class="wid-lp-8">(<?php LNGe('editor.upload.tan90') ?>)</span><?php } ?>
 		</p>
 		<p>
 			<?php LNGe('editor.upload.tip.image') ?> <br/>
@@ -147,6 +165,12 @@ load_js('js/resource/resourceapp');
 			<?php LNGe('ui.or') ?>
 			<input class="input-min" placeholder="<?php LNGe('editor.upload.down') ?>" name="theimage_url" style="width:250px!important;">
 		</p>
+
+		<!--来源链接-->
+		<?php $origin_url=GCM()['O'];if(GCM()['O']) { ?>
+			<hr>
+			<a href="<?php echo $origin_url ?>" target="_blank"><?php LNGe('editor.open_source') ?> <i class="fa fa-external-link"></i></a>
+		<?php } ?>
 	</div>
 	<div class="txmp-page-right" style="position:<?php echo is_wap()?"auto":"fixed" ?>; overflow-y:scroll; padding-bottom:64px;">
 		<?php if(isset($_GET['msg'])) { ?><p id="head-notice"><?php echo htmlspecial($_GET['msg']) ?>

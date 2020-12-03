@@ -57,6 +57,7 @@ ui.or = OR
 meta.description = Private page, do not enter.
 
 # Quality Marks
+quality.24 = "FL"
 quality.48 = "LQ"
 quality.128 = "MQ"
 quality.192 = "HQ"
@@ -342,6 +343,7 @@ editor.submit.view = View
 editor.submit.refresh = Refresh Preview
 editor.alert.save.tips = Saving
 editor.alert.save.fail = Cannot Save
+editor.open_source = View Source Webpage
 permitter.title = Edit Permissions
 permitter.tip1 = Use permissions to limit users' access to this song.
 permitter.tip2 = Roots are not limited by permissions. You can test permissions by adding '?deauth' to the URL.

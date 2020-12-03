@@ -59,9 +59,8 @@ function printIndexList($item,$url=true) {
 	echo '</li>';
 }
 
-// 音频分析标签
-function audioAnalysisTags($item) {
-	$ana = getAudioAnalysis($item);
+// 音频文件分析标签
+function audioFileAnalysisTags($ana) {
 	if($ana != null) {
 		// 时长
 		echo '<span class="txmp-tag tag-length">' . formatDuration($ana['time']) . '</span>';
@@ -71,6 +70,11 @@ function audioAnalysisTags($item) {
 		// 有问题
 		echo '<span class="txmp-tag tag-red-l">' . LNG('quality.err') . '</span>';
 	}
+}
+
+// 音频分析标签
+function audioAnalysisTags($item) {
+	audioFileAnalysisTags(getAudioAnalysis($item));
 }
 
 // 管理员页面上的列表

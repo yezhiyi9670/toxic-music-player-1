@@ -114,12 +114,19 @@
 	}
 	foreach($ver_list as $ver) {
 		$item = $data['versions'][$ver];
+
+		$count = 0;
+		foreach($item['changes'] as $list_item) {
+			if(!isset($list_item['tag']) || !in_array('MILESTONE',$list_item['tag'])) {
+				$count++;
+			}
+		}
 		echo '<div class="cdp-page" data-cdp-name="'.htmlspecial2($ver).'">';
 		echo '<div class="txmp-page-full">';
 		echo '<p class="ver-header"><strong>';
 		echo htmlspecial2($ver);
 		echo '</strong>';
-		echo '&nbsp;(' . count($item['changes']) . ')';
+		echo '&nbsp;(' . $count . ')';
 		echo '&nbsp;&nbsp;';
 		if(isset($item['date'])) {
 			echo '<span class="txmp-tag tag-default">';

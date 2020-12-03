@@ -11,6 +11,9 @@ function readLNG($file) {
 	$arr = [];
 	foreach($lines as $item) {
 		$item = trim($item);
+		if(strpos($item,'=') === false && strpos($item,'- NULL -') !== false) {
+			return null;
+		}
 		if($item == '') continue;
 		
 		if($item[0] == '#') {
@@ -63,11 +66,21 @@ function getLangArray($lang = DEFAULT_LANG) {
 		$f1 = readLNG(I18N . $lang . '.lang');
 		if(file_exists(I18N_USER . $lang . '.lang')) {
 			$f2 = readLNG(I18N_USER . $lang . '.lang');
-			$f1 = array_merge($f1,$f2);
+			if($f1 == NULL || $f2 == null) {
+				$f1 = NULL;
+			} else {
+				$f1 = array_merge($f1,$f2);
+			}
 		}
 
-		foreach($f1 as $k => $v) {
-			$d1[$k] = $v;
+		if($f1 != NULL) {
+			foreach($f1 as $k => $v) {
+				$d1[$k] = $v;
+			}
+		} else {
+			foreach($d1 as $k => $v) {
+				$d1[$k] = $k;
+			}
 		}
 	}
 
@@ -78,7 +91,8 @@ function getLangArray($lang = DEFAULT_LANG) {
 function getSupportedLanguage() {
 	return [
 		'en_us' => 'English',
-		'zh_cn' => '简体中文'
+		'zh_cn' => '简体中文',
+		'ky_cd' => 'lang.ky_cd.locname'
 	];
 }
 
