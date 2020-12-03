@@ -1,5 +1,7 @@
 "mod EditorApp";
 
+var has_pending_changes = false;
+
 function insertText(obj,str) {
 	if (document.selection) {
 		var sel = document.selection.createRange();
@@ -283,6 +285,8 @@ $('document').ready(function(){
 		document.getElementById('lyricfile').focus();
 	});
 	$('#lyricfile').keydown(function(e){
+		has_pending_changes = true;
+
 		console.log(e);
 		if(!e) return true;
 
@@ -319,6 +323,7 @@ $('document').ready(function(){
 						new_data['meta']['G1'] == current_data['meta']['G1'] &&
 						new_data['meta']['G2'] == current_data['meta']['G2']
 					);
+					has_pending_changes = false;
 					if(flag) {
 						$('#preview')[0].contentWindow.location.reload();
 						current_data = new_data;
@@ -334,5 +339,13 @@ $('document').ready(function(){
 		});
 	});
 });
+
+window.onbeforeunload = function() {
+	if(has_pending_changes) {
+		return LNG('editor.not_saved');
+	}
+	e.preventDefault();
+	return false;
+};
 
 /* </script> */

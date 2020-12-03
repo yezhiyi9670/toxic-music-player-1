@@ -23,6 +23,11 @@
 <script>document.title='<?php echo addslashes(GCM()['N']) ?> > <?php LNGe('permitter.title') ?> - <?php echo htmlspecial2(_CT('app_name_title')) ?>';</script>
 <div class="txmp-page-full">
 	<h3><?php LNGe('permitter.title') ?></h3>
+	<span class="bid-linking">
+		<a href="<?php echo BASIC_URL . cid() ?>/edit"><?php LNGe('editor.title') ?></a>&nbsp;▪
+		<a href="<?php echo BASIC_URL . cid() ?>/resource"><?php LNGe('resource.title') ?></a>&nbsp;▪
+		<strong><?php LNGe('permitter.title') ?></strong>
+	</span>
 	<?php if(isset($_GET['msg'])) { ?><p id="head-notice"><?php echo htmlspecial($_GET['msg']) ?>
 		<a href="javascript:;" onclick="F_HideNotice()" class="notice-confirm"><?php LNGe('ui.hide_notice') ?></a>
 	</p><?php } ?>

@@ -51,7 +51,10 @@ function kuwoSearchSong() {
 				exit;
 			}
 			echo '<ul>';
-			printIndexList($item);
+			global $akCrawler;
+			global $akCrawlerInfo;
+			printRmpList($akCrawler[$item]->cache['info'],true);
+			// printIndexList();
 			echo '</ul>';
 			exit;
 		}

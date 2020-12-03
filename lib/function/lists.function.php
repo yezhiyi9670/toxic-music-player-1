@@ -55,6 +55,10 @@ function printIndexList($item,$url=true) {
 	if(!$url && getAudioPath(FILES . $item . '/song',false)) echo '<span class="txmp-tag tag-blue-g">'.LNG('list.tag.mtime').date('Y/m/d H:i:s',getAudioMtime(FILES . $item . '/song')).'</span>';
 	// 权限
 	if(!$url) echo '<span class="txmp-tag tag-purple-g">'.LNG('list.tag.perm').permissionMarks(getPerm($item)).'</span>';
+	// 没有封面
+	if(!$url && !GSM($item)['P']) {
+		echo '<span class="txmp-tag tag-deep-orange-l">'.LNG('list.tag.no_cover').'</span>';
+	}
 	echo '</span>';
 	echo '</li>';
 }
@@ -83,7 +87,11 @@ function printAdminList($item) {
 }
 
 // RemotePlay 搜索列表（默认配置：酷我音乐）
-function printRmpList($item) {
+function printRmpList($item,$dataType=false) {
+	if($dataType) {
+		$item['rid'] = $item['id'];
+		$item['name'] = $item['songName'];
+	}
 	$cl = rgb2hex(hashed_saturate_gradient($item['name'] . ' - ' . $item['artist'])[0]);
 	echo '  <li style="color:#'.$cl.';" class="song-item song-item-rp">';
 	echo '<a href="'.BASIC_URL.'K_'.$item['rid'].'" target="_blank" style="color:#'.$cl.';" data-id="'.'K_'.$item['rid'].'">';
@@ -100,13 +108,13 @@ function printRmpList($item) {
 	// 质量
 	echo '<span class="txmp-tag tag-quality-hq">' . LNG('quality.192') . '</span>';
 	// 上传日期
-	echo '<span class="txmp-tag tag-purple-g">'.LNG('list.tag.rp_date').$item['releaseDate'].'</span>';
+	if(!$dataType) echo '<span class="txmp-tag tag-purple-g">'.LNG('list.tag.rp_date').$item['releaseDate'].'</span>';
 	// 专辑名称
 	echo '<span class="txmp-tag tag-orange-g">'.LNG('list.tag.rp_cate').htmlspecial2($item['album']).'</span>';
 	// 评价（我们发现存在 102%）
 	echo '<span class="txmp-tag tag-blue-g">'.LNG('list.tag.rp_rate').$item['score100'].'%</span>';
 	// 限制标签
-	if(isset($item['payInfo'])) {
+	if(isset($item['pay'])) {
 		$pay = kuwoPayStatus($item['pay']);
 		// 禁止在线播放 | 付费播放
 		if($pay['no_play']) {

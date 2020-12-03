@@ -56,7 +56,8 @@
 					}
 				} else if($_POST['theimage_url']) {
 					$url = $_POST['theimage_url'];
-					$ext=substr($url,strrpos($url,'.'));
+					$baseurl = preSubstr($url,'?');
+					$ext=substr($baseurl,strrpos($baseurl,'.'));
 					if(isPictureExtAllowed($ext)) {
 						if(getPicturePath(FILES.$id.'/avatar')) {
 							unlink(getPicturePath(FILES.$id.'/avatar'));
@@ -185,6 +186,11 @@ load_js('js/resource/resourceapp');
 			echo '&nbsp;&nbsp;&nbsp;&nbsp;';
 			audioAnalysisTags(cid());
 		?></p>
+		<span class="bid-linking">
+			<a href="<?php echo BASIC_URL . cid() ?>/edit"><?php LNGe('editor.title') ?></a>&nbsp;▪
+			<strong><?php LNGe('resource.title') ?></strong>&nbsp;▪
+			<a href="<?php echo BASIC_URL . cid() ?>/permission"><?php LNGe('permitter.title') ?></a>
+		</span>
 		<p>
 			<button type="submit" class="am-btn am-btn-primary"><?php LNGe('editor.submit.update') ?></button>
 			<button type="button" onclick="window.open('<?php echo BASIC_URL.preSubstr($_GET['_lnk']) ?>')" class="am-btn am-btn-secondary"><?php LNGe('editor.submit.view') ?></button>

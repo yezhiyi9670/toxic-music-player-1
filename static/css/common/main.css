@@ -303,3 +303,8 @@ code {
 .wid-lp-12 {
 	margin-left: 12px;
 }
+
+.bid-linking {
+	position:fixed;right:32px;top:64px;background-color:#FFFA;
+	display:block;
+}

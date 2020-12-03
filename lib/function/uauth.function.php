@@ -3,11 +3,11 @@
 ///// 用户数据文件访问量较大，使用文件锁定方法，防止一个文件同时被多个进程写入 /////
 
 function lock_file($n) {
-	file_put_contents(DATA_PATH.$n.'.writing.lock','');
+	@file_put_contents(DATA_PATH.$n.'.writing.lock','');
 }
 
 function unlock_file($n) {
-	unlink(DATA_PATH.$n.'.writing.lock');
+	@unlink(DATA_PATH.$n.'.writing.lock');
 }
 
 function wait_file($n) {

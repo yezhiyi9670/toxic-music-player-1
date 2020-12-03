@@ -2,7 +2,7 @@
 error_reporting(~E_ALL);
 
 define("IN_SYSTEM",'yezhiyi9670/txmp');
-define("VERSION","127a-pre5");
+define("VERSION","127a-pre6");
 define("CSV_VERSION","1");
 define("BASIC_PATH",str_replace("\\","/",__DIR__)."/");
 

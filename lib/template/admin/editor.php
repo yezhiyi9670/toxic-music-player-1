@@ -96,6 +96,11 @@ load_js('js/editor/editorapp');
 			echo '&nbsp;&nbsp;&nbsp;&nbsp;';
 			audioAnalysisTags(cid());
 		?></p>
+		<span class="bid-linking">
+			<strong><?php LNGe('editor.title') ?></strong>&nbsp;▪
+			<a href="<?php echo BASIC_URL . cid() ?>/resource"><?php LNGe('resource.title') ?></a>&nbsp;▪
+			<a href="<?php echo BASIC_URL . cid() ?>/permission"><?php LNGe('permitter.title') ?></a>
+		</span>
 		
 		<p>
 			<button type="button" class="am-btn submit-btn am-btn-primary"><?php LNGe('editor.submit.update') ?></button>
