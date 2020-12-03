@@ -38,15 +38,15 @@ function strToFloat($num) {
 
 // 给出描述时间的文本，返回时间的实际值（单位为 0.1秒）。返回的格式是字符串。
 // 如果是未填写的值或者空白值，返回 1610612736 以表示该行为注释行。
-function strToCurrtime($str)
+function strToCurrtime($str,$delta = 0)
 {
-	if($str=='-' || $str=='__FTIME__' || $str=='NULL') return '1610612736';
+	if($str=='-' || $str=='__FTIME__' || $str=='NULL') return 1610612736 - $delta;
 	$t2=explode("-",$str);
 	if(count($t2)==1){
 		$t2[1]=$t2[0];
 		$t2[0]="0";
 	}
-	if(count($t2)!=2) return '1610612736';
+	if(count($t2)!=2) return 1610612736 - $delta;
 	$egg=strToFloat($t2[0])*60.0+strToFloat($t2[1]);
 	$egg=floatval(intval($egg*10));
 	return strval($egg);
@@ -412,6 +412,10 @@ function parseCmpLyric($u,$parseTags = true,$debug = false) {
 		@$meta['meta']['G2']=concat_arguments(findKVInArray($xinfo,"type","G2")['arg']); // 渐变色2
 		@$meta['meta']['O']=concat_arguments(findKVInArray($xinfo,"type","O")['arg']); // 原网页的网址
 		@$meta['meta']['P']=concat_arguments(findKVInArray($xinfo,"type","P")['arg']); // 摘要图片网址
+		@$time_delta=floor(floatval(concat_arguments(findKVInArray($xinfo,"type","D")['arg'])) * 10); // 偏移量
+		if($time_delta != $time_delta) {
+			$time_delta = 0;
+		}
 		if(!$meta['meta']['P'] || $meta['meta']['P'] == '-') {
 			$meta['meta']['P'] = $u . '/avatar';
 			if(!file_exists(getPicturePath(FILES . $u . '/avatar'))) {
@@ -461,7 +465,8 @@ function parseCmpLyric($u,$parseTags = true,$debug = false) {
 		$k=0;
 		$reuses=array();
 		foreach($am as $v)
-		{
+		{	
+			// 全复用
 			if($v['type']=='Reuse')
 			{
 				$pid++;
@@ -494,7 +499,7 @@ function parseCmpLyric($u,$parseTags = true,$debug = false) {
 					];
 				}
 				$reuseitem=$reuses[$v['arg'][0]];
-				$timealt=strToCurrtime($v['arg'][1])-$meta['lyrics'][$reuseitem]['in'][0]['ts'];
+				$timealt=strToCurrtime($v['arg'][1],$time_delta)+$time_delta-$meta['lyrics'][$reuseitem]['in'][0]['ts'];
 				$meta['lyrics'][$pid]=$meta['lyrics'][$reuseitem];
 				$meta['lyrics'][$pid]['id']=$pid;
 				$meta['lyrics'][$pid]['display']=$meta['lyrics'][$reuseitem]['display'];
@@ -505,12 +510,13 @@ function parseCmpLyric($u,$parseTags = true,$debug = false) {
 					$meta['lyrics'][$pid]['in'][$f]['id']=$rid;
 					$meta['lyrics'][$pid]['in'][$f]['ts']+=$timealt;
 					$meta['timestamps'][$meta['lyrics'][$pid]['in'][$f]['ts']]=array($pid,$rid);
-					if($lastTime == $meta['lyrics'][$pid]['in'][$f]['ts']) {
+					if($lastTime == $meta['lyrics'][$pid]['in'][$f]['ts'] && $lastTime < 1610612736) {
 						$msg .= '<strong>' . LNG('comp.error.warn') . COLON . '</strong>' . LNG('comp.errorw.sametime',$v['__line']) . "\n";
 					}
 					if($meta['lyrics'][$pid]['in'][$f]['ts'] < 1610612736) $lastTime = $meta['lyrics'][$pid]['in'][$f]['ts'];
 				}
 			}
+			// 时长复用
 			if($v['type']=='Similar') {
 				$pid++;
 				$meta['lyrics'][$pid]=array();
@@ -550,7 +556,7 @@ function parseCmpLyric($u,$parseTags = true,$debug = false) {
 					];
 				}
 				$reuseitem=$reuses[$v['arg'][$acstart]];
-				$timealt=strToCurrtime($v['arg'][$acstart+1])-$meta['lyrics'][$reuseitem]['in'][0]['ts'];
+				$timealt=strToCurrtime($v['arg'][$acstart+1],$time_delta)+$time_delta-$meta['lyrics'][$reuseitem]['in'][0]['ts'];
 				$meta['lyrics'][$pid]["ac"]=fmtParaMark($v['arg'][$acstart+2]);
 				$meta['lyrics'][$pid]['n']=concat_arguments($v['arg'],$acstart+3);
 				if(!$meta['lyrics'][$pid]["n"]) $meta['lyrics'][$pid]["n"]="";
@@ -584,7 +590,7 @@ function parseCmpLyric($u,$parseTags = true,$debug = false) {
 						$meta['timestamps'][$meta['lyrics'][$pid]['in'][$k]['ts']]=array($pid,$rid);
 						$meta['lyrics'][$pid]['in'][$k]['c']="";
 						$str = concat_arguments($h['arg'],1);
-						if($lastTime == $meta['lyrics'][$pid]['in'][$k]['ts']) {
+						if($lastTime == $meta['lyrics'][$pid]['in'][$k]['ts'] && $lastTime < 1610612736) {
 							$msg .= '<strong>' . LNG('comp.error.warn') . COLON . '</strong>' . LNG('comp.errorw.sametime',$h['__line']) . "\n";
 						}
 						if($meta['lyrics'][$pid]['in'][$k]['ts'] < 1610612736) $lastTime = $meta['lyrics'][$pid]['in'][$k]['ts'];
@@ -599,6 +605,7 @@ function parseCmpLyric($u,$parseTags = true,$debug = false) {
 					}
 				}
 			}
+			// 常规用法
 			if($v['type']=='Para' || $v['type']=='Hidden')
 			{
 				$pid++;
@@ -630,11 +637,11 @@ function parseCmpLyric($u,$parseTags = true,$debug = false) {
 						$k++;
 						$meta['lyrics'][$pid]['in'][$k]['id']=$rid;
 						$c=count($h['arg']);
-						$meta['lyrics'][$pid]['in'][$k]['ts']=strToCurrtime($h['arg'][0]);
-						$meta['timestamps'][strToCurrtime($h['arg'][0])]=array($pid,$rid);
+						$meta['lyrics'][$pid]['in'][$k]['ts']=strToCurrtime($h['arg'][0],$time_delta) + $time_delta;
+						$meta['timestamps'][strToCurrtime($h['arg'][0],$time_delta)+$time_delta]=array($pid,$rid);
 						$meta['lyrics'][$pid]['in'][$k]['c']="";
 						$str = concat_arguments($h['arg'],1);
-						if($lastTime == $meta['lyrics'][$pid]['in'][$k]['ts']) {
+						if($lastTime == $meta['lyrics'][$pid]['in'][$k]['ts'] && $lastTime < 1610612736) {
 							$msg .= '<strong>' . LNG('comp.error.warn') . COLON . '</strong>' . LNG('comp.errorw.sametime',$h['__line']) . "\n";
 						}
 						if($meta['lyrics'][$pid]['in'][$k]['ts'] < 1610612736) $lastTime = $meta['lyrics'][$pid]['in'][$k]['ts'];

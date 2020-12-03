@@ -184,7 +184,7 @@ function editor_addl(){
 	var obj=$('#lyricfile')[0];
 	var str=obj.value.replace(/\r\n/g,"\n");
 	var lns=str.split("\n");
-	var allh=['A ','S ','N ','LA ','MA ','C ','L ','//','##','O ','TAG ','VAL ','MK ','FI ','G1 ','G2 ','P '];
+	var allh=['A ','S ','N ','LA ','MA ','C ','L ','//','##','O ','TAG ','VAL ','MK ','FI ','G1 ','G2 ','P ','D '];
 	var tagname='';
 	for(var i=0;i<lns.length;i++) {
 		var lns0=lns[i];
@@ -236,7 +236,7 @@ function editor_formatheading(){
 	var obj=$('#lyricfile')[0];
 	var str=obj.value.replace(/\r\n/g,"\n");
 	var lns=str.split("\n");
-	var allh=['A ','S ','N ','LA ','MA ','C ','L ','//','##','O ','TAG ','VAL ','MK ','FI ','G1 ','G2 ','P '];
+	var allh=['A ','S ','N ','LA ','MA ','C ','L ','//','##','O ','TAG ','VAL ','MK ','FI ','G1 ','G2 ','P ','D '];
 	var tagname='';
 	for(var i=0;i<lns.length;i++) {
 		var lns0=lns[i];
