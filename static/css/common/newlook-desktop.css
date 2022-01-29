@@ -1,24 +1,31 @@
 #right-container {
 	margin-top: 13px;
 }
-.song-avatar {
-	border-radius: 50%;
-}
-.am-btn:not(.am-btn-primary):not(.am-btn-secondary):not(.am-btn-warning):not(.am-btn-danger) {
-	border: 1px solid #AAA;
-}
-#preview {
-	padding-bottom: 1px;
-}
 
 .am-list-news {
 	max-width:900px;
 	padding: 16px 24px;
 	margin-left: auto;
 	margin-right: auto;
-	box-shadow: 0 0 4px 2px #00000033;
+	box-shadow: 0 6px 14px -4px #00000055;
 	transition: box-shadow .3s;
 }
 .am-list-news:focus {
-	box-shadow: 0 0 4px 2px #00000055;
+	box-shadow: 0 6px 20px -7px #00000077;
+}
+
+.txmp-tag:hover,.text-highlight:hover {
+	box-shadow: 0 6px 20px -4px #0000006A;
+}
+.txmp-tag.tag-quality-lq:hover {
+	box-shadow: 0 6px 20px -4px #ff5c5c99;
+}
+.txmp-tag.tag-quality-ll:hover {
+	box-shadow: 0 6px 20px -4px #6b79ff99;
+}
+.txmp-tag.tag-deep-orange-l:hover {
+	box-shadow: 0 6px 20px -4px #FB8C00FF;
+}
+.txmp-tag.tag-red-l:hover {
+	box-shadow: 0 6px 20px -4px #F44336FF;
 }

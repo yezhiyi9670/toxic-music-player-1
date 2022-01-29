@@ -1,5 +1,8 @@
 <?php if(!defined('IN_SYSTEM')) exit;//Silence is golden ?>
-<script>document.title='<?php $ioi = $GLOBALS['remote_playlist'];echo htmlspecial2($ioi['data']['name']) ?> - <?php echo htmlspecial2(_CT('app_name_title')) ?>';</script>
+<script>
+	document.title='<?php echo addslashes(LNG('rp.list.title')) . COLON ?><?php $ioi = $GLOBALS['remote_playlist'];echo addslashes($ioi['data']['name']) ?> - <?php echo addslashes(LNG('rp.title')) ?> - <?php echo addslashes(_CT('app_name_title')) ?>';
+	set_section_name(LNG('rp.list.title'));
+</script>
 <div class="txmp-page-full">
 	
 	<h3><?php LNGe('klist.caption') ?><?php echo htmlspecial($ioi['data']['name']) ?><span style="font-size:12px;font-weight:normal;">&nbsp;by <?php echo htmlspecial2($ioi['data']['uname']) ?></span></h3>

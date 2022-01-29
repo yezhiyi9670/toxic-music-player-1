@@ -1,0 +1,14 @@
+.txmp-page-left {
+	padding-top: 68px;
+}
+.txmp-page-right {
+	padding-bottom:0;
+}
+.txmp-page-right::after {
+	font-size: 0;
+}
+.preview {
+	width:calc(100% + 32px);
+	height:532px;
+	margin: -16px;
+}

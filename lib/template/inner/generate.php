@@ -1,6 +1,6 @@
 <?php if(!defined('IN_SYSTEM')) exit;//Silence is golden ?><?php
 
-/* TODO[yezhiyi9670]: Translate generated document. */
+/* TODO[WMSDFCL/User:4]: Translate generated document. */
 /* 由于生成结果不能翻译，此页面暂不翻译。 */
 
 function exitWithError($t) {
@@ -165,9 +165,13 @@ function _SINGLE($dest,$isfirst=true,$islast=true) {
 	$paraov="";
 	foreach($c['lyrics'] as $v)
 	{
-		if($v['display']){
+		if($v['display']) {
 			if($paraov) $paraov.=" ";
-			$paraov.=_W($v['ac'],$W_1,$W_2);
+			if($v['type'] == 'lyrics' && !isset($v['premark'])) {
+				$paraov .= _W($v['ac'],$W_1,$W_2);
+			} else if($v['type'] == 'split') {
+				$paraov .= '/';
+			}
 		}
 	}
 
@@ -176,7 +180,7 @@ function _SINGLE($dest,$isfirst=true,$islast=true) {
 	$paralen="";
 	foreach($c['lyrics'] as $v)
 	{
-		if(substr($v['ac'],strlen($v['ac'])-6)==='</sub>' || preg_match('/^[A-Z]+$/',$v['ac'][strlen($v['ac'])-1]))
+		if($v['type'] == 'lyrics' && (substr($v['ac'],strlen($v['ac'])-6)==='</sub>' || preg_match('/^[A-Z]+$/',$v['ac'][strlen($v['ac'])-1])))
 		{
 			if(!isset($paralen_used[_N($v['in'])]) && _N($v['in'])!=0){
 				if(strlen($paralen)>0) $paralen.='/';
@@ -208,20 +212,22 @@ function _SINGLE($dest,$isfirst=true,$islast=true) {
 	//打印歌词主体
 	foreach($c['lyrics'] as $p)
 	{
-		//Writes para header
-		_E($dest,_T(2,array(
-			'%{xid}','%{c}','@fontname',
-		),array(
-			'11',_W('['.htmlspecial3($p['n']).' '.$p['ac'].']',$W_1,$W_2),'"'.htmlspecial3($font).'"'
-		)));
-		foreach($p['in'] as $v)
-		{
-			//Writes line
+		if($p['type'] == 'lyrics' && !isset($p['premark'])) {
+			//Writes para header
 			_E($dest,_T(2,array(
-				'%{xid}','%{c}','@fontname'
+				'%{xid}','%{c}','@fontname',
 			),array(
-				($v['ts']<=1610612735 ? '15':'18'),_W($v['c'],$W_1,$W_2,true),'"'.htmlspecial3($font).'"',
+				'11',_W('['.htmlspecial3($p['n']).' '.$p['ac'].']',$W_1,$W_2),'"'.htmlspecial3($font).'"'
 			)));
+			foreach($p['in'] as $v)
+			{
+				//Writes line
+				_E($dest,_T(2,array(
+					'%{xid}','%{c}','@fontname'
+				),array(
+					($v['ts']<=1610612735 ? '15':'18'),_W($v['c'],$W_1,$W_2,true),'"'.htmlspecial3($font).'"',
+				)));
+			}
 		}
 	}
 
@@ -233,7 +239,7 @@ function _SINGLE($dest,$isfirst=true,$islast=true) {
 }
 
 //生成主程序
-if($alwaysGen || !file_exists($dest) || filemtime($source) > filemtime($dest) || filemtime(__FILE__) > filemtime($dest)){
+if(!$isList || ($alwaysGen || !file_exists($dest) || filemtime($source) > filemtime($dest) || filemtime(__FILE__) > filemtime($dest))){
 
 	//清空缓存文件，以免重复写入
 	file_put_contents($dest,"");

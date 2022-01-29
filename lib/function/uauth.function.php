@@ -94,7 +94,7 @@ function uauth_hash_verify($pass, $hash) {
 
 /**
  * 哈希摘要
- * 
+ *
  * 返回：md5 前八位或 uauth 哈希中间 17 位
  */
 function uauth_hash_summary($hash) {
@@ -123,6 +123,10 @@ function uauth_username() {
 
 	$ulist = read_data('uauth_users');
 	$t = read_data('uauth_session');
+
+	if($t == null) {
+		$t = [];
+	}
 
 	// 清理已过期
 	$rmlist = [];
@@ -499,6 +503,8 @@ function uauth_ip_cnt($ip) {
 	return $ulist[$ip];
 }
 
+///// 用户文件 /////
+
 /**
  * 获取下一个用户文件ID
  */
@@ -578,6 +584,11 @@ function uauth_lock_data($uname,$cate,$name) {
  */
 function uauth_write_data($uname,$cate,$name,$obj) {
 	if($uname == '__syscall') return;
+
+	$dir = USER_DATA . $uname . '/' . $cate . '/';
+	if(!file_exists($dir)) {
+		mkdir($dir);
+	}
 
 	$fid = 'user/' . $uname . '/' . $cate . '/' . $name;
 

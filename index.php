@@ -1,9 +1,10 @@
 <?php
 error_reporting(~E_ALL);
 
-define("IN_SYSTEM",'yezhiyi9670/txmp');
-define("VERSION","127a-pre6");
+define("IN_SYSTEM",'WMSDFCL/txmp');
+define("VERSION","128a-pre4");
 define("CSV_VERSION","1");
+define("DATAVER","201804");
 define("BASIC_PATH",str_replace("\\","/",__DIR__)."/");
 
 define("LIB_PATH",BASIC_PATH."lib/");
@@ -54,24 +55,32 @@ require(VLUSER."index.vluser.php");
 function _CT($i){
 	if(isset(_C()[$i])) return _C()[$i];
 	else return array(
-		"timezone" => 0, //时区校准
-		"cache_expire" => 24*60*60*2,
-		"temp_expire" => 3600,
+		"app_name" => LNG('config.app_name'), // 软件名称自定义
+		"app_name_title" => LNG('config.app_title'),
+		"app_desc" => LNG('config.app_desc'), // 应用程序描述
 
-		"can_register" => false,
-		"ip_reg_limit" => 3,
+		"timezone" => 0, // 时区校准（请勿使用）
+		"cache_expire" => 24*60*60*2, // RemotePlay 缓存有效时长
+		"temp_expire" => 3600, // 歌词本临时缓存有效时长
 
-		"user_playlist_quota"   => 20,
-		"user_exam_quota" => 50, // 允许用户创建的最大试卷数量
-		"user_submission_capacity" => 20, // 保留的最近用户提交记录数量
+		"rp_search_retry" => 4, // RemotePlay 搜索查询失败后的最大重试次数
+		"rp_search_retry_delay" => 0.1,
+		"rp_allow_pay_crack" => false, // RemotePlay 允许在线播放会员曲目
 
-		"exam_problem_limit" => 512, // 试卷中允许的最大的试题数量
+		"can_register" => false, // 能否注册
+		"ip_reg_limit" => 3, // 单个IP地址注册数量限制
 
-		"offline_usage" => false,
+		"user_playlist_quota" => 64, // 用户最大歌单数
+		"user_playlist_limit" => 76800, // 单个歌单最大尺寸
+		"user_exam_quota" => 50, // 允许用户创建的最大试卷数量 [NYI]
+		"user_submission_capacity" => 20, // 保留的最近用户提交记录数量 [NYI]
+		"exam_problem_limit" => 512, // 试卷中允许的最大的试题数量 [NYI]
 
-		"compiled_cache" => false, // 对已转换的歌词文件进行缓存
+		"offline_usage" => false, // 是否支持在客户端不能接入互联网时使用 [NYI]
+		"compiled_cache" => false, // 对已转换的歌词文件进行缓存 [NYI]
 
-		"debug" => false, // 是否调试模式
+		"show_comp_process" => false, // 在调试代码页显示完整编译过程
+		"debug" => false, // 是否调试模式 [NYI]
 	)[$i];
 }
 
@@ -88,8 +97,10 @@ if(!defined('APP_PREFIX')) {
 	die(LNG('init.empty_prefix'));
 }
 
-$cleaner=new GarbageCleaner();
-$cleaner -> clean();
+// 尝试垃圾清理
+if(mt_rand(1,20) <= 2) {
+	(new GarbageCleaner())->clean();
+}
 
 if(!isset($_GET['_lnk'])) $_GET['_lnk']="";
 $GLOBALS['_lnk'] = $_GET['_lnk'];

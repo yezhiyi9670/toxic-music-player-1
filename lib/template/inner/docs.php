@@ -2,11 +2,14 @@
 
 <script>
 	<?php if(!isset($_GET['list'])){if(!isset($GLOBALS['listname'])) { ?>
-		document.title="<?php echo addslashes(GCM()['N']) ?> > <?php echo LNGk('docs.title') ?> - <?php echo htmlspecial2(_CT('app_name_title')) ?>";
+		document.title="<?php echo LNGk('docs.title') ?> ‹ <?php echo addslashes(GCM()['N']) ?> - <?php echo htmlspecial2(_CT('app_name_title')) ?>";
+		set_section_name(LNG('docs.title'));
 	<?php } else { ?>
 		document.title="<?php echo LNGk('docs.title.bulk') ?> - <?php echo htmlspecial2(_CT('app_name_title')) ?>";
+		set_section_name(LNG('docs.title.bulk'));
 	<?php }}else{ ?>
 		document.title="<?php echo LNGk('docs.title.bulk') ?> - <?php echo htmlspecial2(_CT('app_name_title')) ?>";
+		set_section_name(LNG('docs.title.bulk'));
 	<?php } ?>
 </script>
 <style>
@@ -15,8 +18,9 @@
 }
 .follow-field {
 	white-space: pre;
-	border:1px solid #DDD;
 	background-color:#EEE;
+	padding-left: 3px;
+	padding-right: 3px;
 }
 .field-remember {
 	font-size:16px;
@@ -37,10 +41,10 @@
 ?>
 <?php
 function Field($name,$default,$extra='') {
-	echo '<input class="field-remember '.$extra.'" type="text" id="'.$name.'" name="'.$name.'" value="'.$default.'">';
+	echo '<input class="field-remember '.$extra.'" type="text" id="'.$name.'" name="'.$name.'" value="'.$default.'" data-default="'.$default.'">';
 }
 function Text($name) {
-	echo '<span class="follow-field" data-name="'.$name.'">'.$name.'</span>';
+	echo '<span class="follow-field" data-name="'.$name.'" data-default="'.$default.'">'.$name.'</span>';
 }
 
 $ioi = null;
@@ -72,7 +76,13 @@ if($internal) {
 		?>"></p>
 		<p>
 			<?php LNGe('docs.label.canonical') ?><input type="text" name="customname" value="<?php
-				if(!$internal) echo cid().'|'.$_GET['list'];
+				if(!$internal) {
+					if($_GET['list']) {
+						echo cid().'|'.$_GET['list'];
+					} else {
+						echo cid();
+					}
+				}
 				else {
 					for($i=0;$i<count($ioi['playlist']);$i++) {
 						if($i>0) echo '|';
@@ -89,6 +99,7 @@ if($internal) {
 		</p>
 		<p><?php LNGe('docs.label.font') ?><input type="text" class="field-remember" id="mfont" name="font" value="Noto Serif SC"></p>
 		<hr>
+		<p><a href="javascript:;" onclick="resetDefault()"><i class="fa fa-undo"></i> <?php LNGe('docs.label.reset') ?></a></p>
 		<p><?php Field('name',LNG('docs.cover.title.val')) ?><span class="cmt"><?php LNGe('docs.cover.title') ?></span></p>
 		<p><?php Field('subname',LNG('docs.cover.subtitle.val')) ?><span class="cmt"><?php LNGe('docs.cover.subtitle') ?></span></p>
 		<p><?php Field('author',LNG('docs.cover.author.val')) ?><span class="cmt"><?php LNGe('docs.cover.author') ?></span></p>
@@ -96,8 +107,8 @@ if($internal) {
 		<hr>
 		<p><strong><?php LNGe('docs.cip.caption') ?></strong></p>
 		<p><?php Text('name') ?> / <?php Text('author') ?>.  ——<?php Field('city',LNG('docs.cip.city.val'),'f-midshort') ?>：<?php Text('press') ?></p>
-		<p>ISBN  <?php Field('isbn','978-7-9493-4025-2') ?></p>
-		<p>I. ①<?php Field('cipname',LNG('docs.cip.title_s.val'),'f-short') ?>  II. ①<?php Field('cipauthor',LNG('docs.cip.author_s.val'),'f-short') ?>  III. ①<?php Field('cipcate',LNG('docs.cip.cate.val'),'f-mid') ?>  IV. <?php Field('cipgb','①G792.326','f-midshort') ?></p>
+		<p>ISBN  <?php Field('isbn','978-7-9493-4025-1') ?></p>
+		<p>I. ①<?php Field('cipname',LNG('docs.cip.title_s.val'),'f-short') ?>  II. ①<?php Field('cipauthor',LNG('docs.cip.author_s.val'),'f-short') ?>  III. ①<?php Field('cipcate',LNG('docs.cip.cate.val'),'f-mid') ?>  IV. <?php Field('cipgb','①H440.1316','f-midshort') ?></p>
 		<p><?php Text('press');LNGe('docs.cip.verify.1');Field('year','2048','f-midshort');LNGe('docs.cip.verify.2');Field('number','114514','f-midshort');LNGe('docs.cip.verify.3') ?></p>
 		<hr>
 		<p><?php Field('ititle',LNG('docs.cip.title.val')) ?><span class="cmt"><?php LNGe('docs.cip.title') ?></span></p>
@@ -119,12 +130,12 @@ if($internal) {
 "DocsFontSave BEGIN";
 
 <?php if(!isset($_GET['list']) && !$internal) { ?>
-if(localStorage[G.app_prefix+'-save-dl-font']) {
-	$('#font')[0].value=localStorage[G.app_prefix+'-save-dl-font'];
+if(storeData('docs.dl_font')) {
+	$('#font')[0].value = storeData('docs.dl_font');
 }
 
 $('#dl-form')[0].onsubmit=function(){
-	localStorage[G.app_prefix+'-save-dl-font']=$('#font')[0].value;
+	storeData('docs.dl_font') = $('#font')[0].value;
 }
 
 <?php }else{ ?>
@@ -139,8 +150,8 @@ $('.field-remember').each(function(x) {
 });
 
 for(var i=0;i<saveData.length;i++) {
-	if(localStorage[G.app_prefix+'-save-dl-'+saveData[i]]) {
-		$('#'+saveData[i])[0].value=localStorage[G.app_prefix+'-save-dl-'+saveData[i]];
+	if(storeData('docs.field.' + saveData[i])) {
+		$('#'+saveData[i])[0].value = storeData('docs.field.' + saveData[i]);
 	}
 }
 
@@ -150,7 +161,7 @@ $('#multi-form')[0].onsubmit=function(){
 	$('[name=cacheid]')[0].removeAttribute('disabled');
 	for(var i=0;i<saveData.length;i++) {
 		$('#'+saveData[i])[0].removeAttribute('disabled');
-		localStorage[G.app_prefix+'-save-dl-'+saveData[i]]=$('#'+saveData[i])[0].value;
+		storeData('docs.field.' + saveData[i], $('#'+saveData[i])[0].value);
 	}
 	$('[name=customname]')[0].removeAttribute('disabled');
 	
@@ -167,6 +178,12 @@ $('#multi-form')[0].onsubmit=function(){
 	},20);
 }
 
+function resetDefault() {
+	$('.field-remember:not(#mfont)').each(function(x) {
+		var e = this;
+		$(e).val($(e).attr('data-default'));
+	});
+}
 
 function reActive() {
 	for(var i=0;i<saveData.length;i++) {
@@ -181,7 +198,7 @@ function reActive() {
 setInterval(function(){
 	$('.follow-field').each(function(x) {
 		var e=$('.follow-field')[x];
-		e.innerHTML=escapeXml($('#'+e.getAttribute('data-name'))[0].value);
+		e.innerHTML = escapeXml($('#'+e.getAttribute('data-name'))[0].value);
 	});
 },200);
 

@@ -30,6 +30,179 @@ function escapeXml(unsafe) {
 	});
 }
 
+// 强行重载 iframe（破坏性）
+function reloadIframe($lst) {
+	$lst.each(function(i) {
+		this.outerHTML = this.outerHTML;
+	});
+}
+
+// localStorage 本地存储值
+// - data: 设置
+// - undefined: 查询
+// - null: 删除
+function storeData(key='',val) {
+	// 判断模式
+	var mode = 'set';
+	if(val === undefined) {
+		mode = 'get';
+	} else if(val === null) {
+		mode = 'remove';
+	}
+
+	// 取出数据
+	var data = localStorage[G.app_prefix + '-local-data'];
+	try {
+		data = JSON.parse(data);
+	} catch(_e) {
+		data = {};
+	}
+	if(typeof(data) != 'object') {
+		data = {};
+	}
+
+	// 寻址
+	key = key.split('.');
+	if(key.length == 1 && key[0] == '') {
+		if(mode == 'get') {
+			return data;
+		} else if(mode == 'set') {
+			return null;
+		} else {
+			delete localStorage[G.app_prefix + '-local-data'];
+			return undefined;
+		}
+	}
+	var curr = data;
+	for(let i=0;i<key.length-1;i++) {
+		var nxt = curr[key[i]];
+		if(typeof(nxt) != 'object' || nxt === null) {
+			// 正在设置且此处无内容
+			if(mode == 'set' && nxt === undefined) {
+				// 创建，然后重新赋值
+				curr[key[i]] = {};
+				nxt = curr[key[i]];
+			} else {
+				// 否则失败
+				return null;
+			}
+		}
+		curr = nxt;
+	}
+	// 末端寻址
+	if(mode == 'set') {
+		curr[key[key.length-1]] = val;
+		localStorage[G.app_prefix + '-local-data'] = JSON.stringify(data);
+		return val;
+	} else if(mode == 'get') {
+		return curr[key[key.length-1]];
+	} else if(mode == 'remove') {
+		// 删除值
+		delete curr[key[key.length-1]];
+		localStorage[G.app_prefix + '-local-data'] = JSON.stringify(data);
+		return undefined;
+	}
+}
+
+// 获取行/列位置
+function getLinedPosition(str,pos) {
+	var lnd = 0;
+	str = str.replace(/\r\n/g,"\n");
+	while(str.indexOf("\n") != -1) {
+		var delta = str.indexOf("\n");
+		str = str.substr(delta+1);
+		if(pos < delta + 1) break;
+		pos -= delta + 1;
+		lnd++;
+	}
+	return {line:lnd,ch:pos};
+}
+
+// 比较行/列位置
+function compLinedPosition(x,y) {
+	if(x.line < y.line) return -1;
+	if(x.line > y.line) return 1;
+	if(x.ch < y.ch) return -1;
+	if(x.ch > y.ch) return 1;
+	return 0;
+}
+// 行/列取小
+function minLinedPosition(x,y) {
+	if(compLinedPosition(x,y) == -1) {
+		return x;
+	}
+	return y;
+}
+// 行/列取大
+function maxLinedPosition(x,y) {
+	if(compLinedPosition(x,y) != -1) {
+		return x;
+	}
+	return y;
+}
+
+// 获取线性位置
+function getLinearPosition(str,lch) {
+	var lnd = lch.line;
+	var pos = lch.ch;
+
+	str = str.replace(/\r\n/g,"\n");
+	while(lnd-- && str.indexOf("\n") != -1) {
+		var delta = str.indexOf("\n");
+		str = str.substr(delta+1);
+		pos += delta + 1;
+	}
+	return pos;
+}
+
+// fa-icon
+function fa_icon($id,$mleft='05',$mright=3) {
+	return '<span class="fa fa-' + $id + '" style="margin-left:.' + $mleft + 'em;margin-right:.' + $mright + 'em">' + '</span>';
+}
+
+// 查找结果取小
+function minIndex(x,y) {
+	if(x == -1) return y;
+	if(y == -1) return x;
+	if(x < y) return x;
+	return y;
+}
+
+// 小数表示
+function decimalRps(x,minP=1,maxP=2) {
+	x = x.toString();
+	var currP = 0;
+	if(x.indexOf('.') == -1) {
+		x = x + '.';
+	} else {
+		currP = x.length - x.indexOf('.') - 1;
+	}
+	while(currP > maxP && x[x.length - 1] != '.') {
+		x = x.substr(0, x.length - 1);
+		currP--;
+	}
+	while(currP > minP && x[x.length - 1] == '0') {
+		x = x.substr(0, x.length - 1);
+		currP--;
+	}
+	while(currP < minP) {
+		x = x + '0';
+		currP++;
+	}
+	if(x[x.length - 1] == '.') {
+		x = x.substr(0, x.length - 1);
+	}
+	return x;
+}
+
+// 去 px
+function removePX(x) {
+	if(x.substr(-2) != 'px') {
+		return NaN;
+	}
+	return 1 * x.substr(0,x.length - 2);
+}
+
 // 隐藏提示 ?msg=...
 function F_HideNotice(_selector="#head-notice"){
 	history.replaceState({} ,document.title ,location.href.substring(0,location.href.indexOf('?')));
@@ -88,6 +261,11 @@ function random_shuffle(s1,s2) {
 	};
 }
 
+// 设置页面次级标题
+function set_section_name(str) {
+	$('.header-title-section-name').text(str);
+}
+
 // 试图阻止用户点击“付费播放”的 RemotePlay 项目
 function handle_rp_item() {
 	$('.song-item-rp a').each(function() {
@@ -98,7 +276,7 @@ function handle_rp_item() {
 	});
 	$('.song-item-rp a').on('click',async function() {
 		if($('.tag-rplim-payplay',$(this.parentElement)).length && location.search.indexOf('iframe') == -1) {
-			if(await modal_confirm_p(LNG('list.alert.norp'),LNG('list.alert.norp.tips'),LNG('ui.cancel'),LNG('ui.continue'))) {
+			if(await modal_confirm_p(LNG('list.alert.norp'),LNG(G.can_pay_play ? 'list.alert.norp.tips.true' : 'list.alert.norp.tips.false'),LNG('ui.cancel'),LNG('ui.continue'))) {
 				window.open(G.basic_url + $(this).attr('data-id'));
 			}
 			return false;
@@ -109,49 +287,43 @@ function handle_rp_item() {
 }
 
 // Firefox对onmousewheel的支持修复。
-(function()
-{
-
-if (navigator.userAgent.toLowerCase().indexOf('firefox')>=0)
-{
-	//firefox支持onmousewheel
-	addEventListener('DOMMouseScroll',function(e)
-	{
-		//console.log('iakioi');
-		var xxTarget=e.target;
-		var onmousewheel = xxTarget.onmousewheel;
-		var akioi=0;
-		while(!onmousewheel) {
-			xxTarget = xxTarget.parentElement;
-			//console.log(xxTarget);
-			akioi++;
-			if(akioi>10) break;
-			if(!xxTarget) break;
-			onmousewheel = xxTarget.onmousewheel;
-		}
-		//console.log(onmousewheel);
-		if (onmousewheel)
-		{
-			if(e.preventDefault)e.preventDefault();
-			e.returnValue=false;    //禁止页面滚动
-
-			if ( typeof xxTarget.onmousewheel!='function' )
-			{
-				//将onmousewheel转换成function
-				eval('window._tmpFun = function(event){'+onmousewheel+'}');
-				xxTarget.onmousewheel = window._tmpFun;
-				window._tmpFun = null;
+(function() {
+	if(navigator.userAgent.toLowerCase().indexOf('firefox')>=0) {
+		//firefox支持onmousewheel
+		addEventListener('DOMMouseScroll',function(e) {
+			//console.log('iakioi');
+			var xxTarget=e.target;
+			var onmousewheel = xxTarget.onmousewheel;
+			var akioi=0;
+			while(!onmousewheel) {
+				xxTarget = xxTarget.parentElement;
+				//console.log(xxTarget);
+				akioi++;
+				if(akioi>10) break;
+				if(!xxTarget) break;
+				onmousewheel = xxTarget.onmousewheel;
 			}
-			// 不直接执行是因为若onmousewheel(e)运行时间较长的话，会导致锁定滚动失效，使用setTimeout可避免
-			setTimeout(function(){
-				//console.log("Executed");
-				e.wheelDelta = e.detail * (-40); // Firefox取值不同。
-				//console.log(e);
-				xxTarget.onmousewheel(e);
-			},1);
-		}
-	},false);
-}
+			//console.log(onmousewheel);
+			if (onmousewheel) {
+				if(e.preventDefault)e.preventDefault();
+				e.returnValue=false;    //禁止页面滚动
+
+				if (typeof xxTarget.onmousewheel!='function') {
+					//将onmousewheel转换成function
+					eval('window._tmpFun = function(event){'+onmousewheel+'}');
+					xxTarget.onmousewheel = window._tmpFun;
+					window._tmpFun = null;
+				}
+				// 不直接执行是因为若onmousewheel(e)运行时间较长的话，会导致锁定滚动失效，使用setTimeout可避免
+				setTimeout(function(){
+					//console.log("Executed");
+					e.wheelDelta = e.detail * (-40); // Firefox取值不同。
+					//console.log(e);
+					xxTarget.onmousewheel(e);
+				},1);
+			}
+		},false);
+	}
 })();
 
 $('document').ready(function(){
@@ -172,4 +344,66 @@ $('document').ready(function(){
 			$ele.css('transform','rotateZ('+status+'deg)');
 		});
 	},7);
+
+	$('input[type=text],textarea').attr('spellcheck',false);
 });
+
+// resize 函数
+function setResizeFunc(func) {
+	var last_resize_time = +new Date();
+	window.onresize = function() {
+		var trigger_time = +new Date();
+		setTimeout(function() {
+			if(trigger_time <= last_resize_time) return;
+			func();
+		},20);
+	}
+}
+
+(() => {
+	var is_hidden = false;
+
+	// 网页显示与隐藏触发
+	$(document).ready(function() {
+		function c() {
+			if(document[a]) {
+				is_hidden = true;
+				$(document).trigger('data_leave');
+			} else {
+				is_hidden = false;
+				$(document).trigger('data_enter');
+			}
+		}
+		var a, b, d = document.title;
+		"undefined" != typeof document.hidden ? (a = "hidden", b = "visibilitychange") : "undefined" != typeof document.mozHidden ? (a = "mozHidden", b = "mozvisibilitychange") : "undefined" != typeof document.webkitHidden && (a = "webkitHidden", b = "webkitvisibilitychange"); "undefined" == typeof document.addEventListener && "undefined" == typeof document[a] || document.addEventListener(b, c, !1);
+	});
+
+	// 网页显示状态
+	// * 仅供性能优化使用。可能将非 active 状态误报为 active。
+	window.isWindowActive = function() {
+		return !is_hidden;
+	}
+})();
+
+(() => {
+	var frame_funcs = [];
+	window.registerFrameFunc = (func) => {
+		frame_funcs.push(func);
+	};
+	window.removeFrameFunc = (func) => {
+		var new_frame_func = [];
+		for(let fn of frame_funcs) {
+			if(fn != func) {
+				new_frame_func.push(fn);
+			}
+		}
+		frame_funcs = new_frame_func;
+	};
+	var runFrameFunc = (timer) => {
+		for(let fn of frame_funcs) {
+			fn(timer);
+		}
+		requestAnimationFrame(runFrameFunc);
+	}
+	requestAnimationFrame(runFrameFunc);
+})();

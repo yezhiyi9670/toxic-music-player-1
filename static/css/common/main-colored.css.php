@@ -14,6 +14,10 @@
 	if(isset($_GET['S']) && $_GET['S'][0]=='X' && strlen($_GET['S'])==7) $color4='#'.substr($_GET['S'],1);
 	if(isset($_GET['G1']) && $_GET['G1'][0]=='X' && strlen($_GET['G1'])==7) $colorG1='#'.substr($_GET['G1'],1);
 	if(isset($_GET['G2']) && $_GET['G2'][0]=='X' && strlen($_GET['G2'])==7) $colorG2='#'.substr($_GET['G2'],1);
+	$colorA = '';
+	if($colorG1 != '' && $colorG2 != '') {
+		$colorA = two_color_avg_hex($colorG1,$colorG2);
+	}
 	header("Cache-Control: public max-age=86400");
 	header("Last-Modified: " . gmdate('D, d M Y H:i:s',filemtime(__FILE__)));
 ?>
@@ -43,6 +47,11 @@ a:visited{
 }
 <?php } ?>
 
+.text-highlight {
+	background-color:<?php echo $color ?>;
+	color:#FFF;
+}
+
 body ::selection {
 	background-color:<?php echo $color ?>55;
 }
@@ -63,6 +72,28 @@ body ::-moz-selection {
 .am-list-news:focus .list-focus {
 	background-image: linear-gradient(135deg,<?php echo $color ?>22,<?php echo $color ?>33);
 }
+<?php } ?>
+
+<?php if($colorG1 != "" && $colorG2 != "") { ?>
+.am-header {
+	box-shadow: 0 5px 16px -5px <?php echo $colorA ?>77;
+	transition: background-color 1.5s, box-shadow .3s;
+}
+<?php if(!is_wap()) { ?>
+.am-header:hover {
+	box-shadow: 0 6px 18px -5px <?php echo $colorA ?>99;
+}
+<?php } ?>
+<?php } else { ?>
+.am-header {
+	box-shadow: 0 5px 16px -5px <?php echo $color ?>77;
+	transition: background-color 1.5s, box-shadow .3s;
+}
+<?php if(!is_wap()) { ?>
+.am-header:hover {
+	box-shadow: 0 6px 16px -5px <?php echo $color ?>7F;
+}
+<?php } ?>
 <?php } ?>
 
 /* ----- PATCHING ----- */

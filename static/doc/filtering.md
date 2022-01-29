@@ -8,7 +8,9 @@ You may use advanced grammar to perform advanced search.
 0x00 Scheduled
 --------------
 
-Filters are introduce in v115c, but scheduled to be fully implemented in undefined.
+Filters are introduced in v115c.
+
+Scheduled to be completed during the Emotionizing Update, in v127a.
 
 0x01 How does it work
 ---------------------

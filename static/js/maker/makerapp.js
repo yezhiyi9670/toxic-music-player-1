@@ -20,6 +20,7 @@ $('document').ready(function() {
 	if(isRandShuffle) $('#isRandShuffle')[0].checked="checked";
 	else $('#isRandShuffle')[0].removeAttribute("checked");
 
+	// 显示内容
 	if(isList) {
 		var obj=$('.maker-list')[0];
 		var tpl=obj.innerHTML;
@@ -29,9 +30,13 @@ $('document').ready(function() {
 		}
 		for(var i=0;i<obj.children.length;i++) {
 			var b=obj.children[i];
-			b.children[0].style.color='#'+listColor[i];
-			b.children[1].children[0].style.color='#'+listColor[i];
+			b.children[0].style.color='#'+(listColor[i] ?? '000');
+			if(listColor[i] == null) b.children[0].style.opacity='0.6';
+			b.children[1].children[0].style.color='#'+(listColor[i] ?? '000');
 			b.setAttribute('data-id',list[i]);
+			if(listColor[i] == null) {
+				b.setAttribute('data-invalid','yes');
+			}
 			b.children[0].innerHTML=listName[i];
 		}
 	}
@@ -119,6 +124,9 @@ $('document').ready(function() {
 
 function generateUrl() {
 	shouldGenerateUrl = true;
+	if(!$('.list-submit')[0].hasAttribute('disabled')) {
+		mark_changed();
+	}
 	genUrlTime = new Date().getTime();
 }
 
@@ -175,7 +183,7 @@ function _generateUrl() {
 			$('#list-rating-' + id).html(myRating[id]);
 
 			// A hacky way to fix the bug (?) of jquery.
-			$('span#list-id-' + id).html(myIds[id] + '<span></span>');
+			$('span#list-id-' + id).html(fa_icon('hashtag') + myIds[id] + '<span></span>');
 
 			if(id != myIds[id]) {
 				var idEle = $('span#list-id-' + id);
@@ -222,8 +230,10 @@ function _generateUrl() {
 		if(isCsv) datalen = buildCloudCsv().length;
 		else datalen = JSON.stringify(buildCloudObject()).length;
 	}
+
+	// 长度显示
 	var lenlimit=2048;
-	if(isCloudSave) lenlimit = 51200;
+	if(isCloudSave) lenlimit = cloudLenLimit;
 	$('.list-len-show').html(datalen+'/'+lenlimit);
 	if(datalen>lenlimit) {
 		$('.list-submit')[0].setAttribute('disabled','disabled');
@@ -233,7 +243,14 @@ function _generateUrl() {
 		$('.list-submit')[0].removeAttribute('disabled');
 		$('.op-btn').removeClass('am-disabled');
 	}
+
+	// 数量显示
 	amount=idList.length;
+
+	// 检测是否有无效歌曲
+	if($('[data-id][data-invalid=yes]').length == 0) {
+		$('.btn-clear-invalid').remove();
+	}
 }
 
 function _focus_to(t) {
@@ -264,6 +281,24 @@ async function removeItem(t) {
 	$(t).css('background-color','rgba(255,200,200,1)');
 	setTimeout(function(){$(t).remove();generateUrl();},300);
 	_focus_to(g);
+}
+
+// 清除失效歌曲
+async function clearInvalid() {
+	var invalid_count = $('[data-id][data-invalid=yes]').length;
+	var sel = await modal_confirm_p(LNG('led.alert.clear'),LNG('led.alert.clear.tips',invalid_count));
+	if(!sel) return;
+	var valid_count = $('[data-id]:not([data-invalid=yes])').length;
+	// 不可以清空整个列表
+	var first = (valid_count == 0);
+	$('[data-id][data-invalid=yes]').each(function() {
+		if(first) {
+			first = false;
+		} else {
+			$(this).remove();
+		}
+	});
+	generateUrl();
 }
 
 function highlight(t) {
@@ -318,7 +353,7 @@ async function rate(t,id) {
 async function setCanonical(t,id) {
 	if(!id) t=t.parentElement.parentElement.parentElement.parentElement;
 	if(!id) id = t.getAttribute('data-id');
-	var txt = await modal_prompt_p(LNG('led.alert.change_id'),LNG('led.alert.change_weight.tips',id),myIds[id]);
+	var txt = await modal_prompt_p(LNG('led.alert.change_id'),LNG('led.alert.change_id.tips',id),myIds[id]);
 	if(!txt) {_focus_to(t);return;}
 	if(txt.match(/^(\w+)$/)) {
 		myIds[id] = txt;
@@ -361,9 +396,15 @@ function selectItem(t) {
 			//console.log(b);
 			if(b.getAttribute('data-select')=='yes'){
 				clearInterval(T);
-				t.children[0].style.color=b.style.color;
+				// 选中，修改
+				t.removeAttribute('data-invalid');
+				t.children[0].style.opacity = '1';
+				t.children[0].style.color = b.style.color;
 				t.children[1].children[0].style.color=b.style.color;
 				t.children[0].children[0].innerHTML=b.children[0].innerHTML;
+				if(t.children[0].children[2] === undefined) {
+					t.children[0].innerHTML += '<br /><span class="addition-cmt"></span>';
+				}
 				if(!isCloudSave) t.children[0].children[2].innerHTML=b.children[2].innerHTML;
 				else t.children[0].children[2].innerHTML=b.children[2].innerHTML + (G.is_wap ? '<br />' : '') + '<span class="txmp-tag tag-purple-g">' + LNG('list.tag.rating') +'<span id="list-rating-' + b.children[0].getAttribute('data-id') + '"></span>';
 				t.setAttribute('data-id',b.children[0].getAttribute('data-id'));
@@ -388,7 +429,9 @@ function selectItem(t) {
 			$(b.children[0]).on('click',function(e){
 				this.parentElement.style.border="1px solid #000000";
 				this.parentElement.setAttribute("data-select",'yes');
+				// 防止错误地打开歌曲播放页。v127a-pre10 修复。
 				e.stopPropagation();
+				e.preventDefault();
 			});
 			if(b.children[0].getAttribute('data-id')==t.getAttribute('data-id'))
 				b.style.backgroundColor="#EEEEEE";
@@ -523,8 +566,18 @@ async function display_raw(xurl) {
 	});
 }
 
+var is_changed = false;
+function mark_changed() {
+	is_changed = true;
+	$('.list-submit').text(LNG('led.action.save'));
+}
+
 async function openUrl(ffflag = 0,doOpen = 1) {
 	if(isCloudSave) {
+		if(ffflag == 0 && doOpen == 1 && !is_changed) {
+			location.href = home + 'playlist/' + G.username + '/' + cloudId;
+			return;
+		}
 		var listdata = buildCloudCsv();
 		var wnd = modal_loading(LNG('ui.wait'),LNG('led.alert.save'));
 		$.ajax({
@@ -552,9 +605,11 @@ async function openUrl(ffflag = 0,doOpen = 1) {
 					console.error(LNG('led.debug.save.error'),e);
 					modal_alert(LNG('ui.error'), LNG('led.alert.save.error') + LNG('punc.colon') + e);
 				} else if(ffflag == 0) {
+					is_changed = false;
+					$('.list-submit').text(LNG('led.action.open'));
 					if(doOpen != 0) {
+						close_modal(wnd);
 						if(doOpen == 2) {
-							close_modal(wnd);
 							if(!isCsv) {
 								display_raw(home + 'playlist/' + G.username + '/' + cloudId + '?raw');
 							} else {
@@ -572,7 +627,6 @@ async function openUrl(ffflag = 0,doOpen = 1) {
 							}
 							return;
 						}
-						else location.href = home + 'playlist/' + G.username + '/' + cloudId;
 					}
 				} else if(ffflag == -1) {
 					if(doOpen != 0) location.href = home + 'user';
@@ -584,6 +638,89 @@ async function openUrl(ffflag = 0,doOpen = 1) {
 	} else if(doOpen != 0) {
 		location.href=$('#g-url')[0].value;
 	}
+}
+
+/* TODO[WMSDFCL/User:4]: 清理重复代码 */
+async function editRaw() {
+	conf = await modal_confirm_by_input(LNG('led.alert.editraw.action'),LNG('led.alert.editraw.prompt'),
+					'' + Math.floor(9000 * Math.random() + 1000));
+	if(!conf) return;
+	var wnd2 = modal_loading(LNG('led.alert.export.loading'));
+	var xurl = home + 'playlist/' + G.username + '/' + cloudId + '?raw';
+	$.ajax({
+		async: true,
+		url: xurl,
+		dataType: 'text',
+		method: 'GET',
+		error: async function(e) {
+			close_modal(wnd2);
+			await modal_alert_p(LNG('led.alert.export.fail'),LNG('led.alert.export.fail.tips'));
+		},
+		success: async function(e) {
+			while(true) {
+				close_modal(wnd2);
+				var res;
+				res = await modal_promptarea_p(LNG('led.alert.editraw'),LNG('led.alert.editraw.tips'),e);
+				e = res;
+				if(!res) return;
+				var isCsv = (res.indexOf('{') == -1);
+				if(!isCsv) {
+					try{
+						res = JSON.parse(res);
+					} catch(e) {
+						modal_alert(LNG('ui.error'),LNG('led.alert.import.fail.tips'));
+						return;
+					}
+					if(typeof(res) != 'object') {
+						modal_alert(LNG('ui.error'),LNG('led.alert.import.fail.tips'));
+						return;
+					}
+				}
+
+				var list = res;
+				var is_success = await new Promise((resolve,reject) => {
+					var wnd = modal_loading(LNG('ui.wait'),LNG('led.alert.import.loading'));
+					$.ajax({
+						async: true,
+						url: home + 'playlist/save-list/'+(isCloudSave ? cloudId : 0),
+						dataType: 'text',
+						method: 'POST',
+						data: {
+							'str': (isCsv ? res : JSON.stringify(list)),
+							'isCsv': (isCsv ? 'yes' : 'no'),
+							'delete': false,
+							'isSubmit': 'yes',
+							'isAjax': 'yes',
+							'csrf-token-name': G.csrf_s1,
+							'csrf-token-value': G.csrf_s2,
+						},
+						error: function(e) {
+							close_modal(wnd);
+							resolve(2);
+						},
+						success: function(e) {
+							if(e && e.substr(0,1) != '+') {
+								close_modal(wnd);
+								resolve(e);
+							} else {
+								resolve(0);
+							}
+						}
+					});
+				});
+				if(2 === is_success) {
+					console.error(LNG('led.debug.save.error'));
+					await modal_alert_p(LNG('ui.error'),LNG('led.alert.save.error'));
+				} else if(0 === is_success) {
+					history.go(0);
+					break;
+				} else {
+					console.error(LNG('led.debug.save.error'),is_success);
+					await modal_alert_p(LNG('ui.error'),LNG('led.alert.save.error') + LNG('punc.colon') + is_success);
+				}
+			}
+		}
+	});
 }
 
 function internal_conv() {
@@ -766,5 +903,13 @@ async function importData(flag = true) {
 		}
 	});
 }
+
+window.onbeforeunload = function() {
+	if(is_changed) {
+		return LNG('led.not_saved');
+	}
+	e.preventDefault();
+	return false;
+};
 
 /* </script> */

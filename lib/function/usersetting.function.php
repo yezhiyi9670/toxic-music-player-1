@@ -10,10 +10,12 @@ function setting_def() {
 		'name-font'=>'\'Noto Sans SC\'',
 		'input-font'=>'\'Noto Sans SC\'',
 		'code-font'=>'Consolas,Monospace',
-		'new-look'=>'Y',
 		'allplay-rand'=>'Y',
 		'no-color-switch'=>'N',
-		'limited-selection'=>'N'
+		'limited-selection'=>'Y',
+		'aggressive-optimize'=>'N',
+		'wap-font-size'=>'16',
+		'wap-scale'=>'0.92'
 	);
 }
 

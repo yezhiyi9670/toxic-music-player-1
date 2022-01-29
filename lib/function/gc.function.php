@@ -10,6 +10,23 @@ class GarbageCleaner {
 		return $txt==$mode;
 	}
 
+	function getLastCleaned() {
+		if(file_exists(DATA_PATH . 'cache_clean_time.txt')) {
+			return intval(trim(file_get_contents(DATA_PATH . 'cache_clean_time.txt')));
+		}
+		return 0;
+	}
+
+	function needClean() {
+		return time() - $this->getLastCleaned() >= 600;
+	}
+
+	function cleanIfNeed() {
+		if($this->needClean()) {
+			$this->clean();
+		}
+	}
+
 	function clean() {
 		//清除已过期Cache
 		$menu=dir_list(REMOTE_CACHE);
@@ -22,5 +39,8 @@ class GarbageCleaner {
 				unlink($fname);
 			}
 		}
+
+		// 标记完成
+		file_put_contents(DATA_PATH . 'cache_clean_time.txt', time());
 	}
 }

@@ -13,16 +13,40 @@ a{
 .txmp-header-title{
 	text-align:left !important;
 	margin:0 !important;
+	position: relative;
+}
+.header-title-text {
+	display: inline-block;
+	position: relative;
+}
+.header-title-app-name {
+	font-size: 12px;
+	display: block;
+	position: absolute;
+	margin-top: -12px;
+	opacity:0.7;
+}
+.header-title-section-name {
+	font-size: 18px;
+	display: block;
+	position: absolute;
+	margin-top: 8px;
 }
 .txmp-r-ico{
 	margin-right:16px;
 	margin-left:4px;
 }
-.txmp-nav-icos > a{
+.txmp-nav-icos > a,
+.txmp-nav-icos > .header-dropdown > .header-dropdown-a{
 	color:#FFF;
 	font-size:24px;
 	margin-left:8px;
 	margin-top:2px;
+}
+.txmp-nav-ico-user {
+	padding-right:18px;
+	border-right:2px solid #FFF;
+	margin-right:4px;
 }
 .txmp-page-main{
 	position:relative;
@@ -36,7 +60,8 @@ a{
 
 input[type=text],
 input[type=password],
-input[type=select]{
+select.field-large,
+.am-modal-dialog input{
 	height:37px;width:30%;padding:4px;
 	padding-top: 1px;
 	padding-bottom: 3px;
@@ -56,6 +81,7 @@ strong, b{
 .addition-cmt{
 	font-size:14px;
 	color:#BBB;
+	display: inline-block;
 }
 
 .font-bold {
@@ -67,6 +93,7 @@ strong, b{
 	background-color: transparent;
 	font-size: 12px;
 	margin-right:6px;
+	height: 22px;
 	padding: 1px 2px;
 	color: #000;
 	white-space: nowrap;
@@ -178,6 +205,13 @@ strong, b{
 	color: #FFF;
 }
 
+.txmp-tag.tag-vip {
+	border-color: transparent;
+	background-color: #ccb800;
+	background-image: linear-gradient(135deg,rgb(241, 237, 0),rgb(201, 187, 0));
+	color: rgba(0, 0, 0, 0.8);
+}
+
 .song-item {
 	padding-bottom: 6px;
 }
@@ -188,6 +222,10 @@ strong, b{
 
 .am-list-item-hd {
 	margin-bottom:6px !important;
+}
+
+.am-list-item-hd .txmp-tag {
+	box-shadow: none;
 }
 
 .am-list .am-list-item-dated a{
@@ -239,31 +277,79 @@ input.input-min:focus {
 	font-weight:700;
 }
 
-.language-switcher-a,
-.language-switcher-a:hover {
+.header-dropdown-a,
+.header-dropdown-a:hover {
 	color: inherit;
 	font-size: 2.4rem
+}
+
+div.codeblock{
+	display: block;
+	padding: 1rem;
+	margin: 1rem 0;
+	font-size: 1.3rem;
+	line-height: 1.6;
+	word-break: break-all;
+	word-wrap: break-word;
+	color: #555;
+	background-color: #EEEEEE;
+	/* border: 1px solid #dedede; */
+	white-space: pre-wrap;
+}
+div.codeblock table {
+	font-size: 1.0em;
+	word-break: break-all;
+	word-wrap: break-word;
+	white-space: pre-wrap;
+	line-height: 1.6;
+}
+div.codeblock table td {
+	vertical-align: top;
+}
+div.codeblock table td:first-child {
+	text-align: right;
+	white-space: nowrap;
+	user-select: none;
+}
+div.codeblock.codeblock-white {
+	background-color: #f8f8f800;
+	border: 1px solid #dedede00;
+}
+div.codeblock {
+	font-family: Monaco,Menlo,Consolas,"Courier New",FontAwesome,monospace;
+}
+
+.text-lowlight {
+	background-color: #E7E7E7;
+}
+
+.text-comp-notice {
+	color: #1E88E5;
+}
+.text-comp-unstd {
+	color: #AB47BC;
+}
+.text-comp-warn {
+	color: #EF6C00;
+}
+.text-comp-error {
+	color: #E53935;
+}
+.text-comp-fatal {
+	color: #000000;
 }
 
 /* ----- PATCHING ----- */
 
 .am-modal-dialog {
 	outline:none;
+	box-shadow: 0 4px 14px -4px #00000055;
 	transition:box-shadow .3s;
 }
 .am-modal-dialog:focus {
-	box-shadow: 0 0 4px 2px #FFFFFF77;
+	box-shadow: 0 6px 20px -4px #00000077;
 }
-input.am-modal-prompt-input[type=text],
-input.am-modal-prompt-input[type=password] {
-	border: 1px solid #CCC;
-	transition:box-shadow .3s;
-}
-input.am-modal-prompt-input[type=text]:focus,
-input.am-modal-prompt-input[type=password]:focus {
-	border: 1px solid #CCC;
-	box-shadow: inset 0 0 4px 0 #00000044;
-}
+
 .am-modal-hd {
 	font-weight:700;
 }
@@ -279,12 +365,13 @@ input.am-modal-prompt-input[type=password]:focus {
 
 code {
 	font-size: 1em;
+	white-space: pre-wrap;
 }
 
 .txmp-page-left::after,
 .txmp-page-right::after,
 .txmp-page-full::after {
-	content: "TEMP FIX  ----- WMSDF Development -----";
+	content: "TEMP FIX  ----- WMSDF Code Lab -----";
 	font-size: 0.5em;
 	opacity: 0;
 	user-select: none;
@@ -305,6 +392,25 @@ code {
 }
 
 .bid-linking {
-	position:fixed;right:32px;top:64px;background-color:#FFFA;
+	position:fixed;right:14px;top:62px;background-color:#FFFC;
 	display:block;
+	font-size: 14px;
+	padding: 8px;
+	box-shadow: 0 4px 14px -4px #00000055;
+	transition: box-shadow .3s, background-color .3s;
+}
+
+.bid-linking:hover {
+	background-color:#FFFF;
+	box-shadow: 0 6px 20px -4px #00000077;
+}
+
+.am-dropdown-content li.am-active>a,
+.am-dropdown-content li.am-active>a:hover {
+	background-color: #ddd;
+	color: #000;
+}
+
+body {
+	overscroll-behavior-x: none;
 }

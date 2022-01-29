@@ -1,13 +1,16 @@
+!dataver %{V}
 [Info]
 N  <Title>
 S  <Singer>
 C  <Cate>
 LA <Lyric Author>
 MA <Music Author>
-G1 <Gradiant C1>
-G2 <Gradiant C2>
+G1 #777777
+G2 #AAAAAA
 O  <Origin>
 P  -
 
 [Para M0 Notice]
 L 1.0 No Lyrics
+
+[Final __LT__]

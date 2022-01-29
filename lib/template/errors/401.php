@@ -1,6 +1,7 @@
 <?php if(!defined('IN_SYSTEM')) exit;//Silence is golden ?>
 <script>
 	document.title="<?php LNGe('err.title') ?> - <?php echo htmlspecial2(_CT('app_name_title')) ?>";
+	set_section_name(LNG('err.title'));
 </script>
 <div class="txmp-page-full">
 	<h3><?php LNGe('err.title.401') ?></h3>

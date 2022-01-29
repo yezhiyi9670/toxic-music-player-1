@@ -1,9 +1,9 @@
 <?php if(!defined('IN_SYSTEM')) exit;//Silence is golden ?>
 
 <div class="rmenu-selection-tabs">
-	<span data-tab="list"   class="rmenu-tab rmenu-tab-list rmenu-tab-active"><?php LNGe('player.hub.list') ?></span>
-	<span data-tab="saving" class="rmenu-tab rmenu-tab-saving"><?php LNGe('player.hub.action') ?></span>
-	<span data-tab="stats"  class="rmenu-tab rmenu-tab-stats"><?php LNGe('player.hub.stats') ?></span>
+	<span data-tab="list"   class="shadowed rmenu-tab rmenu-tab-list rmenu-tab-active"><?php LNGe('player.hub.list') ?></span>
+	<span data-tab="saving" class="shadowed rmenu-tab rmenu-tab-saving"><?php LNGe('player.hub.action') ?></span>
+	<span data-tab="stats"  class="shadowed rmenu-tab rmenu-tab-stats"><?php LNGe('player.hub.stats') ?></span>
 	<a class="rmenu-close" href="javascript:;" onclick="rmenu_hide()" style="color: #000; float:right; font-size:20px;">
 		<i class="fa fa-times"></i>
 	</a>

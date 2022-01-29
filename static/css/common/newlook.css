@@ -2,30 +2,90 @@
 .codeblock,
 .tooltip-box,
 .am-btn,
-input[type=text], input[type=password], input[type=select],
+input[type=text], input[type=password], select.field-large,
 input[type=number],select{
-	border-radius:0;
+	border: 1px solid #EEE;
 }
-input[type=text], input[type=password], input[type=select],
-input[type=number],select {
+input[type=text], input[type=password], select.field-large,
+input[type=number],select,.am-modal-dialog textarea {
 	outline:none;
-	border: 1.5px dashed #888;
+	box-shadow: 0 4px 14px -4px #00000055;
+	border: none;
+	transition: box-shadow .3s;
 }
 input[type=text]:focus,
 input[type=password]:focus,
-input[type=select]:focus,
+select.field-large:focus,
 input[type=number]:focus,
-select:focus {
-	border: 1.5px dashed #000;
+select:focus,
+.am-modal-dialog textarea:focus {
+	border: none;
+	box-shadow: 0 6px 20px -4px #00000077;
+}
+.am-btn {
+	outline:none;
+	box-shadow: 0 4px 14px -4px #00000055;
+	border: 1px solid transparent;
+	transition: box-shadow .3s;
+}
+
+.shadowed,
+.am-dropdown-content {
+	border: none;
+	box-shadow: 0 4px 14px -4px #00000055;
+	transition: box-shadow .3s;
+}
+.shadowed:hover,
+.am-dropdown-content:hover {
+	border: none;
+	box-shadow: 0 4px 14px -4px #00000077;
+}
+.shadowed-intense {
+	border: none;
+	box-shadow: 0 5px 17px -4px #00000077;
+	transition: box-shadow .3s;
+}
+.shadowed-intense:hover {
+	border: none;
+	box-shadow: 0 6px 22px -4px #00000088;
+}
+.am-dropdown-content::before,
+.am-dropdown-content::after {
+	display: none;
+}
+
+.txmp-tag,.text-highlight {
+	box-shadow: 0 4px 14px -4px #00000051;
+	transition: box-shadow .3s;
+}
+.txmp-tag.tag-quality-lq {
+	box-shadow: 0 4px 14px -4px #ff5c5c77;
+}
+.txmp-tag.tag-quality-ll {
+	box-shadow: 0 4px 14px -4px #6b79ff77;
+}
+.txmp-tag.tag-deep-orange-l {
+	box-shadow: 0 4px 14px -4px #FB8C00CC;
+}
+.txmp-tag.tag-red-l {
+	box-shadow: 0 6px 20px -4px #F44336CC;
+}
+
+.am-btn:hover {
+	border: 1px solid transparent;
+	box-shadow: 0 6px 20px -4px #00000077;
+}
+.am-list-item-hd {
+	overflow: visible !important;
 }
 
 input[type=text]:disabled,
 input[type=password]:disabled,
-input[type=select]:disabled,
+select.field-large:disabled,
 input[type=number]:disabled,
 select:disabled {
-	border: 1.5px dotted #888;
-	background-color: #77777722;
+	border: none;
+	background-color: #77777733;
 }
 
 .am-dropdown-content,
@@ -35,13 +95,32 @@ select:disabled {
 .tooltip-box,
 .am-btn,
 .txmp-tag,
-input[type=text], input[type=password], input[type=select],
+input[type=text], input[type=password], select.field-large,
 input[type=number],select,
 .follow-field{
-	box-shadow: none;
+	/* box-shadow: none; */
 }
 .am-btn {
-	transition: background-color 0.1s;
+	transition: background-color .3s, box-shadow .3s;
+}
+
+.tooltip-box {
+	border: none;
+	box-shadow: 0 4px 14px -4px #00000055;
+	transition: box-shadow .3s;
+	padding: 16px;
+	margin-bottom: 16px;
+}
+.tooltip-box:hover {
+	box-shadow: 0 6px 20px -4px #00000077;
+}
+.tooltip-box p:last-child {
+	margin-bottom: 0;
+}
+
+.am-btn:not(.am-btn-primary):not(.am-btn-secondary):not(.am-btn-warning):not(.am-btn-danger):not(.am-btn-success) {
+	background-color: #EEE;
+	border: 1px solid #DDD;
 }
 
 
@@ -53,14 +132,20 @@ input[type=number],select,
 	padding:7px;
 }
 
-.txmp-header {
-	transition: background-color 1.5s;
-}
 a {
 	transition: color .25s;
 }
-.lrc-item,.para-title {
-	transition: color .3s;
+.lrc-item,
+.para-title,
+.lrc-text,
+.active-color-1,
+.active-color-2,
+.active-color-3,
+.active-color-4,
+.active-color-5,
+.active-color-6,
+.active-color-7 {
+	transition: color .12s;
 }
 .para {
 	transition: background-color .3s;
@@ -72,4 +157,44 @@ a {
 
 .player-processbar-i {
 	transition: background-color .25s, width .2s;
+}
+
+.am-dropdown-content .addition-cmt {
+	margin-top: 3px;
+}
+
+.am-list-item-hd .addition-cmt {
+	margin-top: 0;
+	margin-bottom: -3px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+}
+
+.am-dropdown-content li,
+.am-dropdown-content li>a {
+	transition: background-color, .15s;
+}
+
+/* Flat Design */
+
+input[type=text], input[type=password], select.field-large,textarea,
+.am-modal-prompt-input,
+input[type=number],select,.am-btn,.tooltip-box,.am-dropdown-content,
+.song-avatar,.song-avatar img,.lrc-overview,.lrc-content,
+.am-modal-dialog,.rmenu-tab,
+#lyricfile__wrapper,.preview,.bid-linking,.avatar-preview,
+.codeblock,.follow-field,.am-modal-no-btn .am-modal-dialog {
+	border-radius: 6px;
+}
+
+.am-modal-dialog {
+	overflow: hidden;
+}
+
+.txmp-tag,code,.text-highlight,.text-lowlight {
+	border-radius: 3px;
+}
+
+.player-processbar,.player-processbar-i,.float-btn {
+	border-radius: 4px;
 }

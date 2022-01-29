@@ -8,7 +8,7 @@ if(!isset($_POST['isSubmit'])){
 else if(!$uname) {
 	echo LNG('led.save.notlogin');
 } else {
-	if(strlen($_POST['str']) > 51200) {
+	if(strlen($_POST['str']) > _CT('user_playlist_limit')) {
 		echo LNG('led.save.size');
 		exit;
 	}

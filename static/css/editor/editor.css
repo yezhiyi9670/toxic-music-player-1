@@ -1,6 +1,18 @@
 button.am-btn{
-    margin-bottom:8px;
+	margin-bottom:8px;
 }
 textarea {
-    overscroll-behavior:none;
+	overscroll-behavior:none;
+}
+#lyricfile {
+	resize: none;
+	outline: none;
+}
+
+#lyricfile__wrapper {
+	box-shadow: 0 4px 14px -4px #00000055;
+	transition: box-shadow .3s;
+}
+#lyricfile__wrapper:hover {
+	box-shadow: 0 6px 20px -4px #00000077;
 }

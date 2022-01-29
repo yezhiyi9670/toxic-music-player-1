@@ -46,7 +46,7 @@
 		active_modals++;
 		$('body').append($modal);
 		$('#modal-' + wid + ' .amjs-modal-close').click(function(){
-			cancel();
+			if(cancel) cancel();
 			setTimeout(function(){destroy_modal(wid)},500);
 		});
 
@@ -54,13 +54,14 @@
 			if(e.which == 32 || e.which == 13) {
 				$modal.modal('close');
 				setTimeout(function(){destroy_modal(wid)},500);
-				cancel();
+				if(cancel) cancel();
+				e.preventDefault();
 			}
 		});
 
 		$modal.modal({onCancel:()=>{
 			setTimeout(function(){destroy_modal(wid)},500);
-			cancel();
+			if(cancel) cancel();
 		},closeViaDimmer:false});
 		open_modal($modal);
 		return wid;
@@ -95,9 +96,10 @@
 		$('body').append($modal);
 		$modal.children().on('keypress',function(e){
 			if(e.which == 32 || e.which == 13) {
-				confirm();
+				if(confirm) confirm();
 				$modal.modal('close');
 				setTimeout(function(){destroy_modal(wid)},500);
+				e.preventDefault();
 			}
 		});
 		$('#modal-' + wid + ' .amjs-modal-close').click(function(){
@@ -107,7 +109,7 @@
 		$('#modal-' + wid + ' .amjs-modal-confirm').click(confirm);
 		$modal.modal({onCancel:()=>{
 			setTimeout(function(){destroy_modal(wid)},500);
-			cancel();
+			if(cancel) cancel();
 		},closeViaDimmer:false});
 
 		open_modal($modal);
@@ -131,7 +133,7 @@
 					<div class="am-modal-hd">${title}</div>
 					<div class="am-modal-bd">
 						${content}
-						<input type="${type}" class="am-modal-prompt-input amjs-modal-input" style="width:unset">
+						<input type="${type}" class="am-modal-prompt-input amjs-modal-input" style="width:unset" spellcheck="false">
 					</div>
 					<div class="am-modal-footer">
 						<span class="am-modal-btn amjs-modal-close amjs-modal-cancel">${LNG('ui.cancel')}</span>
@@ -147,6 +149,7 @@
 				confirm($('#modal-' + wid + ' .amjs-modal-input').val());
 				$modal.modal('close');
 				setTimeout(function(){destroy_modal(wid)},500);
+				e.preventDefault();
 			}
 		});
 		$('#modal-' + wid + ' .amjs-modal-close').click(function(){
@@ -154,11 +157,11 @@
 		});
 		$('#modal-' + wid + ' .amjs-modal-cancel').click(cancel);
 		$('#modal-' + wid + ' .amjs-modal-confirm').click(function(){
-			confirm($('#modal-' + wid + ' .amjs-modal-input').val());
+			if(confirm) confirm($('#modal-' + wid + ' .amjs-modal-input').val());
 		});
 		$modal.modal({onCancel:()=>{
 			setTimeout(function(){destroy_modal(wid)},500);
-			cancel();
+			if(cancel) cancel();
 		},closeViaDimmer:false});
 
 		open_modal($modal);
@@ -192,7 +195,7 @@
 					<div class="am-modal-hd">${title}</div>
 					<div class="am-modal-bd">
 						${content}
-						<textarea class="am-modal-prompt-input amjs-modal-input" style="width:100%;height:200px;font-family:'Consolas','Source Code Pro','Courier New';"></textarea>
+						<textarea class="am-modal-prompt-input amjs-modal-input" style="width:100%;height:200px;font-family:'Consolas','Source Code Pro','Courier New';" spellcheck="false"></textarea>
 					</div>
 					<div class="am-modal-footer">
 						<span class="am-modal-btn amjs-modal-close amjs-modal-cancel">${LNG('ui.cancel')}</span>
@@ -208,11 +211,11 @@
 		});
 		$('#modal-' + wid + ' .amjs-modal-cancel').click(cancel);
 		$('#modal-' + wid + ' .amjs-modal-confirm').click(function(){
-			confirm($('#modal-' + wid + ' .amjs-modal-input').val());
+			if(confirm) confirm($('#modal-' + wid + ' .amjs-modal-input').val());
 		});
 		$modal.modal({onCancel:()=>{
 			setTimeout(function(){destroy_modal(wid)},500);
-			cancel();
+			if(cancel) cancel();
 		},closeViaDimmer:false});
 
 		open_modal($modal);

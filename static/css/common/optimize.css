@@ -1,0 +1,35 @@
+.comp-list-item,
+.ann-list-item,
+.song-item,
+.maker-list-example {
+	contain: style;
+}
+
+.song-list-item {
+	contain: paint style layout;
+}
+.song-list-item .addition-cmt {
+    content-visibility: auto;
+	contain-intrinsic-size: 25px;
+}
+.am-list-item-hd .addition-cmt {
+    content-visibility: auto;
+	contain-intrinsic-size: 18.67px;
+}
+
+.rmenu-list-showbox,
+.comp-show,
+.ann-show {
+	content-visibility: auto;
+}
+
+@keyframes overflow-move {
+    0% {
+        left: 0;
+        transform: translate(0, 0);
+    }
+    100% {
+        left: 100%;
+        transform: translate(-100%, 0);
+    }
+}

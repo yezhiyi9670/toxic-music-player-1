@@ -18,17 +18,17 @@
 	header("Last-Modified: " . gmdate('D, d M Y H:i:s',filemtime(__FILE__)));
 ?>
 /*<style>*/
-.lrc-active{
+.lrc-item.lrc-active{
 	color:<?php echo $color ?>;
 }
 <?php if($colorG1 != "" && $colorG2 != ""){ ?>
-.player-icon:hover{
-	color:<?php echo $colorG1 ?>;
-}
 .player-icon,
 .player-icon:focus,
 .player-icon:visited{
 	color:<?php echo $colorG2 ?>;
+}
+.player-icon:hover{
+	color:<?php echo $colorG1 ?>;
 }
 .player-processbar:hover>.player-processbar-i{
 	background-color:<?php echo $colorG1 ?>;
@@ -49,6 +49,14 @@
 	background-color:<?php echo $color ?>;
 }
 <?php } ?>
+
+.float-btn.float-btn-active,
+.float-btn.float-btn-active:hover {
+	/* border: 2px solid <?php echo $color ?>;
+	color: <?php echo $color ?>; */
+	background-color: <?php echo $color ?>;
+	color: #FFF;
+}
 
 /* [R] Reverse */
 .lrc-active .reverse-sound-o {

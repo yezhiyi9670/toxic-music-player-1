@@ -65,7 +65,10 @@ else if($_POST['isSubmit']=='register') {
 else {echo '<script>location.href=location.href;</script>';exit;}
 
 ?>
-<script>document.title='<?php echo LNGk('login.title') ?> - <?php echo htmlspecial2(_CT('app_name_title')) ?>';</script>
+<script>
+    document.title='<?php echo LNGk('login.title') ?> - <?php echo htmlspecial2(_CT('app_name_title')) ?>';
+    set_section_name(LNG('login.title'));
+</script>
 <div class="txmp-page-full">
     <h3><?php LNGe('login.login.caption') ?></h3>
     <?php if(isset($_GET['msg'])) { ?><p id="head-notice"><?php echo htmlspecial($_GET['msg']) ?>

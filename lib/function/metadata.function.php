@@ -3,18 +3,35 @@
 // 码率与品质的关系。返回品质描述词。
 function bitrate_tag($x,$useName=true) {
 	if($x <= -1) {
-		return '<span class="txmp-tag tag-quality-ll">' . ($useName ? LNG('quality.400') : $x . 'k') . '</span>';
+		return '<span class="txmp-tag tag-quality-ll">' . fa_icon('file') . ($useName ? LNG('quality.400') : $x . 'k') . '</span>';
 	} else if($x <= 32) {
-		return '<span class="txmp-tag tag-deep-orange-l">' . ($useName ? LNG('quality.24') : $x . 'k') . '</span>';
+		return '<span class="txmp-tag tag-deep-orange-l">' . fa_icon('file') . ($useName ? LNG('quality.24') : $x . 'k') . '</span>';
 	} else if($x <= 64) {
-		return '<span class="txmp-tag tag-quality-lq">' . ($useName ? LNG('quality.48') : $x . 'k') . '</span>';
+		return '<span class="txmp-tag tag-quality-lq">' . fa_icon('file') . ($useName ? LNG('quality.48') : $x . 'k') . '</span>';
 	} else if($x <= 160) {
-		return '<span class="txmp-tag tag-quality-mq">' . ($useName ? LNG('quality.128') : $x . 'k') . '</span>';
+		return '<span class="txmp-tag tag-quality-mq">' . fa_icon('file') . ($useName ? LNG('quality.128') : $x . 'k') . '</span>';
 	} else if($x <= 256) {
-		return '<span class="txmp-tag tag-quality-hq">' . ($useName ? LNG('quality.192') : $x . 'k') . '</span>';
+		return '<span class="txmp-tag tag-quality-hq">' . fa_icon('file') . ($useName ? LNG('quality.192') : $x . 'k') . '</span>';
 	} else {
-		return '<span class="txmp-tag tag-quality-sq">' . ($useName ? LNG('quality.320') : $x . 'k') . '</span>';
+		return '<span class="txmp-tag tag-quality-sq">' . fa_icon('file') . ($useName ? LNG('quality.320') : $x . 'k') . '</span>';
 	}
+}
+
+// 最近修改
+function modifiedTime($u) {
+	$modified = -1;
+	if(isKuwoId($u)) {
+		global $akCrawler;
+		remoteEncache($u,'K');
+		$modified = $akCrawler[$u]->cached;
+	} else {
+		$modified = filemtime(FILES . $u . '/lyric.txt');
+		$au_loc = getAudioPath(FILES . $u . '/song');
+		if($au_loc) {
+			$modified = max($modified,filemtime($au_loc));
+		}
+	}
+	return $modified;
 }
 
 // 可接受摘要图片扩展名
@@ -65,8 +82,8 @@ function paymentStatus($n) {
 	if(isKuwoId($n)) {
 		global $akCrawler;
 		global $akCrawlerInfo;
-		remoteEncache(cid(),'K');
-		return kuwoPayStatus($akCrawler[cid()]->cache['info']['pay']);
+		remoteEncache($n,'K');
+		return kuwoPayStatus($akCrawler[$n]->cache['info']['pay']);
 	} else {
 		return kuwoPayStatus(0);
 	}
@@ -187,21 +204,20 @@ function getDownloadUrl($u,$idx=0) {
 // 是否是有效的歌曲ID
 // $requireAudio：是否要求有音频（无论是否有效）
 // $allowRemote：是否认为remoteplay歌曲有效
-function isValidMusic($n,$requireAudio=true,$allowRemote=true)
-{
+function isValidMusic($n,$requireAudio=true,$allowRemote=true) {
+	if(!preg_match('/^(\w+)$/',$n)) return false;
 	if(isKuwoId($n) && $allowRemote) {
 		global $akCrawler;
 		global $akCrawlerInfo;
 		remoteEncache($n,'K');
-		return $akCrawler[$n]->success;
+		return $akCrawler[$n]->success && (!$requireAudio || _CT('rp_allow_pay_crack') || !paymentStatus($n)['pay_play']);
 	}
 	if($requireAudio==false) return file_exists(FILES.$n."/lyric.txt");
-	return file_exists(FILES.$n."/lyric.txt") && getAudioPath(FILES.$n."/song");
+	return file_exists(FILES.$n."/lyric.txt") && getAudioAnalysis($n) != null;
 }
 
 // 获取歌曲的音频URL。会处理指向替代和remoteplay。
-function getAudioUrl($d,$basename="song",$urlname="audio",$idx=0)
-{
+function getAudioUrl($d,$basename="song",$urlname="audio",$idx=0) {
 	if(getReferenceID($d) != $d) {
 		if($idx>=100) return '';
 		return getAudioUrl(getReferenceID($d),$basename,$urlname,$idx+1);
@@ -374,7 +390,7 @@ function _checkPermission($t,$id="") {
 	if(!preg_match('/^(\w+)$/',$id)){
 		print404("Illegal Data");
 	}
-	if(isValidMusic($id) && (getPerm($id)[$t] || is_root())){
+	if(isValidMusic($id,false) && (getPerm($id)[$t] || is_root())){
 		return true;
 	}
 	else {

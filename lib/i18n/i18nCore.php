@@ -49,6 +49,7 @@ function readLNG($file) {
 
 global $langCache;
 $langCache = [];
+// 获取语言数组
 function getLangArray($lang = DEFAULT_LANG) {
 	global $langCache;
 
@@ -88,6 +89,7 @@ function getLangArray($lang = DEFAULT_LANG) {
 	return $d1;
 }
 
+// 获取受支持的语言
 function getSupportedLanguage() {
 	return [
 		'en_us' => 'English',
@@ -96,6 +98,7 @@ function getSupportedLanguage() {
 	];
 }
 
+// 获取浏览器语言
 function getBrowserLanguage() {
 	$ret = $_SERVER['HTTP_ACCEPT_LANGUAGE'];
 	if(isset($_COOKIE[APP_PREFIX.'-user-language'])) {
@@ -114,7 +117,7 @@ $userLanguage = '';
 function i18nInit() {
 	global $userLanguage;
 	$userLanguage = getBrowserLanguage();
-	define("_FLAG_I18N_INIT");
+	define("_FLAG_I18N_INIT",true);
 }
 i18nInit();
 
@@ -167,6 +170,27 @@ function LNGk($key = '', ...$templates) {
  */
 function LNGe($key = '', ...$templates) {
 	echo htmlspecial2(LNG($key, ...$templates));
+}
+
+/**
+ * 获取语言定义型列表
+ * （以默认语言文件为依据，用户可以覆盖）
+ */
+function getListOf($t) {
+	$arr = getLangArray(DEFAULT_LANG);
+	$ret = [];
+	foreach($arr as $k => $v) {
+		$p = $k;
+		if(substr($k,0,2) == '_.') {
+			$k = substr($k,2);
+			if(substr($k,0,strlen($t) + 1) == $t . '.') {
+				$k = substr($k, strlen($t) + 1);
+				$ret[$k] = LNG($p);
+			}
+		}
+	}
+
+	return $ret;
 }
 
 require(I18N . '../definition.php');

@@ -40,7 +40,7 @@ function strToFloat($num) {
 // 如果是未填写的值或者空白值，返回 1610612736 以表示该行为注释行。
 function strToCurrtime($str,$delta = 0)
 {
-	if($str=='-' || $str=='__FTIME__' || $str=='NULL') return 1610612736 - $delta;
+	if($str=='-' || $str=='__FTIME__' || $str=='__LT__' || $str=='NULL') return 1610612736 - $delta;
 	$t2=explode("-",$str);
 	if(count($t2)==1){
 		$t2[1]=$t2[0];
@@ -65,14 +65,27 @@ function fmtParaMark($x) {
 // 用于还原被拆分的不定项参数。
 function concat_arguments($arr,$s=0,$e=-1)
 {
+	$int = null;
+	if(isset($arr['arg'])) {
+		if(isset($arr['interval'])) {
+			$int = $arr['interval'];
+		}
+		$arr = $arr['arg'];
+	}
 	if(!is_array($arr)) return '';
 	$egg="";
 	if($e==-1) $e=count($arr);
 	for($i=$s;$i<$e;$i++)
 	{
-		if($i!=$s) $egg.=" ";
+		if($i!=$s) {
+			$cnt = (null != $int ? $int[$i] : 1);
+			for($j = 0; $j < $cnt; $j++) {
+				$egg .= ' ';
+			}
+		}
 		$egg.=$arr[$i];
 	}
+	$egg = str_replace('  ',FULL_SPACE,$egg);
 	return $egg;
 }
 
@@ -142,9 +155,8 @@ function getLyricFile($u) {
 }
 
 // 构造一个编译错误的JSON
-function errorJson($t,$e,$c) {
+function errorJson() {
 	return encode_data(array(
-		"error" => [[$t,$e]],
 		"meta" => array(
 			"N" => LNG('comp.system_error'),
 			"S" => '--',
@@ -160,13 +172,14 @@ function errorJson($t,$e,$c) {
 		"lyrics" => array(array(
 			"id"=>0,
 			"ac"=>"error",
+			"type"=>"lyrics",
 			"n"=>LNG('comp.system_error'),
 			"display"=>false,
 			"title"=>false,
 			"in"=>array(array(
 				"id"=>0,
 				"ts"=>1610612736,
-				"c"=>$c,
+				"c"=>LNG('ui.error'),
 			)),
 		)),
 		"timestamps" => array(),
@@ -177,16 +190,51 @@ function f_json_encode($data) {
 	return json_encode($data,JSON_PRETTY_PRINT+JSON_UNESCAPED_SLASHES+JSON_UNESCAPED_UNICODE);
 }
 
+// 追加错误信息
+function cmpi_ADD_ERROR(&$info,$level,$id,$line,...$args) {
+	$flag = true;
+	if($level[0] == '!') {
+		$level = substr($level,1);
+		$flag = false;
+	}
+	$info .= '<strong>' . LNG('comp.error.' . $level) . '</strong>' . COLON;
+	$info .= LNG('comp.errorw.' . $id, $line, ...$args);
+	if($flag) $info .= "\n";
+}
+function cmpi_ADD_ERROR_P(&$info,$level,$id,$line,...$args) {
+	// cmpi_ADD_ERROR($info,$level,$id,$line,...$args);
+	if(!is_array($info)) {
+		$info = [];
+	}
+	$info[] = [
+		'level' => $level,
+		'id' => $id,
+		'line' => $line,
+		'args' => $args
+	];
+}
+
+// 追加成功信息
+function cmpi_ADD_SUCCESS(&$info) {
+	if(!is_array($info)) $info .= LNG('comp.success') . "\n";
+}
+
 // 编译器主体代码
 // 如果 $parseTags 为 false 将不会把标签转换成HTML代码。
-function parseCmpLyric($u,$parseTags = true,$debug = false) {
+function parseCmpLyric($u,$parseTags = true, $debug = false,$ADD_ERROR='cmpi_ADD_ERROR') {
 	if(!$debug) {
 		if($GLOBALS['compiler_cache'][$u][intval($parseTags)]) {
 			return $GLOBALS['compiler_cache'][$u][intval($parseTags)];
 		}
 	}
 
-	// FS Cache
+	$punc_list = [
+		',','，','。','"','“','”','‘','’','?','？','!','！','；',';','`',
+		'+','{','}','<','>'
+	];
+	$allow_heading = array('Info','Para','Hidden','Comment','Reuse','Similar','Split','Final');
+
+	// 文件系统内缓存
 	if(_CT('compiled_cache') && !kuwo_classify_id($u) && $parseTags == true && $debug == false) {
 		$cache_fn = FILES . $u . '/compiled.json';
 		if(file_exists($cache_fn)) {
@@ -200,9 +248,8 @@ function parseCmpLyric($u,$parseTags = true,$debug = false) {
 
 	// 文件不存在
 	if(!isValidMusic($u,false)){
-		$ft = LNG('comp.errorw.file_tan90',0);
-		$msg .= '<strong>' . LNG('comp.error.fatal') . COLON . '</strong>'.$ft."\n";
-		$e = errorJson("Fatal","LyricNotExist",$ft);
+		$ADD_ERROR($msg,'fatal','file_tan90',0);
+		$e = errorJson();
 		if(!$debug) return $GLOBALS['compiler_cache'][$u][intval($parseTags)] = $e;
 		else return [
 			"message" => $msg,
@@ -216,7 +263,28 @@ function parseCmpLyric($u,$parseTags = true,$debug = false) {
 
 	// 行拆
 	$srccode = getLyricFile($u);
-	$txt=explode("\n",str_replace("\r\n","\n",$srccode));
+	$txt = explode("\n",str_replace("\r\n","\n",$srccode));
+
+	// 识别版本号
+	$ver_num = '';
+	$tmp = $txt[0];
+	if(substr($tmp,0,8) == '!dataver') {
+		$tmp = substr($tmp,8);
+		$ch = $tmp[0];
+		if(strlen($tmp) != 0 && trim($ch) != $ch) {
+			$tmp = trim(substr($tmp,1));
+			$ver_num = $tmp;
+		}
+	}
+	if($ver_num == '') {
+		$ADD_ERROR($msg,'warn','no_ver',0);
+	} else if(!preg_match('/^(\d+)$/',$ver_num)) {
+		$ADD_ERROR($msg,'error','illegal_ver',1);
+	} else if(intval($ver_num) < intval(DATAVER)) {
+		$ADD_ERROR($msg,'notice','low_ver',1,$ver_num,DATAVER);
+	} else if(intval($ver_num) > intval(DATAVER)) {
+		$ADD_ERROR($msg,'warn','high_ver',1,$ver_num,DATAVER);
+	}
 
 	// 主体部分
 	try {
@@ -243,68 +311,47 @@ function parseCmpLyric($u,$parseTags = true,$debug = false) {
 				{
 					if($v[strlen($v)-1]!=']')
 					{
-						$ft = LNG('comp.errorw.ambig_heading',$v['__line']);
-						$msg .= '<strong>' . LNG('comp.error.fatal') . COLON . '</strong>'.$ft."\n";
-						$e = errorJson(
-							'Fatal','IncompleteHeading',
-							$ft
-						);
-						if(!$debug) return $GLOBALS['compiler_cache'][$u][intval($parseTags)] = $e;
-						else return [
-							"message" => $msg,
-							"source" => $srccode,
-							"ld" => $txt,
-							"cd" => $zlj,
-							"gd" => null,
-							"final" => null
-						];
-					}
-					$v=substr($v,1,strlen($v)-2);
-					$zlj[$k]['type']='Para';
-					$vi=explode(" ",$v);
-					foreach($vi as $k2=>$v2)
-					{
-						if(!$v2) continue;
-						if($k2){
-							$zlj[$k]['arg'][]=$v2;
-						}
-						else
+						$ADD_ERROR($msg,'error','ambig_heading',$lineid+1);
+					} else {
+						$v = trim(substr($v,1,strlen($v)-2));
+						$zlj[$k]['type'] = 'Para';
+						$vi = explode(" ",$v);
+						$space_count = 0;
+						foreach($vi as $k2=>$v2)
 						{
-							$allow_heading=array('Info','Para','Hidden','Comment','Reuse','Similar');
-							// Info 歌曲信息
-							  // N <NAME>
-							  // S <SINGER>
-							  // C <COLLECTION>
-							  // LA <LYRIC_AUTHOR>
-							  // MA <MUSIC_AUTHOR>
-							// Para [@<ID>] <AC> <UFN> 段落
-							  // L <TIME> <THING>
-							// Hidden [@<ID>] <AC> <UFN> 不在概览中显示的段落
-							  // L <TIME> <THING>
-							// Comment 注释段，编译时整个忽略
-							  // *
-							// Reuse @<USING_ID> <BEGIN_TIME> 重用整段
-							// Similar [@<ID>] @<USING_ID> <BEGIN_TIME> <AC> <UFN> 时间差（节奏）与某一段相同的段，但是歌词不同。该段内L命令的时间参数写“-”即可。
-							  // L - <THING>
-							if(!in_array($v2,$allow_heading)) {
-								$ft = LNG('comp.errorw.undef_header',$v['__line'],concat_arguments($allow_heading,0));
-								$msg .= '<strong>' . LNG('comp.error.fatal') . COLON . '</strong>'.$ft."\n";
-								$e = errorJson(
-									'Fatal','WrongHeading',
-									$ft
-								);
-								if(!$debug) return $GLOBALS['compiler_cache'][$u][intval($parseTags)] = $e;
-								else return [
-									"message" => $msg,
-									"source" => $srccode,
-									"ld" => $txt,
-									"cd" => $zlj,
-									"gd" => null,
-									"final" => null
-								];
+							// 删除空参数
+							if(!$v2) {
+								$space_count++;
+								continue;
 							}
-							$zlj[$k]['cmd']=$v2;
-							$zlj[$k]['arg']=array();
+							if($k2) {
+								$zlj[$k]['arg'][] = $v2;
+								$zlj[$k]['interval'][] = $space_count;
+								$space_count = 1;
+							} else {
+								// Info 歌曲信息
+								// N <NAME>
+								// S <SINGER>
+								// C <COLLECTION>
+								// LA <LYRIC_AUTHOR>
+								// MA <MUSIC_AUTHOR>
+								// Para [@<ID>] <AC> <UFN> 段落
+								// L <TIME> <THING>
+								// Hidden [@<ID>] <AC> <UFN> 不在概览中显示的段落
+								// L <TIME> <THING>
+								// Comment 注释段，编译时整个忽略
+								// *
+								// Reuse @<USING_ID> <BEGIN_TIME> 重用整段
+								// Similar [@<ID>] @<USING_ID> <BEGIN_TIME> <AC> <UFN> 时间差（节奏）与某一段相同的段，但是歌词不同。该段内L命令的时间参数写“-”即可。
+								// L - <THING>
+								if(!in_array($v2,$allow_heading)) {
+									$ADD_ERROR($msg,'warn','undef_header',$lineid+1,concat_arguments($allow_heading,0));
+								}
+								$zlj[$k]['cmd']=$v2;
+								$zlj[$k]['arg']=array();
+								$zlj[$k]['interval']=array();
+								$space_count = 1;
+							}
 						}
 					}
 				}
@@ -312,11 +359,21 @@ function parseCmpLyric($u,$parseTags = true,$debug = false) {
 				{
 					$zlj[$k]['type']='Command';
 					$vi=explode(" ",$v);
+					$space_count = 0;
 					foreach($vi as $k2=>$v2)
 					{
-						if(!$v2) continue;
-						if($k2) $zlj[$k]['arg'][]=$v2;
-						else $zlj[$k]['cmd']=$v2;
+						if(!$v2) {
+							$space_count++;
+							continue;
+						}
+						if($k2) {
+							$zlj[$k]['arg'][] = $v2;
+							$zlj[$k]['interval'][] = $space_count;
+							$space_count = 1;
+						} else {
+							$zlj[$k]['cmd']=$v2;
+							$space_count = 1;
+						}
 					}
 				}
 				$k++;
@@ -331,12 +388,8 @@ function parseCmpLyric($u,$parseTags = true,$debug = false) {
 		foreach($zlj as $k=>$v)
 		{
 			if(!$k && $v['type']!="Para") {
-				$ft = LNG('comp.errorw.not_started',$v['__line']);
-				$msg .= '<strong>' . LNG('comp.error.fatal') . COLON . '</strong>'.$ft."\n";
-				$e = errorJson(
-					'Fatal','IncompleteBeginning',
-					$ft
-				);
+				$ADD_ERROR($msg,'fatal','not_started',$v['__line']);
+				$e = errorJson();
 				if(!$debug) return $GLOBALS['compiler_cache'][$u][intval($parseTags)] = $e;
 				else return [
 					"message" => $msg,
@@ -353,12 +406,13 @@ function parseCmpLyric($u,$parseTags = true,$debug = false) {
 				$iscommented = false;
 				if($v['cmd'] == 'Info') {
 					if($hasInfo) {
-						$msg .= '<strong>' . LNG('comp.error.warn') . COLON . LNG('comp.errorw.mult_info',$v['__line']) . "\n";
+						$ADD_ERROR($msg,'warn','mult_info',$v['__line']);
 					}
 					$hasInfo = true;
 				}
 				$am[$currcmid]['type']=$v['cmd'];
 				$am[$currcmid]['arg']=$v['arg'];
+				$am[$currcmid]['interval']=$v['interval'];
 				$am[$currcmid]['__line']=$v['__line'];
 				$am[$currcmid]['cmds']=array();
 				if($v['cmd']=='Comment') {$currcmid-=1;$iscommented = true;}
@@ -372,47 +426,47 @@ function parseCmpLyric($u,$parseTags = true,$debug = false) {
 		}
 
 		if(!$hasInfo) {
-			$msg .= '<strong>' . LNG('comp.error.warn') . COLON . LNG('comp.errorw.no_info',0);
+			$ADD_ERROR($msg,'warn','no_info',0);
 		}
 
 		// 解析出 meta 部分
 		$meta=array();
 		$xinfo=findKVInArray($am,"type","Info")['cmds'];
-		@$meta['meta']['N']=concat_arguments(findKVInArray($xinfo,"type","N")['arg']); // 标题
-		@$meta['meta']['S']=concat_arguments(findKVInArray($xinfo,"type","S")['arg']); // 演唱
+		@$meta['meta']['N']=concat_arguments(findKVInArray($xinfo,"type","N")); // 标题
+		@$meta['meta']['S']=concat_arguments(findKVInArray($xinfo,"type","S")); // 演唱
 		if(
 			strstr($meta['meta']['S'],'&') ||
 			strstr($meta['meta']['S'],'|') ||
 			strstr($meta['meta']['S'],',') ||
 			strstr($meta['meta']['S'],'、')
 		) {
-			$msg .= '<strong>' . LNG('comp.error.unstd') . COLON . '</strong>' . LNG('comp.errorw.authorsep',findKVInArray($xinfo,"type","S")['__line']) . "\n";
+			$ADD_ERROR($msg,'unstd','authorsep',findKVInArray($xinfo,"type","S")['__line']);
 		}
-		@$meta['meta']['LA']=concat_arguments(findKVInArray($xinfo,"type","LA")['arg']); // 作词
+		@$meta['meta']['LA']=concat_arguments(findKVInArray($xinfo,"type","LA")); // 作词
 		if(
 			strstr($meta['meta']['LA'],'&') ||
 			strstr($meta['meta']['LA'],'|') ||
 			strstr($meta['meta']['LA'],',') ||
 			strstr($meta['meta']['LA'],'、')
 		) {
-			$msg .= '<strong>' . LNG('comp.error.unstd') . COLON . '</strong>' . LNG('comp.errorw.authorsep',findKVInArray($xinfo,"type","LA")['__line']) . "\n";
+			$ADD_ERROR($msg,'unstd','authorsep',findKVInArray($xinfo,"type","LA")['__line']);
 		}
-		@$meta['meta']['MA']=concat_arguments(findKVInArray($xinfo,"type","MA")['arg']); // 作曲
+		@$meta['meta']['MA']=concat_arguments(findKVInArray($xinfo,"type","MA")); // 作曲
 		if(
 			strstr($meta['meta']['MA'],'&') ||
 			strstr($meta['meta']['MA'],'|') ||
 			strstr($meta['meta']['MA'],',') ||
 			strstr($meta['meta']['MA'],'、')
 		) {
-			$msg .= '<strong>' . LNG('comp.error.unstd') . COLON . '</strong>' . LNG('comp.errorw.authorsep',findKVInArray($xinfo,"type","MA")['__line']) . "\n";
+			$ADD_ERROR($msg,'unstd','authorsep',findKVInArray($xinfo,"type","MA")['__line']);
 		}
-		@$meta['meta']['C']=concat_arguments(findKVInArray($xinfo,"type","C")['arg']); // 分类
-		@$meta['meta']['A']=concat_arguments(findKVInArray($xinfo,"type","A")['arg']); // 主颜色
+		@$meta['meta']['C']=concat_arguments(findKVInArray($xinfo,"type","C")); // 分类
+		@$meta['meta']['A']=concat_arguments(findKVInArray($xinfo,"type","A")); // 主颜色
 		@$meta['meta']['G1']=concat_arguments(findKVInArray($xinfo,"type","G1")['arg']); // 渐变色1
 		@$meta['meta']['G2']=concat_arguments(findKVInArray($xinfo,"type","G2")['arg']); // 渐变色2
-		@$meta['meta']['O']=concat_arguments(findKVInArray($xinfo,"type","O")['arg']); // 原网页的网址
-		@$meta['meta']['P']=concat_arguments(findKVInArray($xinfo,"type","P")['arg']); // 摘要图片网址
-		@$time_delta=floor(floatval(concat_arguments(findKVInArray($xinfo,"type","D")['arg'])) * 10); // 偏移量
+		@$meta['meta']['O']=concat_arguments(findKVInArray($xinfo,"type","O")); // 原网页的网址
+		@$meta['meta']['P']=concat_arguments(findKVInArray($xinfo,"type","P")); // 摘要图片网址
+		@$time_delta=floor(floatval(concat_arguments(findKVInArray($xinfo,"type","D"))) * 10); // 偏移量
 		if($time_delta != $time_delta) {
 			$time_delta = 0;
 		}
@@ -423,12 +477,8 @@ function parseCmpLyric($u,$parseTags = true,$debug = false) {
 			}
 		}
 		if(!$meta['meta']['N']) {
-			$ft = LNG('comp.errorw.no_title',findKVInArray($am,"type","Info")['__line']);
-			$msg .= '<strong>' . LNG('comp.error.fatal') . COLON . '</strong>'.$ft."\n";
-			$e = errorJson(
-				'Fatal','NoSongTitle',
-				$ft
-			);
+			$ADD_ERROR($msg,'fatal','no_title',findKVInArray($am,"type","Info")['__line']);
+			$e = errorJson();
 			if(!$debug) return $GLOBALS['compiler_cache'][$u][intval($parseTags)] = $e;
 			else return [
 				"message" => $msg,
@@ -457,6 +507,8 @@ function parseCmpLyric($u,$parseTags = true,$debug = false) {
 
 		// 为段和句标号；按照播放时间指定当前句与段编号；名称、内容类参数空格重组；段标号sub格式处理；歌词内容 Markup 处理；段落重用符号处理(Reuse,Similar)
 		$lastTime = -5;
+		$maxTime = -5;
+		$finalized = false;
 		$meta['lyrics']=array();
 		$meta['timestamps']=array();
 		$meta['timestamps']['0']=[-1,-1];
@@ -465,15 +517,19 @@ function parseCmpLyric($u,$parseTags = true,$debug = false) {
 		$k=0;
 		$reuses=array();
 		foreach($am as $v)
-		{	
+		{
+			if(in_array($v['type'],['Reuse','Similar','Para','Hidden'])) {
+				if($finalized) {
+					$ADD_ERROR($msg,'warn','fake_final',$v['__line']);
+				}
+			}
 			// 全复用
 			if($v['type']=='Reuse')
 			{
 				$pid++;
 				if($v['arg'][0][0]!='@') {
-					$ft = LNG('comp.errorw.id_invalid',$v['__line']);
-					$msg .= '<strong>' . LNG('comp.error.fatal') . COLON . '</strong>'.$ft."\n";
-					$e = errorJson('Fatal','ReuseIdIllegal',$ft);
+					$ADD_ERROR($msg,'fatal','id_invalid',$v['__line']);
+					$e = errorJson();
 					if(!$debug) return $GLOBALS['compiler_cache'][$u][intval($parseTags)] = $e;
 					else return [
 						"message" => $msg,
@@ -485,9 +541,8 @@ function parseCmpLyric($u,$parseTags = true,$debug = false) {
 					];
 				}
 				if(!isset($reuses[$v['arg'][0]])) {
-					$ft = LNG('comp.errorw.id_tan90',$v['__line']);
-					$msg .= '<strong>' . LNG('comp.error.fatal') . COLON . '</strong>'.$ft."\n";
-					$e = errorJson('Fatal','ReuseIdNotExist',$ft);
+					$ADD_ERROR($msg,'fatal','id_tan90',$v['__line']);
+					$e = errorJson();
 					if(!$debug) return $GLOBALS['compiler_cache'][$u][intval($parseTags)] = $e;
 					else return [
 						"message" => $msg,
@@ -499,7 +554,11 @@ function parseCmpLyric($u,$parseTags = true,$debug = false) {
 					];
 				}
 				$reuseitem=$reuses[$v['arg'][0]];
+				if($v['arg'][1] == '__FTIME__' || $v['arg'][1] == '__LT__') {
+					$ADD_ERROR($msg,'unstd','ftime',$v['__line']);
+				}
 				$timealt=strToCurrtime($v['arg'][1],$time_delta)+$time_delta-$meta['lyrics'][$reuseitem]['in'][0]['ts'];
+				// 此处为复制
 				$meta['lyrics'][$pid]=$meta['lyrics'][$reuseitem];
 				$meta['lyrics'][$pid]['id']=$pid;
 				$meta['lyrics'][$pid]['display']=$meta['lyrics'][$reuseitem]['display'];
@@ -513,7 +572,10 @@ function parseCmpLyric($u,$parseTags = true,$debug = false) {
 					if($lastTime == $meta['lyrics'][$pid]['in'][$f]['ts'] && $lastTime < 1610612736) {
 						$msg .= '<strong>' . LNG('comp.error.warn') . COLON . '</strong>' . LNG('comp.errorw.sametime',$v['__line']) . "\n";
 					}
-					if($meta['lyrics'][$pid]['in'][$f]['ts'] < 1610612736) $lastTime = $meta['lyrics'][$pid]['in'][$f]['ts'];
+					if($meta['lyrics'][$pid]['in'][$f]['ts'] < 1610612736) {
+						$lastTime = $meta['lyrics'][$pid]['in'][$f]['ts'];
+						$maxTime = max($maxTime, $meta['lyrics'][$pid]['in'][$f]['ts']);
+					}
 				}
 			}
 			// 时长复用
@@ -523,9 +585,8 @@ function parseCmpLyric($u,$parseTags = true,$debug = false) {
 				$meta['lyrics'][$pid]["id"]=$pid;
 				$acstart=0;
 				if($v['arg'][0][0]!='@') {
-					$ft = LNG('comp.errorw.id_invalid',$v['__line']);
-					$msg .= '<strong>' . LNG('comp.error.fatal') . COLON . '</strong>'.$ft."\n";
-					$e = errorJson('Fatal','SimilarIdIllegal',$ft);
+					$ADD_ERROR($msg,'fatal','id_invalid',$v['__line']);
+					$e = errorJson();
 					if(!$debug) return $GLOBALS['compiler_cache'][$u][intval($parseTags)] = $e;
 					else return [
 						"message" => $msg,
@@ -542,9 +603,8 @@ function parseCmpLyric($u,$parseTags = true,$debug = false) {
 					$reuses[$v['arg'][0]]=$pid;
 				}
 				if(!isset($reuses[$v['arg'][$acstart]])) {
-					$ft = LNG('comp.errorw.id_tan90',$v['__line']);
-					$msg .= '<strong>' . LNG('comp.error.fatal') . COLON . '</strong>'.$ft."\n";
-					$e = errorJson('Fatal','SimilarIdNotExist',$ft);
+					$ADD_ERROR($msg,'fatal','id_tan90',$v['__line']);
+					$e = errorJson();
 					if(!$debug) return $GLOBALS['compiler_cache'][$u][intval($parseTags)] = $e;
 					else return [
 						"message" => $msg,
@@ -556,18 +616,25 @@ function parseCmpLyric($u,$parseTags = true,$debug = false) {
 					];
 				}
 				$reuseitem=$reuses[$v['arg'][$acstart]];
+				if($v['arg'][$acstart+1] == '__FTIME__' || $v['arg'][$acstart+1] == '__LT__') {
+					$ADD_ERROR($msg,'unstd','ftime',$v['__line']);
+				}
 				$timealt=strToCurrtime($v['arg'][$acstart+1],$time_delta)+$time_delta-$meta['lyrics'][$reuseitem]['in'][0]['ts'];
 				$meta['lyrics'][$pid]["ac"]=fmtParaMark($v['arg'][$acstart+2]);
-				$meta['lyrics'][$pid]['n']=concat_arguments($v['arg'],$acstart+3);
+				$meta['lyrics'][$pid]['n']=concat_arguments($v,$acstart+3);
+				// 标题全角空格禁止
+				if(str_included($meta['lyrics'][$pid]['n'],[FULL_SPACE])) {
+					$ADD_ERROR($msg,'unstd','fullspace_h',$v['__line']);
+				}
 				if(!$meta['lyrics'][$pid]["n"]) $meta['lyrics'][$pid]["n"]="";
 				$meta['lyrics'][$pid]['display']=$meta['lyrics'][$reuseitem]['display'];
 				$meta['lyrics'][$pid]['title']=$meta['lyrics'][$reuseitem]['title'];
+				$meta['lyrics'][$pid]["type"] = 'lyrics';
 				$k=-1;
 				$meta['lyrics'][$pid]['in']=array();
 				if(count($v['cmds'])>count($meta['lyrics'][$reuseitem]['in'])) {
-					$ft = LNG('comp.errorw.similar_exceeded',$v['__line']);
-					$msg .= '<strong>' . LNG('comp.error.fatal') . COLON . '</strong>'.$ft."\n";
-					$e = errorJson('Fatal','SimilarLarger',$ft);
+					$ADD_ERROR($msg,'fatal','similar_exceeded',$v['__line']);
+					$e = errorJson();
 					if(!$debug) return $GLOBALS['compiler_cache'][$u][intval($parseTags)] = $e;
 					else return [
 						"message" => $msg,
@@ -587,21 +654,45 @@ function parseCmpLyric($u,$parseTags = true,$debug = false) {
 						$meta['lyrics'][$pid]['in'][$k]['id']=$rid;
 						$c=count($h['arg']);
 						$meta['lyrics'][$pid]['in'][$k]['ts']=$meta['lyrics'][$reuseitem]['in'][$k]['ts']+$timealt;
+						if($h['arg'][0] == '__FTIME__' || $h['arg'][0] ==  '__LT__') {
+							$ADD_ERROR($msg,'unstd','ftime',$h['__line']);
+						}
 						$meta['timestamps'][$meta['lyrics'][$pid]['in'][$k]['ts']]=array($pid,$rid);
 						$meta['lyrics'][$pid]['in'][$k]['c']="";
-						$str = concat_arguments($h['arg'],1);
 						if($lastTime == $meta['lyrics'][$pid]['in'][$k]['ts'] && $lastTime < 1610612736) {
-							$msg .= '<strong>' . LNG('comp.error.warn') . COLON . '</strong>' . LNG('comp.errorw.sametime',$h['__line']) . "\n";
+							$ADD_ERROR($msg,'warn','sametime',$h['__line']);
 						}
-						if($meta['lyrics'][$pid]['in'][$k]['ts'] < 1610612736) $lastTime = $meta['lyrics'][$pid]['in'][$k]['ts'];
-						if($meta['lyrics'][$pid]['in'][$k]['ts'] < 1610612736 && str_included($str,[
-							',','，','.','。','"','“','”','‘','’','?','？','!','！','：','；',';','~','`',
-							'+','{','}','<','>'
-						])) {
-							$msg .= '<strong>' . LNG('comp.error.unstd') . '</strong>' . LNG('comp.errorw.punc',$h['__line__']) . "\n";
+						if($meta['lyrics'][$pid]['in'][$k]['ts'] < 1610612736) {
+							$lastTime = $meta['lyrics'][$pid]['in'][$k]['ts'];
+							$maxTime = max($maxTime, $meta['lyrics'][$pid]['in'][$k]['ts']);
 						}
-						if($parseTags) $meta['lyrics'][$pid]['in'][$k]['c']=replaceHtMark(concat_arguments($h['arg'],1));
-						else $meta['lyrics'][$pid]['in'][$k]['c']=(concat_arguments($h['arg'],1));
+						$str = concat_arguments($h['arg'],1);
+						// 禁止角色标示
+						if($meta['lyrics'][$pid]['in'][$k]['ts'] < 1610612736) {
+							$is_role = false;
+							$role = '';
+							if(mb_substr($str,mb_strlen($str)-1) == '：') {
+								$role = trim(mb_substr($str,0,mb_strlen($str)-1));
+								$is_role = true;
+							} else if(mb_substr($str,mb_strlen($str)-1) == '】' && mb_substr($str,0,1) == '【') {
+								$role = trim(mb_substr($str,1,mb_strlen($str)-2));
+								$is_role = true;
+							}
+							if($is_role && ($role == '合' || strpos($meta['meta']['S'],$role) !== false)) {
+								$ADD_ERROR($msg,'unstd','role',$h['__line']);
+							}
+						}
+						// 全角空格禁止
+						if(str_included($str,[FULL_SPACE])) {
+							$ADD_ERROR($msg,'unstd','fullspace',$h['__line']);
+						}
+						// 不规范间奏标记
+						if(onlyConsistsOf($str,['-'])) {
+							$ADD_ERROR($msg,'warn','wronginterval',$h['__line']);
+						}
+						$ret_str = concat_arguments($h,1);
+						if($parseTags) $meta['lyrics'][$pid]['in'][$k]['c']=replaceHtMark($ret_str);
+						else $meta['lyrics'][$pid]['in'][$k]['c']=($ret_str);
 					}
 				}
 			}
@@ -611,6 +702,7 @@ function parseCmpLyric($u,$parseTags = true,$debug = false) {
 				$pid++;
 				$meta['lyrics'][$pid]=array();
 				$meta['lyrics'][$pid]["id"]=$pid;
+				$meta['lyrics'][$pid]['type'] = 'lyrics';
 				$acstart=1;
 				if($v['arg'][0][0]=='@')
 				{
@@ -618,8 +710,12 @@ function parseCmpLyric($u,$parseTags = true,$debug = false) {
 					$reuses[$v['arg'][0]]=$pid;
 				}
 				$meta['lyrics'][$pid]["ac"]=fmtParaMark($v['arg'][$acstart-1]);
-				$meta['lyrics'][$pid]['n']=concat_arguments($v['arg'],$acstart);
+				$meta['lyrics'][$pid]['n']=concat_arguments($v,$acstart);
 				if(!$meta['lyrics'][$pid]["n"]) $meta['lyrics'][$pid]["n"]="";
+				// 标题全角空格禁止
+				if(str_included($meta['lyrics'][$pid]['n'],[FULL_SPACE])) {
+					$ADD_ERROR($msg,'unstd','fullspace_h',$v['__line']);
+				}
 				if($v['type']=="Para") $meta['lyrics'][$pid]['display']=true;
 				else $meta['lyrics'][$pid]['display']=false;
 				$meta['lyrics'][$pid]['title']=true;
@@ -637,32 +733,93 @@ function parseCmpLyric($u,$parseTags = true,$debug = false) {
 						$k++;
 						$meta['lyrics'][$pid]['in'][$k]['id']=$rid;
 						$c=count($h['arg']);
+						if($h['arg'][0] == '__FTIME__' || $h['arg'][0] == '__LT__') {
+							$ADD_ERROR($msg,'unstd','ftime',$h['__line']);
+						}
 						$meta['lyrics'][$pid]['in'][$k]['ts']=strToCurrtime($h['arg'][0],$time_delta) + $time_delta;
 						$meta['timestamps'][strToCurrtime($h['arg'][0],$time_delta)+$time_delta]=array($pid,$rid);
 						$meta['lyrics'][$pid]['in'][$k]['c']="";
-						$str = concat_arguments($h['arg'],1);
 						if($lastTime == $meta['lyrics'][$pid]['in'][$k]['ts'] && $lastTime < 1610612736) {
-							$msg .= '<strong>' . LNG('comp.error.warn') . COLON . '</strong>' . LNG('comp.errorw.sametime',$h['__line']) . "\n";
+							$ADD_ERROR($msg,'warn','sametime',$h['__line']);
 						}
-						if($meta['lyrics'][$pid]['in'][$k]['ts'] < 1610612736) $lastTime = $meta['lyrics'][$pid]['in'][$k]['ts'];
-						if($meta['lyrics'][$pid]['in'][$k]['ts'] < 1610612736 && str_included($str,[
-							',','，','.','。','"','“','”','‘','’','?','？','!','！','：','；',';','~','`',
-							'+','{','}','<','>'
-						])) {
-							$msg .= '<strong>' . LNG('comp.error.unstd') . COLON . '</strong>' . LNG('comp.errorw.punc',$h['__line']) . "\n";
+						if($meta['lyrics'][$pid]['in'][$k]['ts'] < 1610612736) {
+							$lastTime = $meta['lyrics'][$pid]['in'][$k]['ts'];
+							$maxTime = max($maxTime, $meta['lyrics'][$pid]['in'][$k]['ts']);
 						}
-						if($parseTags) $meta['lyrics'][$pid]['in'][$k]['c']=replaceHtMark(concat_arguments($h['arg'],1));
-						else $meta['lyrics'][$pid]['in'][$k]['c']=(concat_arguments($h['arg'],1));
+						$str = concat_arguments($h['arg'],1);
+						// 禁止角色标示
+						if($meta['lyrics'][$pid]['in'][$k]['ts'] < 1610612736) {
+							$is_role = false;
+							$role = '';
+							if(mb_substr($str,mb_strlen($str)-1) == '：') {
+								$role = trim(mb_substr($str,0,mb_strlen($str)-1));
+								$is_role = true;
+							} else if(mb_substr($str,mb_strlen($str)-1) == '】' && mb_substr($str,0,1) == '【') {
+								$role = trim(mb_substr($str,1,mb_strlen($str)-2));
+								$is_role = true;
+							}
+							if($is_role && ($role == '合' || strpos($meta['meta']['S'],$role) !== false)) {
+								$ADD_ERROR($msg,'unstd','role',$h['__line']);
+							}
+						}
+						// 全角空格禁止
+						if(str_included($str,[FULL_SPACE])) {
+							$ADD_ERROR($msg,'unstd','fullspace',$h['__line']);
+						}
+						// 不规范间奏标记
+						if(onlyConsistsOf($str,['-'])) {
+							$ADD_ERROR($msg,'warn','wronginterval',$h['__line']);
+						}
+						$ret_str = concat_arguments($h,1);
+						if($parseTags) $meta['lyrics'][$pid]['in'][$k]['c']=replaceHtMark($ret_str);
+						else $meta['lyrics'][$pid]['in'][$k]['c']=($ret_str);
 					}
 				}
 			}
+			// 分片符
+			if($v['type'] == 'Split') {
+				$pid++;
+				$meta['lyrics'][$pid] = array();
+				$meta['lyrics'][$pid]['id'] = $pid;
+				$meta['lyrics'][$pid]['type'] = 'split';
+				$meta['lyrics'][$pid]['display'] = true;
+			}
+			// 终结标志
+			if($v['type'] == 'Final') {
+				if($finalized) {
+					$ADD_ERROR($msg,'error','dup_final',$v['__line']);
+				}
+				$finalized = true;
+
+				$ts = strToCurrtime($v['arg'][0],$time_delta) + $time_delta;
+				if($ts <= $maxTime) {
+					$ADD_ERROR($msg,'warn','early_final',$v['__line']);
+				}
+				$pid++;
+				if($v['arg'][0] == '__FTIME__' || $v['arg'][0] == '__LT__') {
+					$ADD_ERROR($msg,'unstd','ftime',$v['__line']);
+				}
+				$meta['lyrics'][$pid] = array();
+				$meta['lyrics'][$pid]['id'] = $pid;
+				$meta['lyrics'][$pid]['type'] = 'final';
+				$meta['lyrics'][$pid]['ts'] = $ts;
+				$meta['lyrics'][$pid]['display'] = false;
+
+				$meta['timestamps'][$ts]=array(-2,-2);
+			}
+		}
+
+		if(!$finalized) {
+			$ADD_ERROR($msg,'unstd','no_final',count($txt));
 		}
 
 		$meta['lyrics']=array_merge([[
 			'id'=> -1,
+			'type'=>'lyrics',
 			'ac'=> '--',
 			'n' => 'pre',
-			'display'=>false,
+			'premark' => true,
+			'display'=>true,
 			'title'=>false,
 			'in'=> [[
 				'id'=>-1,
@@ -670,8 +827,11 @@ function parseCmpLyric($u,$parseTags = true,$debug = false) {
 				'c' =>'- - - - - - -'
 			]]
 		]],$meta['lyrics']);
-
-		$msg .= LNG('comp.success') . "\n";
+		
+		if($ADD_ERROR == 'cmpi_ADD_ERROR_P' && !is_array($msg)) {
+			$msg = [];
+		}
+		cmpi_ADD_SUCCESS($msg);
 
 		// FS Cache
 		if(_CT('compiled_cache') && !kuwo_classify_id($u) && $parseTags == true && $debug == false) {
@@ -691,9 +851,8 @@ function parseCmpLyric($u,$parseTags = true,$debug = false) {
 			];
 		}
 	} catch(Exception $exception) {
-		$ft = LNG('comp.uke');
-		$msg .= '<strong>' . LNG('comp.error.uke') . COLON . '</strong>'.$ft."\n";
-		$e = errorJson('Fatal','UnknownError',$ft);
+		$ADD_ERROR($msg,'fatal','uke',0);
+		$e = errorJson();
 		if(!$debug) return $GLOBALS['compiler_cache'][$u][intval($parseTags)] = $e;
 		else return [
 			"message" => $msg,
@@ -706,6 +865,171 @@ function parseCmpLyric($u,$parseTags = true,$debug = false) {
 	}
 }
 
+/**
+ * 计数
+ */
+function countCompileIssue($msglist, $unaccept = []) {
+	$ret = 0;
+	foreach($msglist as $e) {
+		if(in_array($e['level'],$unaccept)) continue;
+		$ret++;
+	}
+	return $ret;
+}
+/**
+ * 获取格式化后的编译信息（含原内容的）
+ * * 可以用于非编译场合，如代码标记
+ */
+function getCompileIssueMsg($fn, $cont, $msglist, $window = 1, $unaccept = []) {
+	$cont = explode("\n",str_replace("\r\n","\n",$cont));
+	$nline = count($cont);
+
+	// 将错误信息按行编排
+	$lined = [];
+	foreach($msglist as $e) {
+		if(in_array($e['level'],$unaccept)) continue;
+		if(!isset($lined[$e['line']])) {
+			$lined[$e['line']] = [];
+		}
+		$lined[$e['line']][] = $e;
+	}
+
+	$partition = [];
+	// 行号为 0 的另当别论
+	$part_id = 0;
+	if(isset($lined[0])) {
+		$partition = [[0,0]];
+		$part_id = 1;
+	}
+	$in = false;
+	foreach($cont as $_lineid => $linecont) {
+		$lineid = $_lineid + 1;
+		$should_display = false;
+
+		// 遍历窗口内元素
+		for($i = max($lineid - $window,1); $i <= min($lineid + $window, $nline); $i++) {
+			// 需要展示
+			if(isset($lined[$i])) {
+				$should_display = true;
+				break;
+			}
+		}
+
+		if($in == false) {
+			// 开启新块
+			if($should_display) {
+				$partition[$part_id] = [$lineid, $lineid];
+				$in = true;
+			}
+		} else {
+			// 扩充块
+			if($should_display) {
+				$partition[$part_id][1] = $lineid;
+			}
+			// 离开块
+			else {
+				$part_id++;
+				$in = false;
+			}
+		}
+	}
+
+	// 按块输出
+	$msg = '';
+	foreach($partition as $rng) {
+		// 标题
+		$msg .= '<strong class="text-highlight"> ' . $fn . ' @ ';
+		if($rng[0] == $rng[1]) {
+			$msg .= 'L' . $rng[0];
+		} else {
+			$msg .= 'L' . $rng[0] . '-L' . $rng[1];
+		}
+		$msg .= " </strong>\n";
+		
+		$msg .= '<table>';
+		for($i = $rng[0]; $i <= $rng[1]; $i++) {
+			// 输出内容
+			$display_text = '';
+			if($i != 0) {
+				$display_text = htmlspecial2($cont[$i - 1]);
+				if(strlen($display_text) == 0) {
+					$display_text = '&nbsp;';
+				}
+			} else {
+				$display_text = '~';
+			}
+			$msg .= '<tr><td>'.$i.'&gt;&nbsp;</td><td><span class="text-lowlight">' . $display_text . "</span></td></tr>\n";
+
+			// 输出错误信息
+			if(isset($lined[$i])) {
+				foreach($lined[$i] as $e) {
+					// 不隐藏
+					if(!isset($e['hidden'])) {
+						$msg .= '<tr>';
+						$msg .= '<td>';
+						$msg .= '<strong>·</strong>&nbsp;';
+						$msg .= '</td>';
+						// 纯文本输出
+						if(isset($e['text'])) {
+							$msg .= '<td>';
+							if(isset($e['text_html'])) {
+								$msg .= $e['text'];
+							} else {
+								$msg .= htmlspecial2($e['text']);
+							}
+							$msg .= '</td>';
+						}
+						// 错误格式输出
+						else {
+							$msg .= '<td>';
+							$msg .= '<span class="text-comp-'.$e['level'].'">';
+							cmpi_ADD_ERROR($msg,'!' . $e['level'],$e['id'],$e['line'],...$e['args']);
+							$msg .= '</span>';
+							$msg .= '</td>';
+						}
+						$msg .= "</tr>\n";
+					}
+				}
+			}
+		}
+		$msg .= '</table>';
+	}
+
+	// 没有输出任何东西
+	if(count($partition) == 0) {
+		$msg .= '<strong class="text-highlight">';
+		$msg .= ' ' . LNG('code.compinfo.null') . ' ';
+		$msg .= '</strong>';
+	}
+
+	return $msg;
+}
+
+// 歌词行是否应该是间奏
+function isIntervalContent($p) {
+	$ptr = 0;
+	$cnt = 0;
+	for(;$ptr+1 < strlen($p); $ptr += 2) {
+		if($p[$ptr] != '-' || $p[$ptr+1] != ' ') {
+			return -1;
+		}
+		$cnt++;
+	}
+	if($p[$ptr] != '-') {
+		return -1;
+	}
+	$cnt++;
+	if($cnt == 1) {
+		return -1;
+	}
+	return $cnt;
+}
+
+function getCompileIssueMsg2($item,$msglist,$window = 1) {
+	$ft = getLyricFile($item);
+	return getCompileIssueMsg($item . '/lyric.txt', $ft, $msglist, $window);
+}
+
 function prefixToLength($str,$len=3,$prfx=' ') {
 	$ret = $str;
 	while(strlen($ret) < $len) $ret = $prfx.$ret;
@@ -716,11 +1040,21 @@ function addLineNumbers($str) {
 	$txt=explode("\n",str_replace("\r\n","\n",$str));
 	$r = '';
 
+	$r .= '<table>';
 	foreach($txt as $k => $v) {
-		$r .= prefixToLength(strval($k+1))."| ";
-		$r .= $v;
-		$r .= "\n";
+		$r .= '<tr>';
+
+		$r .= '<td>';
+		$r .= strval($k + 1)."|&nbsp;";
+		$r .= '</td>';
+
+		$r .= '<td>';
+		$r .= ($v != '' ? htmlspecial2($v) : '&nbsp;');
+		$r .= '</td>';
+
+		$r .= "</tr>";
 	}
+	$r .= '</table>';
 	return $r;
 }
 
@@ -752,6 +1086,7 @@ function replaceLrcMark($str) {
 }
 
 function lrcTimestamp($val) {
+	$val = max(0, $val + intval(round($GLOBALS['lrcopt']['delta'] * 10)));
 	$i = strval(floor($val / 600));
 	$s = strval(floor($val % 600 / 10));
 	while(strlen($i) < 2) $i = '0' . $i;
@@ -763,20 +1098,45 @@ function lrcTimestamp($val) {
 function fmtDataForLrc($data) {
 	$timelist = [];
 	foreach($data['lyrics'] as $i=>&$para) {
-		if($para['id'] == -1) {
-			$para['in'][0]['ts'] = "-1";
-			continue;
-		}
-		foreach($para['in'] as $j=>&$item) {
-			if($para['ac'] == '--') {
-				$item['c'] = '(Music)';
+		if($para['type'] == 'lyrics') {
+			// 初始配位段
+			if($para['id'] == -1) {
+				$para['in'][0]['ts'] = "-1";
+				continue;
 			}
-			$timelist[] = [intval($item['ts']),$i,$j];
-			if($item['ts'] == 0) {
-				$item['ts'] = 5;
+			// 正常段落
+			foreach($para['in'] as $j=>&$item) {
+				// 填充间奏
+				if($para['ac'] == '--') {
+					$item['c'] = '(Break)';
+				}
+				$timelist[] = [intval($item['ts']),$i,$j];
+				if($item['ts'] <= 5) {
+					$item['ts'] = 5;
+				} else {
+					$ela = intval(round($GLOBALS['lrcopt']['precision'] * 10));
+					$item['ts'] = intval(floor($item['ts'] / $ela) * $ela);
+				}
 			}
+		} else if($para['type'] == 'final') {
+			$para = [
+				'id' => -2,
+				'type' => 'lyrics',
+				'ac' => '__E',
+				'display' => false,
+				'title' => true,
+				'ts' => $para['ts'],
+				'in' => [
+					[
+						'id' => -2,
+						'ts' => $para['ts'],
+						'c' => '(End)'
+					]
+				]
+			];
 		}
 	}
+	$cmt_size = intval(round($GLOBALS['lrcopt']['comment'] * 10));
 	$j = 0;
 	$prevtime = 0;
 	for($i=0;$i<count($timelist);) {
@@ -800,10 +1160,10 @@ function fmtDataForLrc($data) {
 			$ts = -1;
 			if($nexttime == -1) {
 				$ts = $prevtime + $idx * 10;
-			} else if($sz * 7 > $nexttime - $prevtime) {
+			} else if($sz * $cmt_size > $nexttime - $prevtime) {
 				$ts = floatval($nexttime - $prevtime) / $sz * $idx + $prevtime;
 			} else {
-				$ts = $nexttime - $ridx * 7;
+				$ts = $nexttime - $ridx * $cmt_size;
 			}
 			$data['lyrics'][$timelist[$k][1]]['in'][$timelist[$k][2]]['ts'] = strval($ts);
 		}
@@ -826,13 +1186,15 @@ function buildMinifiedLrc($data) {
 	$ret .= '[00:00.000]' . $data['meta']['N'] . ' - ' . $data['meta']['S'] . "\n";
 
 	foreach($data['lyrics'] as $para) {
-		foreach($para['in'] as $item) {
-			if($item['ts'] > 0) {
-				$cont = trim(replaceLrcMark($item['c']));
-				if(!isset($contmap[$cont])) {
-					$contmap[$cont] = [];
+		if($para['type'] == 'lyrics') {
+			foreach($para['in'] as $item) {
+				if($item['ts'] > 0) {
+					$cont = trim(replaceLrcMark($item['c']));
+					if(!isset($contmap[$cont])) {
+						$contmap[$cont] = [];
+					}
+					$contmap[$cont][] = intval($item['ts']);
 				}
-				$contmap[$cont][] = intval($item['ts']);
 			}
 		}
 	}
@@ -863,12 +1225,18 @@ function buildExtendedLrc($data) {
 
 	foreach($data['lyrics'] as $para) {
 		if($para['id'] == -1) continue;
-		$ret .= '[txmp_para:' . $para['ac'] . ' ' . $para['n'] . ']' . "\n";
-		foreach($para['in'] as $item) {
-			if($item['ts'] > 0) {
-				$cont = trim(replaceLrcMark($item['c']));
-				$ret .= '[' . lrcTimestamp($item['ts']) . ']' . $cont . "\n";
+		if($para['type'] == 'lyrics' && $para['ac'] != '__E') {
+			$ret .= '[txmp_para:' . strip_tags($para['ac']) . ' ' . $para['n'] . ']' . "\n";
+			foreach($para['in'] as $item) {
+				if($item['ts'] > 0) {
+					$cont = trim(replaceLrcMark($item['c']));
+					$ret .= '[' . lrcTimestamp($item['ts']) . ']' . $cont . "\n";
+				}
 			}
+		} else if($para['type'] == 'split') {
+			$ret .= '[txmp_split:0]' . "\n";
+		} else if($para['type'] == 'lyrics') {
+			$ret .= '[txmp_final:' . lrcTimestamp($para['ts']) . ']' . "\n";
 		}
 	}
 

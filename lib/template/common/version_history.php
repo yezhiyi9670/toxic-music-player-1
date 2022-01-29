@@ -1,8 +1,11 @@
 <?php if(!defined('IN_SYSTEM')) exit;//Silence is golden ?>
 <script>
 	document.title="<?php LNGe('ver.title') ?> - <?php echo htmlspecial2(_CT('app_name_title')) ?>";
+	set_section_name(LNG('ver.title'));
 </script>
-<link rel="stylesheet" href="<?php echo BASIC_URL ?>static/css/common/cdp-page.css" />
+<?php
+	load_css('css/common/cdp-page');
+?>
 
 <div class="cdp-header">
 	<a style="width:32px;font-size:19px;padding-right:32px;" onclick="prev_page()"><i class="fa fa-chevron-left"></i></a>
@@ -53,25 +56,25 @@
 	$data = json_decode(file_get_contents(CHANGELOG),true);
 	function print_tag($tag) {
 		if($tag == 'CHANGE') {
-			echo '<span class="txmp-tag tag-blue-g">' . LNG('ver.tag.change') . '</span>';
+			echo '<span class="txmp-tag tag-blue-g">' . fa_icon('pencil') . LNG('ver.tag.change') . '</span>';
 		} else if($tag == 'ISSUE') {
-			echo '<span class="txmp-tag tag-deep-orange-l">' . LNG('ver.tag.issue') . '</span>';
+			echo '<span class="txmp-tag tag-deep-orange-l">' . fa_icon('exclamation-circle') . LNG('ver.tag.issue') . '</span>';
 		} else if($tag == 'ADD') {
-			echo '<span class="txmp-tag tag-green-g">' . LNG('ver.tag.add') . '</span>';
+			echo '<span class="txmp-tag tag-green-g">' . fa_icon('plus') . LNG('ver.tag.add') . '</span>';
 		} else if($tag == 'FIX') {
-			echo '<span class="txmp-tag tag-purple-g">' . LNG('ver.tag.fix') . '</span>';
+			echo '<span class="txmp-tag tag-purple-g">' . fa_icon('wrench') . LNG('ver.tag.fix') . '</span>';
 		} else if($tag == 'CLEAN') {
-			echo '<span class="txmp-tag tag-cyan-g">' . LNG('ver.tag.clean') . '</span>';
+			echo '<span class="txmp-tag tag-cyan-g">' . fa_icon('filter') . LNG('ver.tag.clean') . '</span>';
 		} else if($tag == 'BREAKING') {
-			echo '<span class="txmp-tag tag-red-l">' . LNG('ver.tag.break') . '</span>';
+			echo '<span class="txmp-tag tag-red-l">' . fa_icon('exclamation-circle') . LNG('ver.tag.break') . '</span>';
 		} else if($tag == 'INIT') {
-			echo '<span class="txmp-tag tag-green-g">' . LNG('ver.tag.init') . '</span>';
+			echo '<span class="txmp-tag tag-green-g">' . fa_icon('check') . LNG('ver.tag.init') . '</span>';
 		} else if($tag == 'PUBLISH') {
-			echo '<span class="txmp-tag tag-default">' . LNG('ver.tag.publish') . '</span>';
+			echo '<span class="txmp-tag tag-default">' . fa_icon('upload') . LNG('ver.tag.publish') . '</span>';
 		} else if($tag == 'REMOVE') {
-			echo '<span class="txmp-tag tag-red-g">' . LNG('ver.tag.remove') . '</span>';
+			echo '<span class="txmp-tag tag-red-g">' . fa_icon('trash') . LNG('ver.tag.remove') . '</span>';
 		} else if($tag == 'EXPERIMENTAL') {
-			echo '<span class="txmp-tag tag-deep-orange-l">' . LNG('ver.tag.danger') . '</span>';
+			echo '<span class="txmp-tag tag-deep-orange-l">' . fa_icon('exclamation-triangle') . LNG('ver.tag.danger') . '</span>';
 		}
 	}
 	function print_items($r) {
@@ -138,29 +141,31 @@
 			echo '</span>';
 		}
 		if(intval(substr($ver,1,3)) < 114) {
-			echo '<span class="txmp-tag tag-purple-g">' . LNG('ver.type.classic') . '</span>';
+			echo '<span class="txmp-tag tag-purple-g">' . fa_icon('archive') . LNG('ver.type.classic') . '</span>';
 		} else if(strstr($ver,'-pre')) {
-			echo '<span class="txmp-tag tag-deep-orange-l">' . LNG('ver.type.preview') . '</span>';
+			echo '<span class="txmp-tag tag-deep-orange-l">' . fa_icon('tags') . LNG('ver.type.preview') . '</span>';
+		} else if(strstr($ver,'-rc')) {
+			echo '<span class="txmp-tag tag-orange-g">' . fa_icon('flag-checkered') . LNG('ver.type.release_candidate') . '</span>';
 		} else {
-			echo '<span class="txmp-tag tag-green-g">' . LNG('ver.type.release') . '</span>';
+			echo '<span class="txmp-tag tag-green-g">' . fa_icon('check-square-o') . LNG('ver.type.release') . '</span>';
 		}
 		if(isset($item['tag'])) {
 			foreach($item['tag'] as $tag) {
 				if($tag == 'OFFLINE_DEV') {
-					echo '<span class="txmp-tag tag-cyan-g">' . LNG('ver.type.offline_dev') . '</span>';
+					echo '<span class="txmp-tag tag-cyan-g">' . fa_icon('laptop') . LNG('ver.type.offline_dev') . '</span>';
 				} else if($tag == 'UNUSABLE') {
-					echo '<span class="txmp-tag tag-red-l">' . LNG('ver.type.bugged') . '</span>';
+					echo '<span class="txmp-tag tag-red-l">' . fa_icon('bomb') . LNG('ver.type.bugged') . '</span>';
 				} else if($tag == 'EMERGENCY') {
-					echo '<span class="txmp-tag tag-purple-g">' . LNG('ver.type.emergency') . '</span>';
+					echo '<span class="txmp-tag tag-purple-g">' . fa_icon('life-buoy') . LNG('ver.type.emergency') . '</span>';
 				} else if($tag == 'STABLE') {
-					echo '<span class="txmp-tag tag-blue-g">' . LNG('ver.type.latest_stable') . '</span>';
+					echo '<span class="txmp-tag tag-blue-g">' . fa_icon('thumbs-up') . LNG('ver.type.latest_stable') . '</span>';
 				} else if($tag == 'WIP') {
-					echo '<span class="txmp-tag tag-orange-g">' . LNG('ver.type.wip') . '</span>';
+					echo '<span class="txmp-tag tag-orange-g">' . fa_icon('minus-circle') . LNG('ver.type.wip') . '</span>';
 				}
 			}
 		}
 		if($data['current'] == $ver) {
-			echo '<span class="txmp-tag tag-canonical">' . LNG('ver.type.current') . '</span>';
+			echo '<span class="txmp-tag tag-canonical">' . fa_icon('map-marker') . LNG('ver.type.current') . '</span>';
 		}
 		echo '</p>';
 		if(isset($item['featured'])) {
@@ -173,7 +178,7 @@
 		echo '</div>';
 	}
 ?>
-<?php if(isset($data['issues'])) { ?>
+<?php if(false && isset($data['issues'])) { ?>
 <div class="cdp-page" data-cdp-name="<?php LNGe('ver.caption.issues') ?>">
 	<div class="txmp-page-full">
 		<p class="ver-header"><strong><?php LNGe('ver.caption.issues') ?></strong>&nbsp;(<?php echo count($data['issues']) ?>)</p>
@@ -187,7 +192,9 @@ var cdp_nav_gettext = function(ele) {
 	return ele.children[0].children[0].innerHTML;
 }
 </script>
-<script src="<?php echo BASIC_URL ?>static/js/common/cdp-page.js"></script>
+<?php
+	load_js('js/common/cdp-page');
+?>
 <script>
 turn_page(pagecount - currpage);
 </script>

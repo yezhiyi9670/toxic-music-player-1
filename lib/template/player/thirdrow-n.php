@@ -1,3 +1,5 @@
+<?php if(!defined('IN_SYSTEM')) exit;//Silence is golden ?>
+
 <div class="title-dropdown-father am-dropdown am-dropdown-up" style="margin-right:8px;">
 	<a class="am-dropdown-toggle cl-g-2"><?php LNGe('player.tr.details') ?> ▼</a>
 	<ul class="am-dropdown-content song-list-show" onclick="$('.title-dropdown-father').dropdown('close')">

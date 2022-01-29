@@ -1,15 +1,20 @@
-{
-	"baseurl":"<?php echo BASIC_URL.preSubstr($_GET['_lnk']) ?>",
-	"song_id":"<?php echo preSubstr($_GET['_lnk']) ?>",
+<?php if(!defined('IN_SYSTEM')) exit;//Silence is golden ?><?php
 
-	"src1":"<?php echo getAudioUrl(preSubstr($_GET['_lnk']))?>",
-	"src2":"<?php echo getAudioUrl(preSubstr($_GET['_lnk']),"back","background")?>",
+$modified = modifiedTime(cid());
 
-	"player_colored_css":"<?php echo BASIC_URL ?>dynamic/css/player/player-colored.css?v=<?php echo VERSION ?>&w=<?php echo is_wap() ?>&A=X<?php echo addslashes(GCM()['A']) ?>&S=X<?php echo addslashes(GCM()['X']) ?>&G1=X<?php echo addslashes(GCM()['G1']) ?>&G2=X<?php echo addslashes(GCM()['G2']) ?>",
-	"main_colored_css":"<?php echo BASIC_URL ?>dynamic/css/common/main-colored.css?v=<?php echo VERSION ?>&w=<?php echo is_wap() ?>&A=X<?php echo addslashes(GCM()['A']) ?>&S=X<?php echo addslashes(GCM()['X']) ?>&G1=X<?php echo addslashes(GCM()['G1']) ?>&G2=X<?php echo addslashes(GCM()['G2']) ?>",
+echo encode_data([
+	'baseurl' => BASIC_URL . cid(),
+	'song_id' => cid(),
+	'src1' => getAudioUrl(preSubstr($_GET['_lnk'])),
+	'src2' => getAudioUrl(preSubstr($_GET['_lnk']),"back","background"),
+	'player_colored_css' => BASIC_URL . 'dynamic/css/player/player-colored.css?v=' . VERSION . '&w=' . is_wap() . '&A=X' . GCM()['A'] . '&S=X' . GCM()['X'] . '&G1=X' . GCM()['G1'] . '&G2=X' . GCM()['G2'],
+	'main_colored_css' => BASIC_URL . 'dynamic/css/common/main-colored.css?v=' . VERSION . '&w=' . is_wap() . '&A=X' . GCM()['A'] . '&S=X' . GCM()['X'] . '&G1=X' . GCM()['G1'] . '&G2=X' . GCM()['G2'],
 
-	"title":"<?php echo addslashes(GCM()['N']) ?> - <?php echo addslashes(_CT('app_name_title')) ?>",
+	'title' => LNG('player.title') . ' ‹ ' . GCM()['N'] . ' - ' . _CT('app_name_title'),
+	'source' => isKuwoId(cid()) ? 'kuwo' : 'internal',
+	'payment' => paymentStatus(cid()),
 
-	"source": "<?php echo isKuwoId(cid()) ? 'kuwo' : 'internal' ?>",
-	"payment": <?php echo encode_data(paymentStatus(cid())) ?>
-}
+	'meta' => GCM(),
+	'modified' => $modified,
+	'audio_info' => getAudioAnalysis(cid()),
+]);

@@ -3,75 +3,105 @@
 var has_pending_changes = false;
 
 function insertText(obj,str) {
-	if (document.selection) {
-		var sel = document.selection.createRange();
-		sel.text = str;
-	} else if (typeof obj.selectionStart === 'number' && typeof obj.selectionEnd === 'number') {
-		var startPos = obj.selectionStart,
-			endPos = obj.selectionEnd,
-			cursorPos = startPos,
-			tmpStr = obj.value;
-		obj.value = tmpStr.substring(0, startPos) + str + tmpStr.substring(endPos, tmpStr.length);
-		cursorPos += str.length;
-		obj.selectionStart = obj.selectionEnd = cursorPos;
-	} else {
-		obj.value += str;
-	}
+	obj.replaceSelection(str);
 }
 
 function editor_ftime() {
-	var obj=$('#lyricfile')[0];
-	var t=$('#preview')[0].contentWindow.$('#accurate')[0].innerHTML;
-	t=Math.round(t*10)/10;
-	t=Math.floor(t*10)/10;
-	if(Math.abs(t-Math.floor(t))<0.01) t=t.toString()+".0";
-	else t=t.toString();
+	var obj = lyricEditor;
+	// 计算
+	var t = $('.preview-play')[0].contentWindow.A.currentTime;
+	t = Math.round(t*10)/10;
+	t = Math.floor(t*10)/10;
+	if(Math.abs(t-Math.floor(t)) < 0.01) t = t.toString()+".0";
+	else t = t.toString();
+
+	// 插入
 	insertText(obj,t);
-	var lchar=obj.value[obj.selectionStart];
-	if(lchar!=' ' && lchar!=']') insertText(obj," ");
 
-	var np=obj.value.indexOf('__FTIME__');
-	if(np!=-1) {
-		obj.selectionStart=np;
-		obj.selectionEnd=np+9;
+	// 双击选择机制已经被改变，不再需要补全。
+
+	// 取出最后位置
+	var txt = obj.getValue();
+	var sel_list = obj.listSelections();
+	var lastpos = 0;
+	for(let i=0;i<sel_list.length;i++) {
+		lastpos = Math.max(lastpos,getLinearPosition(txt,sel_list[i].anchor),getLinearPosition(txt,sel_list[i].head));
+	}
+	var np = minIndex(txt.indexOf('__FTIME__',lastpos),txt.indexOf('__LT__',lastpos));
+	if(np != -1) {
+		var selectL = np;
+		var selectR = 0;
+		if(txt[np+2] == 'F') {
+			selectR = np+9;
+		} else {
+			selectR = np+6;
+		}
+		console.log(selectL,selectR,txt.substring(selectL,selectR));
+		obj.setSelection(getLinedPosition(txt,selectL),getLinedPosition(txt,selectR));
 	}
 
-	$(obj).keydown();
 	if(!G.is_wap) {
-		$(obj).focus();
+		obj.focus();
 	}
+
+	has_pending_changes = true;
 }
 
 function editor_etime() {
-	var obj=$('#lyricfile')[0];
+	var obj = lyricEditor;
+	// 计算
+	var t = '-';
 
-	t='-';
+	// 插入
 	insertText(obj,t);
-	var lchar=obj.value[obj.selectionStart];
-	if(lchar!=' ' && lchar!=']') insertText(obj," ");
 
-	var np=obj.value.indexOf('__FTIME__');
-	if(np!=-1) {
-		obj.selectionStart=np;
-		obj.selectionEnd=np+9;
+	// 双击选择机制已经被改变，不再需要补全。
+
+	// 取出最后位置
+	var txt = obj.getValue();
+	var sel_list = obj.listSelections();
+	var lastpos = 0;
+	for(let i=0;i<sel_list.length;i++) {
+		lastpos = Math.max(lastpos,getLinearPosition(txt,sel_list[i].anchor),getLinearPosition(txt,sel_list[i].head));
+	}
+	var np = minIndex(txt.indexOf('__FTIME__',lastpos),txt.indexOf('__LT__',lastpos));
+	if(np != -1) {
+		var selectL = np;
+		var selectR = 0;
+		if(txt[np+2] == 'F') {
+			selectR = np+9;
+		} else {
+			selectR = np+6;
+		}
+		console.log(selectL,selectR,txt.substring(selectL,selectR));
+		obj.setSelection(getLinedPosition(txt,selectL),getLinedPosition(txt,selectR));
 	}
 
-	$(obj).keydown();
 	if(!G.is_wap) {
-		$(obj).focus();
+		obj.focus();
 	}
+
+	has_pending_changes = true;
 }
 
 function editor_entag(txt) {
-	var obj=$('#lyricfile')[0];
-	var s=obj.selectionStart;
-	var e=obj.selectionEnd;
-	obj.selectionStart=obj.selectionEnd=e;
-	insertText(obj,'[/'+txt+']');
-	obj.selectionStart=obj.selectionEnd=s;
-	insertText(obj,'['+txt+']');
-	$(obj).keydown();
+	var obj = lyricEditor;
+	var sel_list = obj.listSelections();
+	var lastpos = 0;
+	for(let i=sel_list.length-1;i>=0;i--) {
+		var anchor = minLinedPosition(sel_list[i].anchor,sel_list[i].head);
+		var head = maxLinedPosition(sel_list[i].anchor,sel_list[i].head);
+		// 末端插入
+		obj.setSelection(head,head);
+		insertText(obj,'[/' + txt + ']');
+		// 头端插入
+		obj.setSelection(anchor,anchor);
+		insertText(obj,'[' + txt + ']');
+	}
+
 	obj.focus();
+
+	has_pending_changes = true;
 }
 
 function editor_sni(x){
@@ -88,25 +118,38 @@ O  <Origin>
 P  -`,
 		"para": "[Para @ID AC <Name>]",
 		"hidden": "[Hidden @ID AC <Name>]",
-		"reuse": "[Reuse @UID __FTIME__]",
-		"similar": "[Similar @ID @UID __FTIME__ AC <Name>]",
-		"line": "L __FTIME__ <Content>",
+		"reuse": "[Reuse @UID __LT__]",
+		"similar": "[Similar @ID @UID __LT__ AC <Name>]",
+		"line": "L __LT__ <Content>",
 		"mid": `[Para -- <Name>]
-L __FTIME__ - - - - - - -`,
+L __LT__ - - - - - - -`,
+		"split": `[Split]`,
+		"final": `[Final __LT__]`
 	};
-	insertText(document.getElementById('lyricfile'),sni[x]);
-	document.getElementById('lyricfile').focus();
+	insertText(lyricEditor,sni[x]);
+	lyricEditor.focus();
+
+	has_pending_changes = true;
 }
 
 function editor_nl(){
-	var obj=$('#lyricfile')[0];
-	var str=obj.value.replace(/\r\n/g,"\n");
+	var obj = lyricEditor;
+	var scp = obj.getScrollInfo();
+	var sep = obj.listSelections()[0];
+	var str = obj.getValue().replace(/\r\n/g,"\n");
 	var lns=str.split("\n");
+	var tagname='';
 	for(var i=0;i<lns.length;i++) {
-		if(lns[i]=='') {
-			if(i!=lns.length-1 && lns[i+1][0]!='[') {
-				lns.splice(i,1);
-				i--;
+		var sp = lns[i].trim();
+		if(sp[0] == '[' && sp[sp.length-1]==']') {
+			tagname = sp.substring(1,sp.length-1).split(' ')[0];
+		}
+		else if(tagname != 'Comment') {
+			if(lns[i]=='') {
+				if(i!=lns.length-1 && lns[i+1][0]!='[') {
+					lns.splice(i,1);
+					i--;
+				}
 			}
 		}
 	}
@@ -116,14 +159,17 @@ function editor_nl(){
 		if(i) str+="\n";
 		str+=lns[i];
 	}
-	obj.value=str;
-	$(obj).keydown();
+	obj.setValue(str);
+
+	obj.setSelection(sep.anchor,sep.head);
+	obj.scrollTo(scp.left,scp.top);
+
+	has_pending_changes = true;
 }
 
 function rmsym(str) {
 	str=str.replace(/\,/g," ");
 	str=str.replace(/，/g," ");
-	str=str.replace(/\./g,"");
 	str=str.replace(/。/g,"");
 	str=str.replace(/\;/g," ");
 	str=str.replace(/；/g," ");
@@ -152,9 +198,11 @@ function NextWhite(str,start,flag) {
 }
 
 function editor_rmsym() {
-	var obj=$('#lyricfile')[0];
-	var str=obj.value.replace(/\r\n/g,"\n");
-	var lns=str.split("\n");
+	var obj = lyricEditor;
+	var scp = obj.getScrollInfo();
+	var sep = obj.listSelections()[0];
+	var str = obj.getValue().replace(/\r\n/g,"\n");
+	var lns = str.split("\n");
 	var lrch=['L'];
 
 	var tagname='';
@@ -178,13 +226,20 @@ function editor_rmsym() {
 		if(i) str+="\n";
 		str+=lns[i];
 	}
-	obj.value=str;
-	$(obj).keydown();
+	
+	obj.setValue(str);
+	
+	obj.setSelection(sep.anchor,sep.head);
+	obj.scrollTo(scp.left,scp.top);
+
+	has_pending_changes = true;
 }
 
 function editor_addl(){
-	var obj=$('#lyricfile')[0];
-	var str=obj.value.replace(/\r\n/g,"\n");
+	var obj=lyricEditor;
+	var scp = obj.getScrollInfo();
+	var sep = obj.listSelections()[0];
+	var str=obj.getValue().replace(/\r\n/g,"\n");
 	var lns=str.split("\n");
 	var allh=['A ','S ','N ','LA ','MA ','C ','L ','//','##','O ','TAG ','VAL ','MK ','FI ','G1 ','G2 ','P ','D '];
 	var tagname='';
@@ -192,10 +247,10 @@ function editor_addl(){
 		var lns0=lns[i];
 		lns[i]=lns[i].trim();
 		if(lns[i][0]=='[' && lns[i][lns[i].length-1]==']') {
-			tagname=lns[i].substring(1).split()[0];
+			tagname=lns[i].substring(1,lns[i].length-1).split(' ')[0];
 		}
 		else {
-			if(tagname && tagname!="Comment")
+			if(tagname == 'Para' || tagname == 'Similar' || tagname == 'Hidden')
 			{
 				var ok=0;
 				if(lns[i]=='') ok=1;
@@ -206,7 +261,7 @@ function editor_addl(){
 						ok=1;
 					}
 				}
-				if(!ok) lns0="L __FTIME__ "+lns0;
+				if(!ok) lns0="L __LT__ "+lns0;
 			}
 		}
 		lns[i]=lns0;
@@ -217,26 +272,51 @@ function editor_addl(){
 		if(i) str+="\n";
 		str+=lns[i];
 	}
-	obj.value=str;
-	$(obj).keydown();
+	obj.setValue(str);
+	obj.setSelection(sep.anchor,sep.head);
+	obj.scrollTo(scp.left,scp.top);
+
+	has_pending_changes = true;
+}
+
+function editor_fixtime() {
+	var obj = lyricEditor;
+	var scp = obj.getScrollInfo();
+	var sep = obj.listSelections()[0];
+	var str = obj.getValue().replace(/\r\n/g,"\n");
+
+	str = str.replace(/\bL __FTIME__\b/g,'L __LT__');
+
+	obj.setValue(str);
+	obj.setSelection(sep.anchor,sep.head);
+	obj.scrollTo(scp.left,scp.top);
+
+	has_pending_changes = true;
 }
 
 function editor_cleartime(t) {
-	var obj=$('#lyricfile')[0];
-	var str=obj.value.replace(/\r\n/g,"\n");
+	var obj = lyricEditor;
+	var scp = obj.getScrollInfo();
+	var sep = obj.listSelections()[0];
+	var str = obj.getValue().replace(/\r\n/g,"\n");
 
 	str=str.replace(/\bL (\d+)\.(\d+)\b/g,'L '+t);
 	str=str.replace(/\bL (\d+)-(\d+).(\d+)\b/g,'L '+t);
 	str=str.replace(/\bL (\d+)-(\d+)\b/g,'L '+t);
 	str=str.replace(/\bL (\d+)\b/g,'L '+t);
 
-	obj.value=str;
-	$(obj).keydown();
+	obj.setValue(str);
+	obj.setSelection(sep.anchor,sep.head);
+	obj.scrollTo(scp.left,scp.top);
+
+	has_pending_changes = true;
 }
 
 function editor_formatheading(){
-	var obj=$('#lyricfile')[0];
-	var str=obj.value.replace(/\r\n/g,"\n");
+	var obj = lyricEditor;
+	var scp = obj.getScrollInfo();
+	var sep = obj.listSelections()[0];
+	var str = obj.getValue().replace(/\r\n/g,"\n");
 	var lns=str.split("\n");
 	var allh=['A ','S ','N ','LA ','MA ','C ','L ','//','##','O ','TAG ','VAL ','MK ','FI ','G1 ','G2 ','P ','D '];
 	var tagname='';
@@ -269,11 +349,58 @@ function editor_formatheading(){
 		if(i) str+="\n";
 		str+=lns[i];
 	}
-	obj.value=str;
-	$(obj).keydown();
+	
+	obj.setValue(str);
+	obj.setSelection(sep.anchor,sep.head);
+	obj.scrollTo(scp.left,scp.top);
+
+	has_pending_changes = true;
 }
 
 $('document').ready(function(){
+	// 启动 CodeMirror
+	window.lyricEditor = CodeMirror.fromTextArea($('#lyricfile')[0],{
+		lineNumbers:true,
+		lineWrapping:true,
+		lineSeparator:"\n",
+		configureMouse:function(cm,repeat,e) {
+			if(repeat == 'double') {
+				return {
+					unit: function(cm,pos) {
+						var txt = cm.getValue();
+						pos = getLinearPosition(txt,pos);
+
+						function isDelimeter(t) {
+							if(t.trim() != t) {
+								return true;
+							}
+							if('`#$%^&*()=+[{]}\\|;:\'",<>/?，。、？：；“”‘’（）【】《》·￥…「」'.indexOf(t) != -1) {
+								return true;
+							}
+							return false;
+						}
+
+						var lt = pos;
+						var rt = pos;
+						while(lt > 0 && !isDelimeter(txt[lt-1])) {
+							lt--;
+						}
+						while(rt < txt.length - 1 && !isDelimeter(txt[rt+1])) {
+							rt++;
+						}
+
+						return {
+							from: getLinedPosition(txt,lt),
+							to: getLinedPosition(txt,rt+1)
+						};
+					}
+				};
+			}
+			return {};
+		}
+	});
+	// $('#lyricfile').val('');
+
 	autofit();
 
 	$('.txmp-page-right')[0].scrollTop=37777;
@@ -282,33 +409,37 @@ $('document').ready(function(){
 		$ele = $('#input-time-button');
 		if($ele.hasClass('am-btn-warning')) $ele.removeClass('am-btn-warning');
 		else $ele.addClass('am-btn-warning');
-		document.getElementById('lyricfile').focus();
+		lyricEditor.focus();
 	});
-	$('#lyricfile').keydown(function(e){
+	lyricEditor.on('changes',function(cm,delta) {
+		$('#lyricfile').val(lyricEditor.getValue());
 		has_pending_changes = true;
-
-		console.log(e);
+	});
+	lyricEditor.on('keydown',function(cm,e){
 		if(!e) return true;
 
 		if(e.ctrlKey == 1 && (49 <= e.which && e.which <= 55)) {
 			editor_entag(String.fromCharCode(e.which));
-			return false;
+			e.preventDefault();e.stopPropagation();return false;
 		}
 
 		if(!$('#input-time-button').hasClass('am-btn-warning')) return true;
-		if(e.which == 32 || e.which == 13) {editor_ftime();return false;}
-		else if(e.which == 191) {editor_etime();return false;}
+		if(e.which == 32 || e.which == 13) {editor_ftime();e.preventDefault();e.stopPropagation();return false;}
+		else if(e.which == 191) {editor_etime();e.preventDefault();e.stopPropagation();return false;}
 		return true;
 	});
 
 	// AJAX 提交
 	$('.submit-btn').on('click',async function() {
 		var modal_id = modal_loading(LNG('ui.wait'),LNG('editor.alert.save.tips'));
+		$('#lyricfile').val(lyricEditor.getValue());
+		var data_arr = $('form').serialize();
+		// $('#lyricfile').val('');
 		$.ajax({
 			url: 'edit',
 			method: 'POST',
 			dataType: 'text',
-			data: $('form').serialize(),
+			data: data_arr,
 			timeout: 9000,
 			success: async function(e) {
 				close_modal(modal_id);
@@ -325,7 +456,15 @@ $('document').ready(function(){
 					);
 					has_pending_changes = false;
 					if(flag) {
-						$('#preview')[0].contentWindow.location.reload();
+						// 局部刷新
+						// $('#preview')[0].contentWindow.location.reload();
+						var frame = $('.preview-play')[0];
+						try {
+							frame.contentWindow.changeTo(frame.contentWindow.song_id,false,true);
+						} catch(_e) {
+							reloadIframe($(frame));
+						}
+						reloadIframe($('.preview-info'));
 						current_data = new_data;
 					} else {
 						history.go(0);
@@ -339,6 +478,22 @@ $('document').ready(function(){
 		});
 	});
 });
+
+function togglePreviewPage() {
+	var $btn = $('.btn-page-toggle');
+	var $f1 = $('.preview-play');
+	var $f2 = $('.preview-info');
+
+	if($f1.css('display') == 'none') {
+		$btn.text(LNG('editor.submit.page.player'));
+		$f1.show();
+		$f2.hide();
+	} else {
+		$btn.text(LNG('editor.submit.page.comp'));
+		$f1.hide();
+		$f2.show();
+	}
+}
 
 window.onbeforeunload = function() {
 	if(has_pending_changes) {

@@ -20,9 +20,12 @@ load_js('js/editor/editorflex');
 load_js('js/editor/editorapp');
 ?>
 <?php
-	load_css('css/editor/editor');
+	load_css('css/editor/editor','w');
 ?>
-<script>document.title='<?php echo addslashes(GCM()['N']) ?> > <?php LNGe('editor.title') ?> - <?php echo htmlspecial2(_CT('app_name_title')) ?>';</script>
+<script>
+	document.title='<?php LNGe('editor.title') ?> ‹ <?php echo addslashes(GCM()['N']) ?> - <?php echo htmlspecial2(_CT('app_name_title')) ?>';
+	set_section_name(LNG('editor.title'));
+</script>
 <script>
 	var current_data = <?php echo parseCmpLyric(preSubstr($_GET['_lnk'])) ?>;
 </script>
@@ -41,7 +44,8 @@ load_js('js/editor/editorapp');
 					<li><a onclick="editor_rmsym()"><?php LNGe('editor.action.strip') ?></a></li>
 					<li><a onclick="editor_formatheading()"><?php LNGe('editor.action.reformat') ?></a></li>
 					<li><a onclick="editor_cleartime('-')"><?php LNGe('editor.action.deletetime') ?></a></li>
-					<li><a onclick="editor_cleartime('__FTIME__')"><?php LNGe('editor.action.emptytime') ?></a></li>
+					<li><a onclick="editor_cleartime('__LT__')"><?php LNGe('editor.action.emptytime') ?></a></li>
+					<li><a onclick="editor_fixtime('__LT__')"><?php LNGe('editor.action.fixtime') ?></a></li>
 				</ul>
 			</span>
 			<span class="am-dropdown" data-am-dropdown>
@@ -72,18 +76,20 @@ load_js('js/editor/editorapp');
 					<li><a onclick="editor_sni('similar');"><?php LNGe('editor.sni.similar') ?></a></li>
 					<li><a onclick="editor_sni('line');"><?php LNGe('editor.sni.line') ?></a></li>
 					<li><a onclick="editor_sni('mid');"><?php LNGe('editor.sni.interval') ?></a></li>
+					<li><a onclick="editor_sni('split');"><?php LNGe('editor.sni.split') ?></a></li>
+					<li><a onclick="editor_sni('final');"><?php LNGe('editor.sni.final') ?></a></li>
 				</ul>
 			</span>
 			<button type="button" class="am-btn" id="input-time-button"><?php LNGe('editor.action.inptime') ?></button>
 		</div>
-		<div style="font-family:'Consolas','Source Code Pro','Courier New'!important;font-size:16px;" id="lyricfile__wrapper"><textarea style="width:100%;height:300px" id="lyricfile" name="lyricfile"></textarea></div>
+		<div style="font-family:'Consolas','Source Code Pro','Courier New'!important;font-size:15px;" id="lyricfile__wrapper"><textarea style="width:100%;height:300px;" id="lyricfile" name="lyricfile"></textarea></div>
 		<script>
 			document.getElementById('lyricfile').value=`<?php
 				echo esline(file_get_contents(FILES.preSubstr($_GET['_lnk']).'/lyric.txt'));
 			?>`;
 		</script>
 	</div>
-	<div class="txmp-page-right" style="position:<?php echo is_wap()?"auto":"fixed" ?>; overflow-y:scroll; padding-bottom:64px;">
+	<div class="txmp-page-right" style="position:<?php echo is_wap()?"auto":"fixed" ?>; overflow-y:scroll;">
 		<?php if(isset($_GET['msg'])) { ?><p id="head-notice"><?php echo htmlspecial($_GET['msg']) ?>
 			<a href="javascript:;" onclick="F_HideNotice()" class="notice-confirm"><?php LNGe('ui.hide_notice') ?></a>
 		</p><?php } ?>
@@ -105,12 +111,16 @@ load_js('js/editor/editorapp');
 		<p>
 			<button type="button" class="am-btn submit-btn am-btn-primary"><?php LNGe('editor.submit.update') ?></button>
 			<button type="button" onclick="window.open('<?php echo BASIC_URL.preSubstr($_GET['_lnk']) ?>')" class="am-btn am-btn-secondary"><?php LNGe('editor.submit.view') ?></button>
-			<?php if(isValidMusic(preSubstr($_GET['_lnk']))){ ?><button type="button" onclick="$('#preview')[0].contentWindow.location.reload()" class="am-btn am-btn-thirdary"><?php LNGe('editor.submit.refresh') ?></button><?php } ?>
+			<?php if(true || isValidMusic(preSubstr($_GET['_lnk']))){ ?>
+				<button type="button" onclick="reloadIframe($('.preview'))" class="am-btn am-btn-warning"><?php LNGe('editor.submit.refresh') ?></button>
+				<button type="button" onclick="togglePreviewPage()" class="am-btn am-btn-thirdary btn-page-toggle"><?php LNGe('editor.submit.page.player') ?></button>
+			<?php } ?>
 		</p>
 
 		<p>
-			<?php if(isValidMusic(preSubstr($_GET['_lnk']))){ ?>
-				<iframe id="preview" src="<?php echo BASIC_URL.preSubstr($_GET['_lnk']).'?wap=force-phone' ?>" style="width:100%;height:500px;border:1px solid #000000;<?php if(stristr($_SERVER['HTTP_USER_AGENT'],'firefox/')){ ?>margin-bottom: 51px;<?php } ?>"></iframe>
+			<?php if(true || isValidMusic(preSubstr($_GET['_lnk']))){ ?>
+				<iframe class="preview preview-play" src="<?php echo BASIC_URL.preSubstr($_GET['_lnk']).'?wap=force-phone&iframe' ?>" style="<?php if(stristr($_SERVER['HTTP_USER_AGENT'],'firefox/')){ ?>margin-bottom: 51px;<?php } ?>"></iframe>
+				<iframe class="preview preview-info" src="<?php echo BASIC_URL.preSubstr($_GET['_lnk']).'/comp-info?iframe' ?>" style="display:none;<?php if(stristr($_SERVER['HTTP_USER_AGENT'],'firefox/')){ ?>margin-bottom: 51px;<?php } ?>"></iframe>
 			<?php } ?>
 		</p>
 	</div>

@@ -14,8 +14,15 @@
 ?>
 
 <script>
-	document.title="<?php echo LNGk('led.title') ?><?php if($listType == 'internal') echo ' < '.htmlspecial($listdata['title']) ?> - <?php echo htmlspecial2(_CT('app_name_title')) ?>";
+	document.title="<?php echo LNGk('led.title') ?><?php if($listType == 'internal') echo ' ‹ '.htmlspecial($listdata['title']) ?> - <?php echo htmlspecial2(_CT('app_name_title')) ?>";
+	set_section_name(LNG('led.title'));
 </script>
+<style>
+	/* 禁止移动端过滑行为 */
+	body {
+		overscroll-behavior-y: none;
+	}
+</style>
 <script>
 //状态初始化
 
@@ -25,7 +32,9 @@ var isRandShuffle=<?php echo (isset($_GET['randShuffle']) ? "true":"false") ?>;
 
 var list=[
 	<?php 
-		$otherList=explode('|',$_GET['list']);
+		$hasInvalid = false;
+		$otherList = explode('|',$_GET['list']);
+		$isInvalid = [];
 		if($listType == 'internal') {
 			$otherList = [];
 			foreach($listdata['playlist'] as $item) {
@@ -35,10 +44,10 @@ var list=[
 		$first=true;
 		for($i=0;$i<count($otherList);$i++) {
 			if(!preg_match('/^(\w+)$/',$otherList[$i])) continue;
-			if(!_checkPermission('music/index',$otherList[$i])) continue;
 			if($first) $first=false;
 			else echo ",\n";
 			echo '"'.$otherList[$i].'"';
+			$hasInvalid |= $isInvalid[$otherList[$i]] = !_checkPermission('music/index',$otherList[$i]);
 		}
 	?>
 ];
@@ -47,12 +56,15 @@ var listName=[
 		$first=true;
 		for($i=0;$i<count($otherList);$i++) {
 			if(!preg_match('/^(\w+)$/',$otherList[$i])) continue;
-			if(!_checkPermission('music/index',$otherList[$i])) continue;
-			if($first) $first=false;
+			if($first) $first = false;
 			else echo ",\n";
-			$curr=$otherList[$i];
+			$curr = $otherList[$i];
 			echo '"';
-			printPlayerList($otherList[$i],$listType=='internal');
+			if(!$isInvalid[$otherList[$i]]) {
+				printPlayerList($otherList[$i],$listType=='internal');
+			} else {
+				printPlayerList($otherList[$i],$listType=='internal',true);
+			}
 			echo '"';
 		}
 	?>
@@ -62,10 +74,13 @@ var listColor=[
 		$first=true;
 		for($i=0;$i<count($otherList);$i++) {
 			if(!preg_match('/^(\w+)$/',$otherList[$i])) continue;
-			if(!_checkPermission('music/index',$otherList[$i])) continue;
 			if($first) $first=false;
 			else echo ",\n";
-			echo '"'.GSM($otherList[$i])['A'].'"';
+			if(!$isInvalid[$otherList[$i]]) {
+				echo '"'.GSM($otherList[$i])['A'].'"';
+			} else {
+				echo 'null';
+			}
 		}
 	?>
 ];
@@ -78,6 +93,8 @@ var cloudId='<?php echo strval($intlist_arr[1]); ?>';
 var cloudData = <?php echo encode_data($listdata) ?>;
 
 var isCsv = <?php $is_csv = uauth_has_data($uname,'playlist',$intlist_arr[1].'.csv'); echo $is_csv ? 'true' : 'false'; ?>;
+
+var cloudLenLimit = <?php echo _CT('user_playlist_limit') ?>;
 <?php } ?>
 
 </script>
@@ -87,7 +104,7 @@ var isCsv = <?php $is_csv = uauth_has_data($uname,'playlist',$intlist_arr[1].'.c
 	<div style="border:1px solid #DDD;padding:16px;padding-bottom:0;margin-bottom:16px;" class="tooltip-box">
 		<span class="cloudsave-disabled" style="display:<?php echo ($listType == 'tmp')?'inline-block':'none' ?>">
 			<a onclick="toggleVisible(this,'.type-form-content')" style="font-weight:bold;margin-bottom:16px;display:block;">▶ <?php LNGe('led.type.temp') ?></a>
-			<span class="type-form-content" style="display:none;">
+			<span class="type-form-content" style="display:none;margin-bottom:16px">
 				<p><?php LNGe('led.type.temp.tip.1') ?></p>
 				<p><?php LNGe('led.type.temp.tip.2') ?></p>
 				<p>
@@ -98,7 +115,7 @@ var isCsv = <?php $is_csv = uauth_has_data($uname,'playlist',$intlist_arr[1].'.c
 		</span>
 		<span class="internalsave-disabled" style="display:<?php echo ($listType == 'internal')?'inline-block':'none' ?>">
 			<a onclick="toggleVisible(this,'.type-form-content')" style="font-weight:bold;margin-bottom:16px;display:block;">▶ <?php LNGe('led.type.online') ?> <span style="font-weight:normal"><?php echo uauth_username() . '/' . $intlist_arr[1] ?></span></a>
-			<span class="type-form-content" style="display:none;">
+			<span class="type-form-content" style="display:none;margin-bottom:16px">
 				<?php if(!$is_csv) { ?>
 					<p class="text-danger"></p>
 				<?php } ?>
@@ -121,18 +138,21 @@ var isCsv = <?php $is_csv = uauth_has_data($uname,'playlist',$intlist_arr[1].'.c
 							openUrl(-1);
 						}
 					</script>
+				</p>
+				<p>
 					<button class="am-btn am-btn-success op-btn am-disabled" onclick="openUrl(0,2)"><?php LNGe('led.type.online.export') ?></button>
 					<button class="am-btn am-btn-success op-btn am-disabled" onclick="importData()"><?php LNGe('led.type.online.import') ?></button>
+					<button class="am-btn am-btn-success op-btn am-disabled" onclick="editRaw()"><?php LNGe('led.type.online.editraw') ?></button>
 				</p>
 			</span>
 		</span>
 	</div>
 	<div>
 		<?php LNGe('led.label.url') ?><br>
-		<input type="text" id="g-url" autocomplete="off" placeholder="<?php LNGe('led.label.url.val') ?>" style="margin-right:8px;"><button type="button" class="am-btn am-btn-primary list-submit" disabled onclick="openUrl()"><?php echo (isset($_GET['fmid']) || $listType == 'internal')? LNG('led.action.save_open'):LNG('led.action.open') ?></button>
+		<input type="text" id="g-url" autocomplete="off" placeholder="<?php LNGe('led.label.url.val') ?>" style="margin-right:8px;"><button type="button" class="am-btn am-btn-primary list-submit" disabled onclick="openUrl()"><?php echo LNG('led.action.open') ?></button>
 		<p <?php if($listType == 'internal') echo 'style="display:none;"'; ?>><input type="checkbox" placeholder="" id="isRand" /> <?php LNGe('led.temp.rand_next') ?>&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" placeholder="" id="isRandShuffle" /> <?php LNGe('led.temp.rand_shuffle') ?>&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" placeholder="" disabled id="isIframe" /> <?php LNGe('led.temp.integrated') ?></p>
 		<p><?php LNGe('led.data_len') ?><code class="list-len-show">0/0</code></p>
-	</div> 
+	</div>
 	<?php if($listType == 'internal') { ?>
 		<div style="border:1px solid #DDD;padding:16px;margin-bottom:16px;" class="tooltip-box">
 			<h3><?php LNGe('led.online.feature') ?></h3>
@@ -196,6 +216,14 @@ var isCsv = <?php $is_csv = uauth_has_data($uname,'playlist',$intlist_arr[1].'.c
 			<span class="" onclick="modal_alert(LNG('led.count'),amount)">
 				<h2><?php LNGe('led.list') ?></h2>
 			</span>
+			<?php if($hasInvalid) { ?>
+			<span style="float:right;display:inline-block;margin-top:-4px;margin-bottom:-8px;" class="btn-clear-invalid">
+				<a href="javascript:;" style="display:inline" onclick="clearInvalid()">
+					<i class="fa fa-ban"></i>
+					<?php LNGe('led.clear_invalid') ?>
+				</a>
+			</span>
+			<?php } ?>
 		</div>
 		<div class="am-list-news-bd">
 			<ul class="am-list maker-list">
@@ -227,6 +255,6 @@ var isCsv = <?php $is_csv = uauth_has_data($uname,'playlist',$intlist_arr[1].'.c
 	</div>
 	<div class="toxic-dialog-cover" id="selector" style="display:none;">
 		<iframe style="position:fixed;left:0;top:0;width:100%;height:100%;border:1px solid #000000;" src="<?php echo BASIC_URL ?>?iframe"></iframe>
-		<a style="font-weight:bold;color:#000;font-size:24px;top:16px;right:16px;position:absolute;margin-right:24px;z-index:1;" id="button-cancel"><?php LNGe('led.list.cancel') ?></a>
+		<button style="top:12px;right:12px;position:fixed;z-index:1;" class="am-btn am-btn-danger shadowed" id="button-cancel"><?php LNGe('led.list.cancel') ?></button>
 	</div>
 </div>

@@ -31,3 +31,102 @@
 #reload-button{
 	display: none;
 }
+.right-first-row {
+	white-space: nowrap;
+}
+
+/* Customization from here */
+
+.lrc-overview {
+	border: none;
+	z-index: 1;
+	box-shadow: #FFF 0 4px 16px 18px;
+	padding: 0;
+	position: relative;
+	background-color: #FFF;
+}
+
+.lrc-content {
+	border:none;
+	padding:0;
+	margin-top: -20px;
+	padding-top: 52px;
+	text-align: left;
+}
+
+.float-btn {
+	text-align: center;
+	z-index: 1;
+}
+
+.para {
+	margin-top: 0;
+	padding-top: 0;
+}
+
+.para-active {
+	background-color: #00000000;
+}
+
+.lrcline-id {
+	margin-left: -15px;
+	display: none;
+}
+
+.txmp-page-right {
+	border: none;
+	box-shadow: #FFF 0 -4px 16px 18px;
+	background-color: #FFF;
+}
+
+.lrc-text {
+	margin-right: 0;
+	margin-left: 0;
+}
+
+.txmp-page-left {
+	padding-left: 24px;
+}
+
+.para-title-text {
+	margin-left: 0;
+	margin-right: 0;
+	color: #E3E3E3;
+	font-size: 0.8em;
+}
+.lrc-wap-title {
+	font-size: 1.35em;
+	font-weight: 700;
+	margin-bottom: 0.5em;
+}
+
+.volume-select-list {
+	max-height: 200px;
+	overflow-y: auto;
+}
+.speed-select-list {
+	max-height: 248px;
+	overflow-y: auto;
+}
+
+body {
+	overscroll-behavior-y: none;
+}
+
+/* Controls positioning */
+#speed-div {
+	left: 0;
+	top: -48px;
+}
+#sync-button {
+	left: 0;
+	top: 0;
+}
+#skip-button {
+	left: 0;
+	top: -144px;
+}
+#volume-div {
+	left: 0;
+	top: -96px;
+}

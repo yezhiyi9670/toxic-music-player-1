@@ -12,6 +12,8 @@ $('.cdp-page').each(function(){
 	}
 });
 var currpage = 1;
+$('.cdp-nav-item').children().css('background-color','');
+$('#cdp-nav-'+currpage).children().css('background-color','#DDD');
 $('.cdp-page').css('display','none');
 $('[data-cdp-id='+1+']').css('display','block');
 

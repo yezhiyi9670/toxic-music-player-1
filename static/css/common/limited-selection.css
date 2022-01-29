@@ -3,7 +3,7 @@ body {
 }
 
 code,
-.lrc-content,
+.lrc-content__wrapperin,
 .codeblock,
 .allow-select {
 	user-select: text;

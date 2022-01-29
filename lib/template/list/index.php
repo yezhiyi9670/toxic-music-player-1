@@ -7,34 +7,47 @@ if(isset($_GET['isSubmit'])) {
 }
 ?>
 
-<script>document.title='<?php echo LNGk('list.title') ?> - <?php echo htmlspecial2(_CT('app_name_title')) ?>';</script>
+<script>
+	document.title='<?php echo addslashes(_CT('app_name_title')) ?> | <?php echo addslashes(_CT('app_desc')) ?>';
+	set_section_name(LNG('list.title'));
+</script>
+<?php declare_allow_overscroll() ?>
 <div class="txmp-page-full">
 	<?php if(!isset($_GET['iframe'])) { ?><h3 id="page-title-clickable"><?php LNGe('list.title') ?></h3>
-	<p><a href="<?php echo BASIC_URL ?>user/login"><?php LNGe('ui.user_center') ?></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="<?php echo BASIC_URL ?>setting"><?php LNGe('ui.user_setting') ?></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="<?php echo BASIC_URL ?>list-maker" target="_blank"><?php LNGe('ui.list_maker') ?></a></p>
+	<p><?php printFuncLink('list/index') ?></p>
 	<?php
 		if(file_exists(DATA_PATH.'bc/bc.html')) {
-			echo '<div class="tooltip-box" style="border:1px solid #DDD;padding:16px;margin-bottom:16px;">';
+			echo '<div class="tooltip-box" style="padding:16px;margin-bottom:16px;">';
 			require(DATA_PATH.'bc/bc.html');
 			echo '</div>';
 		}
 	?>
-	<hr><?php } ?>
-	<p><?php LNGe('list.source.select') ?>&nbsp;&nbsp;
-		<a onclick="$('#list-legacy').css('display','block');
-			$('#list-kuwo').css('display','none');"><?php LNGe('list.source.internal') ?></a>&nbsp;&nbsp;&nbsp;&nbsp;
-		<a onclick="$('#list-kuwo').css('display','block');
-			$('#list-legacy').css('display','none');"><?php LNGe('list.source.kuwo') ?></a>
-	</p>
-	<hr>
+	<?php } ?>
+	<div class="tooltip-box">
+		<p><?php LNGe('list.source.select') ?>&nbsp;&nbsp;
+			<a onclick="$('#list-legacy').css('display','block');
+				$('#list-kuwo').css('display','none');"><?php LNGe('list.source.internal') ?></a>&nbsp;&nbsp;&nbsp;&nbsp;
+			<a onclick="$('#list-kuwo').css('display','block');
+				$('#list-legacy').css('display','none');"><?php LNGe('list.source.kuwo') ?></a>
+		</p>
+	</div>
 	<div id="list-legacy">
 		<p><?php LNGe('list.caption.internal.list') ?>&nbsp;<a href="<?php echo BASIC_URL ?>playlist/__syscall/0" target="_blank"><?php LNGe('list.play_all') ?></a></p>
 		<ul>
 			<?php
 				$menu=dir_list(FILES);
+				$item_count = 0;
 				foreach($menu as $item) {
 					if(isValidMusic($item,false) && (getPerm($item)['list/show'] || is_root())) {
 						printIndexList($item);
+						$item_count++;
 					}
+				}
+
+				if($item_count == 0) {
+					echo '<li>';
+					LNGe('list.list.empty');
+					echo '</li>';
 				}
 			?>
 		</ul>
@@ -73,7 +86,7 @@ if(isset($_GET['isSubmit'])) {
 			success:function(e){
 				close_modal(al);
 				dist.html(e);
-				handle_rp_item();
+				if(!G.is_iframe) handle_rp_item();
 			}
 		});
 	}

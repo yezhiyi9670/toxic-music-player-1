@@ -39,3 +39,10 @@ function load_css($fn,$flag='',$ver=VERSION,$colorizer_class="") {
 		}
 	}
 }
+
+// 插入允许过翻的CSS
+function declare_allow_overscroll() {
+	echo '<style>';
+	echo '.txmp-page-full::after,.txmp-page-left::after,.txmp-page-right::after{padding-bottom:400px;}';
+	echo '</style>';
+}

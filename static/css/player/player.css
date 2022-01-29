@@ -11,12 +11,10 @@ body {
 	height: 240px;
 	margin-left: 24px;
 	margin-right:24px;
-	margin-bottom:8px;
-	border:1px solid #999;
+	margin-bottom: 20px;
 	background-color:#EEE;
 }
 .song-avatar img {
-	border-radius: 50%;
 }
 
 .song-title{
@@ -40,7 +38,7 @@ body {
 	margin-right:4px;
 	white-space:nowrap;
 }
-.song-process{
+.song-status {
 	font-size:14px;
 	padding:2px;
 	color:#9b9b9b;
@@ -73,6 +71,7 @@ body {
 	height:16px;
 	display:inline-block;
 	position:relative;
+	overflow:hidden;
 }
 
 /* Processbar load */
@@ -113,24 +112,37 @@ body {
 	padding:4px;
 	margin-right:0;
 	white-space:nowrap;
-	color:black;
+	color:#000000AA;
 }
-.lo-active{
+.lo-item.lo-active{
 	border:solid 0px transparent;
 	background-color:#EEE;
+	color:#000000;
 }
 .lrc-area{
 	position:fixed;
 }
 .lrc-item,
 .para-title {
-	margin-top:-0.025em;
-	margin-bottom:calc(2.8256em - 2.0em);
-	line-height: 1.2em;
+	margin-top:-0.175em;
+	margin-bottom:calc(2.8256em - 2.15em);
+	line-height: 1.5em;
+}
+.lrcline-id {
+	padding-left: calc(8px + 0.7em);
+	opacity: 0.6;
+	font-size: 0.7em;
+	white-space: nowrap;
+	position: absolute;
+	margin-top: 0.07em;
+	left: 0;
+	user-select: none;
 }
 .lrc-text,
 .para-title-text {
 	display:inline-block;
+	margin-left:1.5em;
+	margin-right:1.5em;
 }
 .active-color-1::before,
 .active-color-2::before,
@@ -172,6 +184,7 @@ body {
 	line-height:90%;
 	overflow:-moz-scrollbars-none;
 	scrollbar-width:none;
+	position:relative;
 }
 .lrc-content::-webkit-scrollbar,
 .lrc-content .-o-scrollbar{
@@ -180,7 +193,20 @@ body {
 .lrc-content::-moz-scrollbars-vertical{
 	display:none;
 }
-.lrc-active{
+.lrc-item {
+	color: #000000AA;
+}
+.lrc-item.lrc-wap-title:not(.lrc-active) {
+	color: #000;
+}
+.lrc-wap-title-singer {
+	font-size: 0.6em;
+	font-weight: 400;
+	display: inline-block;
+	margin-top: 0.5em;
+	opacity: 0.7;
+}
+.lrc-item.lrc-active{
 	font-weight:bold;
 }
 
@@ -270,19 +296,21 @@ body {
 
 /* 人声倒放 */
 .reverse-sound-o {
-	background-color: #000;
+	background-color: #000A;
 	height: 0.1367em;
 	margin-top: 0.2em;
 	margin-left: 0.3111em;
 	margin-right: 0.3111em;
+	transition: color .15s;
 }
 .reverse-sound-i {
-	background-color: #000;
+	background-color: #000A;
 	height: 0.1367em;
 	width: 0.9em;
 	transform: rotate(-45deg);
 	margin-left: 0.2em;
 	margin-top: -0.8em;
+	transition: color .15s;
 }
 
 .para{
@@ -301,15 +329,21 @@ body {
 .para-active{
 	background-color:#F7F7F7;
 }
-#sync-button {
+.float-btn {
 	position:fixed;
-	background-color:#EEE;
-	border: 1px solid #DDD;
-	width: 32px;
-	height: 32px;
-	font-size: 24px;
+	background-color:#FFF;
+	border: 2px solid transparent;
+	color: #444;
+	width: 36px;
+	height: 36px;
+	font-size: 28px;
 	padding: 3px;
 	opacity:0.9;
+	transition: border .15s, color .15s, box-shadow .3s, background-color .15s;
+}
+.float-btn:hover {
+	color: #444;
+	border: 2px solid transparent;
 }
 
 #right-menu-overlay {
@@ -324,8 +358,7 @@ body {
 #right-menu {
 	position: fixed;
 	background-color: #EEE;
-	/* 此box-shadow同时用于两种界面风格 */
-	box-shadow: 0 0 4px 2px #00000055;
+	box-shadow: 0 5px 17px -4px #00000077;;
 	top: 0;
 	height: 100%;
 	z-index: 1023;
@@ -335,7 +368,6 @@ body {
 .rmenu-selection-tabs {}
 .rmenu-tab,
 .rmenu-close {
-	border: 1px solid #AAA;
 	padding: 4px;
 	margin-right:4px;
 }
@@ -353,6 +385,7 @@ body {
 	width: 100%;
 	height: calc(100% - 42px);
 	overflow-y:scroll;
+	font-size: 0.92em;
 }
 
 .song-list-item {
@@ -379,6 +412,9 @@ body {
 .song-list-item .addition-cmt {
 	line-height: unset !important;
 }
+.song-list-item .txmp-tag {
+	box-shadow: none;
+}
 
 .rmenu-toggle,
 .rmenu-toggle:hover,
@@ -388,4 +424,65 @@ body {
 .rmenu-clt {
 	margin-bottom:-2px;
 	margin-top:4px;
+}
+
+.rmenu-close {
+	text-align:center;
+}
+
+.songlist-status-none {
+	border-left: 3px solid #AAAAAA;
+}
+.songlist-status-allow {
+	border-left: 3px solid #00d20c;
+}
+.songlist-status-deny {
+	border-left: 3px solid #A00000;
+}
+
+.active-color-1:first-child::before,
+.active-color-2:first-child::before,
+.active-color-3:first-child::before,
+.active-color-4:first-child::before,
+.active-color-5:first-child::before,
+.active-color-6:first-child::before,
+.active-color-7:first-child::before {
+	margin-left: 0;
+}
+
+/* Controls */
+#speed-button {
+	font-size: 20px;
+	padding-left: 7px;
+	padding-top: 6px;
+}
+#sync-button {
+	font-size: 22px;
+	padding-left: 4px;
+	padding-top: 5px;
+}
+#skip-button {
+	font-size: 22px;
+	padding-left: 4px;
+	padding-top: 5px;
+}
+#volume-button {
+	font-size: 22px;
+	padding-left: 4px;
+	padding-top: 5px;
+}
+.lyric-controls__wrapperin>* {
+	position: absolute;
+}
+.lyric-controls {
+	position: fixed;
+	overflow: visible;
+	width: 36px;
+	height: 36px;
+}
+.lyric-controls__wrapperin {
+	position: relative;
+	overflow: visible;
+	width: 36px;
+	height: 36px;
 }

@@ -139,7 +139,11 @@ else {
 
 ?>
 
-<script>document.title='<?php LNGe('ua.title') ?> - <?php echo htmlspecial2(_CT('app_name_title')) ?>';</script>
+<script>
+	document.title='<?php LNGe('ua.title') ?> - <?php echo htmlspecial2(_CT('app_name_title')) ?>';
+	set_section_name(LNG('ua.title'));
+</script>
+<?php declare_allow_overscroll() ?>
 <script>
 	var userTypes = <?php echo encode_data(get_all_user_types()); ?>;
 </script>
@@ -154,6 +158,9 @@ else {
 		.user-manage-table td {
 			padding: 8px;
 			border: 1px solid #DDD;
+		}
+		body {
+			overflow-x: auto;
 		}
 	</style>
 	<table class="user-manage-table">

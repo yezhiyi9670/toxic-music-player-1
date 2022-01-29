@@ -2,9 +2,55 @@
 
 define("PI",3.14159265358979323846264);
 
-// 重写文件，改变修改时间
-function rewrite_file($fn) {
-	file_put_contents($fn,file_get_contents($fn));
+define("FULL_SPACE","\xE3\x80\x80");
+
+// 判断是否仅包含字符
+function onlyConsistsOf($haystack,$needle=[]) {
+	for($i = 0; $i < strlen($haystack); $i++) {
+		if(!in_array($haystack[$i],$needle)) {
+			return false;
+		}
+	}
+	return true;
+}
+
+// 随机字符串
+function randString($len,$charset='0123456789') {
+	$ret = '';
+	for($i = 0; $i < $len; $i++) {
+		$ret .= $charset[mt_rand(0,strlen($charset)-1)];
+	}
+	return $ret;
+}
+
+// 随机UUID
+function randomUUID() {
+	$res = randString(32,'0123456789abcdef');
+	$p1 = substr($res,0,8);
+	$p2 = substr($res,8,4);
+	$p3 = substr($res,12,4);
+	$p4 = substr($res,16,4);
+	$p5 = substr($res,20);
+	return implode('-', [$p1,$p2,$p3,$p4,$p5]);
+}
+
+// 限制数值
+function clampLimit($x,$default=0,$step=1,$min=-65536,$max=65535) {
+	if(null === $x) {
+		return $default;
+	}
+	$x = floatval($x);
+	if($x != $x) {
+		return $default;
+	}
+	if($x < $min) {
+		$x = $min;
+	}
+	if($x > $max) {
+		$x = $max;
+	}
+	$x = round($x / $step) * $step;
+	return $x;
 }
 
 // 格式化时长
@@ -67,6 +113,40 @@ function hashed_saturate_gradient($s) {
 		$rd->rand_float() * 0.1 + $lm2
 	]);
 	return [$c1,$c2];
+}
+
+// 颜色值 -> 光学数值
+function color_tolinear($cl) {
+	return pow($cl,2.2);
+}
+
+// 光学数值 -> 颜色值
+function color_tovalue($c1) {
+	return max(0,min(255,round(pow($c1,0.454545))));
+}
+
+// 二色平均
+function two_color_avg($p1,$p2,$ratio = 0.5) {
+	return [
+		color_tovalue(color_tolinear($p1[0]) * $ratio + color_tolinear($p2[0]) * (1 - $ratio)),
+		color_tovalue(color_tolinear($p1[1]) * $ratio + color_tolinear($p2[1]) * (1 - $ratio)),
+		color_tovalue(color_tolinear($p1[2]) * $ratio + color_tolinear($p2[2]) * (1 - $ratio))
+	];
+}
+function two_color_avg_hex($c1,$c2,$ratio = 0.5) {
+	return '#' . rgb2hex(two_color_avg(hex2rgb($c1),hex2rgb($c2),$ratio));
+}
+
+// HEX -> RGB 转换
+function hex2rgb($cd) {
+	if($cd[0] == '#') {
+		$cd = substr($cd,1);
+	}
+	$hex = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	$r = strpos($hex,$cd[0]) * 16 + strpos($hex,$cd[1]);
+	$g = strpos($hex,$cd[2]) * 16 + strpos($hex,$cd[3]);
+	$b = strpos($hex,$cd[4]) * 16 + strpos($hex,$cd[5]);
+	return [$r,$g,$b];
 }
 
 // RGB -> HEX 转换
@@ -194,6 +274,15 @@ function preSubstr($u,$f="/") {
 // 对JS中多行文字的转义处理（防止利用</script>和${}等东西进行注入攻击）
 function esline($str) {
 	return str_replace(['<','`','$'],["\\x3c","\\x60","\\x24"],addslashes($str));
+}
+
+// XML 特殊字符反向替换
+function xmlspecial_unescape($str) {
+	return str_replace(
+		["&apos;","&lt;","&gt;","&quot;","&amp;"],
+		["'","<",">",'"','&'],
+		$str
+	);
 }
 
 // -------------------------------- 此上为补加内容 -------------------------------- //
@@ -2623,6 +2712,20 @@ function ua_has($str){
 function is_wap(){
 	if($_GET['wap']=='force-phone') return 1;
 	if($_GET['wap']=='force-pc') return 0;
+	if(!isset($_SERVER['HTTP_USER_AGENT'])){
+		return false;
+	}
+	if(preg_match('/(up.browser|up.link|mmp|symbian|smartphone|midp|wap|phone|iphone|ipad|ipod|android|xoom)/i',
+		strtolower($_SERVER['HTTP_USER_AGENT']))){
+		return true;
+	}
+	if((isset($_SERVER['HTTP_ACCEPT'])) &&
+		(strpos(strtolower($_SERVER['HTTP_ACCEPT']),'application/vnd.wap.xhtml+xml') !== false)){
+		return true;
+	}
+	return false;
+}
+function is_real_wap(){
 	if(!isset($_SERVER['HTTP_USER_AGENT'])){
 		return false;
 	}

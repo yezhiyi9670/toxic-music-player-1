@@ -22,7 +22,7 @@ The requirements of users is always infinite. The best way of solving this probl
 0x00 Scheduled
 --------------
 
-Programmable rules are scheduled to be introduced in v201a, after The Flattening.
+Programmable rules are scheduled to be introduced in Recreation Update, which will be in v132a or so.
 
 0x01 Make rules programmable!
 -----------------------------
@@ -58,9 +58,9 @@ Here's a sample of parameter definition.
 
 Each parameter takes up a line in parameter definition. Empty lines are ignored. `//` or `#` stands for comments if it starts a line.
 
-Indentation or trailing whitespaces are always supported, but redundant spaces are not supported.
+Indentation or trailing whitespaces are always supported, but redundant spaces are not.
 
-Lines don't have to exactly align.
+Lines don't have to align exactly.
 
 **Data Type**
 
@@ -99,4 +99,7 @@ If the function produces uncaught errors, the application will handle those.
 
 Breaking out of the function structure is possible here, but malicious code will not be successfully executed in the sandbox.
 
+0x03 Implementation
+-------------------
 
+Currectly, partial implementation can be found in static/js/lib.

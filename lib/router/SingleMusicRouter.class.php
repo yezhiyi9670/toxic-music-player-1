@@ -12,6 +12,7 @@ class SingleMusicRouter {
 	二级URL（按检测顺序）：
 		/ - 播放页
 		/code - 代码
+		/comp-info - 编译信息（权限同 code）
 		/docs - 歌词文档HTML
 		/make-doc - 歌词文档 action!
 		/audio.(\w+) 或 /audio - 输出音频 file!
@@ -44,6 +45,9 @@ class SingleMusicRouter {
 		}
 		if($type == 'code') {
 			return $this -> routeCode();
+		}
+		if($type == 'comp-info') {
+			return $this -> routeCompInfo();
 		}
 		if($type == 'docs') {
 			return $this -> routeDocs();
@@ -95,9 +99,9 @@ class SingleMusicRouter {
 	}
 
 	// 主页面
-	// 要求：已上传音频
+	// 要求：有效
 	private function routeMainPage() {
-		if(!isValidMusic(cid(),true)) {
+		if(!isValidMusic(cid(),false)) {
 			print404('No Such Music');
 		}
 		checkPermission('music/index');
@@ -124,6 +128,11 @@ class SingleMusicRouter {
 			if(!isset($_GET['lrc'])) {
 				echo getLyricFile(cid());
 			} else {
+				$GLOBALS['lrcopt'] = [
+					'delta' => clampLimit($_GET['delta'],0,0.1), // 偏移量
+					'comment' => clampLimit($_GET['comment'],0.7,0.1,0,65535), // 注释展示时长
+					'precision' => clampLimit($_GET['precision'],0.1,0.1,0.1,60.0), // 基准精度
+				];
 				if($_GET['lrc'] == 'minified') {
 					echo buildMinifiedLrc(json_decode(parseCmpLyric(cid(),false),true));
 				} else if($_GET['lrc'] == 'fancy') {
@@ -132,6 +141,29 @@ class SingleMusicRouter {
 					print404('Parameter Lrc');
 				}
 			}
+		}
+		return true;
+	}
+
+	// 编译信息
+	// 要求：有效
+	private function routeCompInfo() {
+		checkUrlEnd(stripFirstUrl($this->url));
+		if(!isValidMusic(cid(),false)) {
+			print404('No Such Music');
+		}
+		checkPermission('music/code');
+		if(!isset($_GET['raw'])) {
+			include_header();
+			tpl("inner/comp_info");
+			include_footer();
+		} else {
+			header('Content-Type: application/json');
+			$data = parseCmpLyric(cid(),true,true,'cmpi_ADD_ERROR_P');
+			if(!is_array($data['message'])) {
+				$data['message'] = [];
+			}
+			echo encode_data($data['message']);
 		}
 		return true;
 	}
@@ -174,7 +206,7 @@ class SingleMusicRouter {
 		if(isKuwoId(cid())) {
 			global $akCrawler;
 			global $akCrawlerInfo;
-			remoteEncache(sid($d),'K');
+			remoteEncache(sid($_GET['_lnk']),'K');
 			if(substr($_GET['_lnk'],strlen($_GET['_lnk'])-4)!= '.url') {
 				header('HTTP/1.1 307 Redirect'); //将RemotePlay请求导向实际音频地址。不允许缓存。
 				header('Location: '.$akCrawler[cid()]->url());
@@ -200,7 +232,6 @@ class SingleMusicRouter {
 		}
 		checkPermission('music/audio/out');
 
-		checkPermission($urltype);
 		$fn=getAudioPath(FILES.preSubstr($_GET["_lnk"])."/back");
 		if($fn)
 			file_put_out($fn);
@@ -255,8 +286,10 @@ class SingleMusicRouter {
 		checkPermission('music/index');
 		header("Content-Type: text/plain");
 
-		if($nxt == 'lyric') {
-			tpl("player/lyric");
+		if($nxt == 'lyric-overview') {
+			tpl("player/lyric_overview");
+		} else if($nxt == 'lyric-content') {
+			tpl("player/lyric_content");
 		} else if($nxt == 'fr') {
 			tpl("player/firstrow");
 		} else if($nxt == 'tr') {
@@ -289,7 +322,7 @@ class SingleMusicRouter {
 	// 要求：有音频
 	private function routeSwitcher() {
 		checkUrlEnd(stripFirstUrl($this -> url));
-		if(!isValidMusic(cid(),true)) {
+		if(!isValidMusic(cid(),false)) {
 			print404('No Such Music');
 		}
 		checkPermission('music/index');
@@ -300,13 +333,15 @@ class SingleMusicRouter {
 		echo $boundary;
 		tpl("player/meta");
 		echo $boundary;
-		tpl("player/lyric");
+		tpl("player/lyric_content");
 		echo $boundary;
 		tpl("player/firstrow");
 		echo $boundary;
 		tpl("player/thirdrow");
 		echo $boundary;
 		tpl("player/thirdrow-n");
+		echo $boundary;
+		tpl("player/lyric_overview");
 
 		return true;
 	}
@@ -343,6 +378,8 @@ class SingleMusicRouter {
 				return false;
 			} else {
 				header('Content-Type: image/jpg');
+				header("Cache-Control: public max-age=432000");
+				header("Last-Modified: " . gmdate('D, d M Y H:i:s',$akCrawler[cid()]->cached));
 				echo ex_url_get_contents($akCrawler[cid()]->cache['info']['pic']);
 				return true;
 			}

@@ -106,6 +106,17 @@ class PlaylistRouter {
 				include_footer();
 			} else if(isset($_GET['json'])) {
 				header('Content-Type: application/json');
+				if(isset($_GET['include-meta'])) {
+					foreach($data['playlist'] as $k => $item) {
+						$id = $item['id'];
+						$data['playlist'][$k]['meta'] = GSM($id);
+						if(isValidMusic($item['id'])) {
+							$data['playlist'][$k]['modified'] = modifiedTime($id);
+						} else {
+							$data['playlist'][$k]['modified'] = -1;
+						}
+					}
+				}
 				echo encode_data($data);
 			} else {
 				header('Content-Type: text/plain');

@@ -10,7 +10,9 @@ class TopLevelRouter {
 	/*
 	一级URL（按检测顺序）：
 		/ - 主页
+		/clean-garbage - 清理垃圾
 		/i18n-script - 语言定义脚本
+		/system-meta - 系统信息
 		/dynamic - “静态”文件
 		/admin - 管理
 		/user - 用户区
@@ -37,11 +39,26 @@ class TopLevelRouter {
 		if($type == '') {
 			return $this -> routeMainPage();
 		}
+		if($type == 'clean-garbage') {
+			@ignore_user_abort(true);
+			$cleaner = new GarbageCleaner();
+			header('Content-Type: text/plain');
+			if($cleaner->needClean()) {
+				$cleaner->clean();
+				echo LNG('ui.trash_cleaned');
+			} else {
+				echo LNG('ui.trash_no_clean');
+			}
+			return true;
+		}
 		if($type == 'i18n-script') {
 			return $this -> routeI18n();
 		}
 		if($type == 'dynamic') {
 			return $this -> routeDynamic();
+		}
+		if($type == 'system-meta') {
+			return $this -> routeSystemMeta();
 		}
 		if($type == 'admin') {
 			return $this -> routeAdmin();
@@ -88,6 +105,20 @@ class TopLevelRouter {
 		include_header();
 		tpl("list/index");
 		include_footer();
+		return true;
+	}
+
+	private function routeSystemMeta() {
+		checkUrlEnd(stripFirstUrl($this->url));
+
+		header('Content-Type: application/json');
+		echo encode_data([
+			'app_prefix' => APP_PREFIX,
+			'app_name' => _CT('app_name'),
+			'version' => VERSION,
+			'base_url' => BASIC_URL,
+			'username' => uauth_username()
+		]);
 		return true;
 	}
 

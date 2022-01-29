@@ -2,6 +2,10 @@
 
 <?php
 	load_css('css/player/player','wc',VERSION,'playerColoredCss');
+
+	if(is_wap()) {
+		echo '<style>.lrc-content{font-size:'.setting_gt('wap-font-size','15').'px!important;}</style>';
+	}
 ?>
 <script>
 var home="<?php echo BASIC_URL ?>";
@@ -24,13 +28,38 @@ var isRandShuffle=<?php echo (isset($_GET['randShuffle']) ? "true":"false") ?>;
 
 var list=[
 	<?php
+		$isInvalid = [];
+		$otherList = explode('|',$_GET['list']);
+
 		echo '"'.cid().'"';
 		if(isset($_GET['list'])){
-			$otherList=explode('|',$_GET['list']);
 			for($i=0;$i<count($otherList);$i++) {
-				if(!_checkPermission('music/index',$otherList[$i])) continue;
 				echo ",";
 				echo '"'.$otherList[$i].'"';
+				$isInvalid[$otherList[$i]] = !_checkPermission('music/index',$otherList[$i]);
+			}
+		}
+	?>
+];
+var listMeta=[
+	<?php
+		$meta_arr = GCM();
+		if(!isValidMusic(cid()) || !_checkPermission('music/audio/out')) {
+			$meta_arr['cant_play'] = true;
+		}
+		echo encode_data($meta_arr);
+		if(isset($_GET['list'])){
+			for($i=0;$i<count($otherList);$i++) {
+				echo ",";
+				if($isInvalid[$otherList[$i]]) {
+					echo encode_data(null);
+				} else {
+					$meta_arr = GSM($otherList[$i]);
+					if(!isValidMusic($otherList[$i]) || !_checkPermission('music/audio/out',$otherList[$i])) {
+						$meta_arr['cant_play'] = true;
+					}
+					echo encode_data($meta_arr);
+				}
 			}
 		}
 	?>
@@ -41,29 +70,16 @@ var listName=[
 		printPlayerList(cid());
 		echo '"';
 		if(isset($_GET['list'])){
-			$otherList=explode('|',$_GET['list']);
 			for($i=0;$i<count($otherList);$i++) {
-				if(!_checkPermission('music/index',$otherList[$i])) continue;
 				echo ",";
 				$curr=$otherList[$i];
 				echo '"';
-				printPlayerList($curr);
+				if($isInvalid[$otherList[$i]]) {
+					printPlayerList($curr,false,true);
+				} else {
+					printPlayerList($curr,false);
+				}
 				echo '"';
-			}
-		}
-	?>
-];
-
-var listMeta=[
-	<?php
-		echo encode_data(GCM($otherList[$i]));
-		if(isset($_GET['list'])){
-			$otherList=explode('|',$_GET['list']);
-			for($i=0;$i<count($otherList);$i++) {
-				if(!_checkPermission('music/index',$otherList[$i])) continue;
-				echo ",";
-				$curr=$otherList[$i];
-				echo encode_data(GSM($curr));
 			}
 		}
 	?>
@@ -79,14 +95,16 @@ var isRandShuffle = <?php echo ($listdata['transform']['random_shuffle'])?'true'
 
 var list=[
 	<?php
+		$isInvalid = [];
+
 		$otherList=[];
 		foreach($listdata['playlist'] as $item) {
 			$otherList[count($otherList)] = $item['id'];
 		}
 		for($i=0;$i<count($otherList);$i++) {
-			if(!_checkPermission('music/index',$otherList[$i])) continue;
 			if($i) echo ",";
 			echo '"'.$otherList[$i].'"';
+			$isInvalid[$otherList[$i]] = !_checkPermission('music/index',$otherList[$i]);
 		}
 	?>
 ];
@@ -94,9 +112,16 @@ var list=[
 var listMeta=[
 	<?php
 		for($i=0;$i<count($otherList);$i++) {
-			if(!_checkPermission('music/index',$otherList[$i])) continue;
 			if($i) echo ",";
-			echo encode_data(GSM($otherList[$i]));
+			if($isInvalid[$otherList[$i]]) {
+				echo encode_data(null);
+			} else {
+				$meta_arr = GSM($otherList[$i]);
+				if(!isValidMusic($otherList[$i]) || !_checkPermission('music/audio/out',$otherList[$i])) {
+					$meta_arr['cant_play'] = true;
+				}
+				echo encode_data($meta_arr);
+			}
 		}
 	?>
 ];
@@ -104,11 +129,14 @@ var listMeta=[
 var listName=[
 	<?php
 		for($i=0;$i<count($otherList);$i++) {
-			if(!_checkPermission('music/index',$otherList[$i])) continue;
 			if($i) echo ",";
 			$curr=$otherList[$i];
 			echo '"';
-			printPlayerList($curr,true);
+			if($isInvalid[$otherList[$i]]) {
+				printPlayerList($curr,true,true);
+			} else {
+				printPlayerList($curr,true);
+			}
 			echo '"';
 		}
 	?>
@@ -153,36 +181,97 @@ var isFmSave=<?php echo isset($_GET['fmid'])?'true':'false' ?>;
 <script src="<?php echo BASIC_URL ?>static/js/player/playerflex.js?v=<?php echo VERSION ?>"></script>
 <script src="<?php echo BASIC_URL ?>static/js/player/playerapp.js?v=<?php echo VERSION ?>"></script>
 <script>
-	document.title="<?php echo htmlspecial2(GCM()['N']) ?> - <?php echo htmlspecial2(_CT('app_name_title')) ?>";
+	document.title="<?php echo addslashes(LNG('player.title')) ?> ‹ <?php echo addslashes(GCM()['N']) ?> - <?php echo htmlspecial2(_CT('app_name_title')) ?>";
+	set_section_name(LNG('player.title'));
 </script>
 <script>
-	titleformat="%{list_name} - <?php echo htmlspecial2(_CT('app_name_title')) ?>";
+	titleformat="<?php echo addslashes(LNG('player.title')) ?> ‹ %{list_name} - <?php echo addslashes(_CT('app_name_title')) ?>";
 </script>
 <div class="txmp-page-left lrc-area">
-	<?php tpl("player/lyric") ?>
+	<div class="lrc-overview">
+		<?php tpl('player/lyric_overview') ?>
+	</div>
+	<div class="lrc-content" style="height:32px;">
+		<div class="lrc-content__wrapperin">
+			<?php tpl('player/lyric_content') ?>
+		</div>
+		<div class="para" style="height:calc(50% - 4px)">
+		</div>
+		<div class="lyric-controls">
+			<div class="lyric-controls__wrapperin">
+				<a class="float-btn float-btn-active shadowed" id="sync-button" onclick="roll_toggle(!S); if(S)highlight_lyric(1);">
+					<span class="fa fa-location-arrow" id="sync-ico"></span>
+				</a>
+				<div class="am-dropdown am-dropdown-up" style="width:36px;height:36px;" data-am-dropdown id="volume-div">
+					<a class="am-dropdown-toggle float-btn float-btn-active shadowed" id="volume-button">
+						<span class="fa fa-volume-up" id="volume-ico"></span>
+					</a>
+					<ul class="am-dropdown-content volume-select-list" onclick="$('.am-dropdown').dropdown('close')">
+						<li class="am-dropdown-header"><?php LNGe('player.menu.volume') ?></li>
+						<li><a class="volume-choice" onclick="setVolume(0)">0.00</a></li>
+						<li><a class="volume-choice" onclick="setVolume(0.2)">0.20</a></li>
+						<li><a class="volume-choice" onclick="setVolume(0.4)">0.40</a></li>
+						<li><a class="volume-choice" onclick="setVolume(0.6)">0.60</a></li>
+						<li><a class="volume-choice" onclick="setVolume(0.8)">0.80</a></li>
+						<li><a class="volume-choice" onclick="setVolume(1)">1.00</a></li>
+						<li><a class="volume-choice volume-choice-custom" onclick="setVolumeCustom()"><?php LNGe('player.menu.volume.custom') ?></a></li>
+					</ul>
+				</div>
+				<div class="am-dropdown am-dropdown-up" style="width:36px;height:36px;" data-am-dropdown id="speed-div">
+					<a class="am-dropdown-toggle float-btn shadowed" id="speed-button">
+						<span class="fa fa-forward" id="speed-ico"></span>
+					</a>
+					<ul class="am-dropdown-content speed-select-list" onclick="$('.am-dropdown').dropdown('close')">
+						<li class="am-dropdown-header"><?php LNGe('player.menu.speed') ?></li>
+						<li><a class="speed-choice" onclick="setPlayRate(0.5)">0.5x</a></li>
+						<li><a class="speed-choice" onclick="setPlayRate(0.9)">0.9x</a></li>
+						<li><a class="speed-choice" onclick="setPlayRate(1)">1.0x</a></li>
+						<li><a class="speed-choice" onclick="setPlayRate(1.1)">1.1x</a></li>
+						<li><a class="speed-choice" onclick="setPlayRate(1.25)">1.25x</a></li>
+						<li><a class="speed-choice" onclick="setPlayRate(1.5)">1.5x</a></li>
+						<li><a class="speed-choice" onclick="setPlayRate(2)">2.0x</a></li>
+						<li><a class="speed-choice" onclick="setPlayRate(3)">3.0x</a></li>
+						<li><a class="speed-choice speed-choice-custom" onclick="setPlayRateCustom()"><?php LNGe('player.menu.speed.custom') ?></a></li>
+						<li class="am-divider"></li>
+						<li class="am-dropdown-header"><?php LNGe('player.menu.speed.mode') ?></li>
+						<li><a class="speed-preserve-pitch" onclick="togglePreservePitch()"><?php LNGe('player.menu.pitch.on') ?></a></li>
+					</ul>
+				</div>
+				<a class="float-btn shadowed" id="skip-button" onclick="switchNext()" oncontextmenu="switchNext(true)">
+					<span class="fa fa-arrow-right" id="skip-ico"></span>
+				</a>
+			</div>
+		</div>
+	</div>
+
 </div>
 <div class="txmp-page-right pr-player">
 	<div style="display:none;" id="downloader-link">
 
 	</div>
 	<div id="right-container">
-		<div class="right-first-row" style="overflow-x:visible;overflow-y:visible;white-space: <?php is_wap()?'nowrap':'' ?>;<?php if(!is_wap()) echo 'margin-bottom:16px;' ?>">
+		<div class="right-first-row" style="<?php if(!is_wap()) echo 'margin-bottom:16px;' ?>">
 			<?php tpl("player/firstrow") ?>
 		</div>
 		<div class="right-second-row">
-			<?php if(getPerm(cid())['music/audio/out'] || is_root()) { ?><audio
-				preload="all"
-				id="audio"
+			<audio
+				id="audio_1"
+				preload="none"
 				hidden="true"
 				src="<?php echo getAudioUrl(preSubstr($_GET['_lnk'])) ?>"
 				<?php echo ($_GET['autoplay']=='y') ? 'autoplay="autoplay"':"" ?> >
+				<?php LNGe('player.ancient_browser') ?>
+			</audio><audio
+				id="audio_2"
+				preload="none"
+				hidden="true">
 				<?php LNGe('player.ancient_browser') ?>
 			</audio>
 			<a class="fa fa-play-circle player-icon" id="play-button" href="javascript:;" onclick="play_click($(this))"></a>
 			<a class="fa fa-circle-o player-icon" id="repeat-button" href="javascript:;" onclick="rep_click($(this))"></a>
 			<div class="player-processbar" style="width:32px;">
 				<div class="player-processbar-i" style="width:0%;"></div>
-			</div><?php } ?>
+			</div>
 		</div>
 		<div class="right-third-row right-third-row-n">
 			<?php tpl("player/thirdrow-n") ?>
@@ -197,3 +286,7 @@ var isFmSave=<?php echo isset($_GET['fmid'])?'true':'false' ?>;
 		tpl("player/menu");
 	?>
 </div>
+
+<script>
+	$(() => {$('#audio_1,#audio_2').attr('preload','all');})
+</script>

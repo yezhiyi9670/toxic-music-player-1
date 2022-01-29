@@ -1,6 +1,10 @@
 <?php if(!defined('IN_SYSTEM')) exit;//Silence is golden ?>
 
-<script>document.title='<?php echo LNGk('uc.title') ?> - <?php echo htmlspecial2(_CT('app_name_title')) ?>';</script>
+<script>
+	document.title='<?php echo LNGk('uc.title') ?> - <?php echo htmlspecial2(_CT('app_name_title')) ?>';
+	set_section_name(LNG('uc.title'));
+</script>
+<?php declare_allow_overscroll() ?>
 <div class="txmp-page-full">
 	<h3><?php LNGe('uc.title') ?></h3>
 	<p><?php LNGe('uc.welcome',uauth_username()) ?></p>
@@ -15,6 +19,12 @@
 	?>
 	<p><b><?php LNGe('uc.playlists') ?> (<?php echo count($jsonlst) + count($csvlst) ?>/<?php echo _CT('user_playlist_quota') ?>)</b></p>
 	<p><?php echo LNG('uc.create_list',BASIC_URL . 'list-maker') ?></p>
+	<style>
+		.addition-cmt {
+			line-height: 2.1;
+			margin-top: 2px;
+		}
+	</style>
 	<ul>
 		<?php
 			// var_dump($lst);
@@ -45,16 +55,17 @@
 				echo '</a>';
 				echo '<br>';
 				echo '<span class="addition-cmt">';
-				echo '<span class="txmp-tag tag-default">'.$user.'/'.$id.'</span>';
-				echo '<span class="txmp-tag tag-length">'.formatDuration($time).'</span>';
-				echo '<span class="txmp-tag tag-red-g">'.($listdata['public']?LNG('uc.playlist.public'):LNG('uc.playlist.private')).'</span>';
-				echo '<span class="txmp-tag tag-orange-g">'.LNG('uc.playlist.entry').htmlspecial2($meta['N']).'</span>';
-				echo '<span class="txmp-tag tag-blue-g">'.LNG('uc.playlist.count').count($listdata['playlist']).'</span>';
-				echo '<span class="txmp-tag tag-purple-g">'.LNG('uc.playlist.avg').floor($sum).'</span>';
+				echo '<span class="txmp-tag tag-default">'.fa_icon('hashtag').$user.'/'.$id.'</span>';
+				echo '<span class="txmp-tag tag-length">'.fa_icon('clock-o').formatDuration($time).'</span>';
+				echo '<span class="txmp-tag tag-red-g">'.($listdata['public']?fa_icon('unlock').LNG('uc.playlist.public'):fa_icon('lock').LNG('uc.playlist.private')).'</span>';
+				echo '<span class="txmp-tag tag-orange-g">'.fa_icon('arrow-right').htmlspecial2($meta['N']).'</span>';
+				echo '<span class="txmp-tag tag-blue-g">'.fa_icon('th-list').count($listdata['playlist']).'</span>';
+				echo '<span class="txmp-tag tag-purple-g">'.fa_icon('asterisk').floor($sum).'</span>';
 				echo '</span>';
 				echo '</li>';
 			}
 
+			$item_count = count($jsonlst) + count($csvlst);
 			foreach($jsonlst as $item) {
 				$fid = 'user/'.$uname.'/playlist/'.$item;
 				$fp = USER_DATA . $uname . '/playlist/' . $item . '.json';
@@ -72,6 +83,12 @@
 
 				$listdata = plcsv_decode(file_get_contents($fp),true);
 				print_list_entry($listdata,$uname,$item,false);
+			}
+
+			if($item_count == 0) {
+				echo '<li>';
+				LNGe('uc.playlist.null');
+				echo '</li>';
 			}
 		?>
 	</ul>

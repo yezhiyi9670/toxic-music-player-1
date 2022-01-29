@@ -11,8 +11,13 @@
 
 		$has_wrong_ext = false;
 		if($_POST['yp-operation']!='no') {
+			header('X-Audio-Uploaded: ' . $_FILES['thefile']['size']);
+			if($_FILES['thefile']['size'] == 0) {
+				header('X-Audio-Errored: ' . $_FILES['thefile']['error']);
+			}
 			if($_POST['yp-operation']=='upload' && $_FILES['thefile']['size']) {
 				$ext=substr($_FILES['thefile']['name'],strrpos($_FILES['thefile']['name'],'.'));
+				header('X-Audio-Accepted: ' . $ext);
 				if(isAudioExtAllowed($ext)) {
 					if(getAudioPath(FILES.$id.'/song')) {
 						unlink(getAudioPath(FILES.$id.'/song'));
@@ -48,7 +53,7 @@
 						if(getPicturePath(FILES.$id.'/avatar')) {
 							unlink(getPicturePath(FILES.$id.'/avatar'));
 							// 重写 lyric.txt 防止引发缓存问题
-							rewrite_file(FILES . $id . '/lyric.txt');
+							touch(FILES . $id . '/lyric.txt');
 						}
 						move_uploaded_file($_FILES['theimage']['tmp_name'],FILES.$id.'/avatar'.$ext);
 					} else {
@@ -71,7 +76,7 @@
 			} else if($_POST['avatar-operation']=='delete' && getPicturePath(FILES.$id.'/avatar')) {
 				unlink(getPicturePath(FILES.$id.'/avatar'));
 				// 重写 lyric.txt 防止引发缓存问题
-				rewrite_file(FILES . $id . '/lyric.txt');
+				touch(FILES . $id . '/lyric.txt');
 			}
 		}
 
@@ -89,9 +94,12 @@
 load_js('js/resource/resourceapp');
 ?>
 <?php
-	load_css('css/resource/resource');
+	load_css('css/resource/resource','w');
 ?>
-<script>document.title='<?php echo addslashes(GCM()['N']) ?> > <?php LNGe('resource.title') ?> - <?php echo htmlspecial2(_CT('app_name_title')) ?>';</script>
+<script>
+	document.title='<?php LNGe('resource.title') ?> ‹ <?php echo addslashes(GCM()['N']) ?> - <?php echo htmlspecial2(_CT('app_name_title')) ?>';
+	set_section_name(LNG('resource.title'));
+</script>
 <form style="position:<?php echo is_wap()?"auto":"fixed" ?>;" method="POST" enctype="multipart/form-data">
 	<input type="hidden" name="csrf-token-name" value="<?php echo $GLOBALS['sess'] ?>">
 	<input type="hidden" name="csrf-token-value" value="<?php echo $GLOBALS['token'] ?>">
@@ -150,7 +158,7 @@ load_js('js/resource/resourceapp');
 				$avatar_path = getPicturePath(FILES.$id.'/avatar');
 			?>
 			<?php if($avatar_path) { ?>
-				<img style="float:right;height:100px;" src="<?php echo BASIC_URL . $id . '/avatar' ?>" />
+				<img class="avatar-preview shadowed-intense" style="float:right;height:100px;" src="<?php echo BASIC_URL . $id . '/avatar' ?>" />
 			<?php } ?>
 			<strong><?php LNGe('editor.upload.avatar') ?></strong>
 			<select name="avatar-operation">
@@ -173,7 +181,7 @@ load_js('js/resource/resourceapp');
 			<a href="<?php echo $origin_url ?>" target="_blank"><?php LNGe('editor.open_source') ?> <i class="fa fa-external-link"></i></a>
 		<?php } ?>
 	</div>
-	<div class="txmp-page-right" style="position:<?php echo is_wap()?"auto":"fixed" ?>; overflow-y:scroll; padding-bottom:64px;">
+	<div class="txmp-page-right" style="position:<?php echo is_wap()?"auto":"fixed" ?>; overflow-y:scroll;">
 		<?php if(isset($_GET['msg'])) { ?><p id="head-notice"><?php echo htmlspecial($_GET['msg']) ?>
 			<a href="javascript:;" onclick="F_HideNotice()" class="notice-confirm"><?php LNGe('ui.hide_notice') ?></a>
 		</p><?php } ?>
@@ -194,12 +202,12 @@ load_js('js/resource/resourceapp');
 		<p>
 			<button type="submit" class="am-btn am-btn-primary"><?php LNGe('editor.submit.update') ?></button>
 			<button type="button" onclick="window.open('<?php echo BASIC_URL.preSubstr($_GET['_lnk']) ?>')" class="am-btn am-btn-secondary"><?php LNGe('editor.submit.view') ?></button>
-			<?php if(isValidMusic(preSubstr($_GET['_lnk']))){ ?><button type="button" onclick="$('#preview')[0].contentWindow.location.reload()" class="am-btn am-btn-thirdary"><?php LNGe('editor.submit.refresh') ?></button><?php } ?>
+			<?php if(true || isValidMusic(preSubstr($_GET['_lnk']))){ ?><button type="button" onclick="reloadIframe($('.preview'))" class="am-btn am-btn-thirdary"><?php LNGe('editor.submit.refresh') ?></button><?php } ?>
 		</p>
 
 		<p>
-			<?php if(isValidMusic(preSubstr($_GET['_lnk']))){ ?>
-				<iframe id="preview" src="<?php echo BASIC_URL.preSubstr($_GET['_lnk']).'?wap=force-phone' ?>" style="width:100%;height:500px;border:1px solid #000000;<?php if(stristr($_SERVER['HTTP_USER_AGENT'],'firefox/')){ ?>margin-bottom: 51px;<?php } ?>"></iframe>
+			<?php if(true || isValidMusic(preSubstr($_GET['_lnk']))){ ?>
+				<iframe class="preview preview-play" src="<?php echo BASIC_URL.preSubstr($_GET['_lnk']).'?wap=force-phone&iframe' ?>" style="<?php if(stristr($_SERVER['HTTP_USER_AGENT'],'firefox/')){ ?>margin-bottom: 51px;<?php } ?>"></iframe>
 			<?php } ?>
 		</p>
 	</div>
