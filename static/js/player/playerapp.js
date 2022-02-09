@@ -1027,6 +1027,7 @@ function playInit(){
 						return false;
 					}
 					clicked_time = new Date().getTime();
+					e.preventDefault();
 				});
 			})();
 		}

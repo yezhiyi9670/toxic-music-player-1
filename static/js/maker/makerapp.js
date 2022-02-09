@@ -406,7 +406,7 @@ function selectItem(t) {
 					t.children[0].innerHTML += '<br /><span class="addition-cmt"></span>';
 				}
 				if(!isCloudSave) t.children[0].children[2].innerHTML=b.children[2].innerHTML;
-				else t.children[0].children[2].innerHTML=b.children[2].innerHTML + (G.is_wap ? '<br />' : '') + '<span class="txmp-tag tag-purple-g">' + LNG('list.tag.rating') +'<span id="list-rating-' + b.children[0].getAttribute('data-id') + '"></span>';
+				else t.children[0].children[2].innerHTML=b.children[2].innerHTML + (G.is_wap ? '<br />' : '') + '<span class="txmp-tag tag-purple-g">' + fa_icon('asterisk') +'<span id="list-rating-' + b.children[0].getAttribute('data-id') + '"></span>';
 				t.setAttribute('data-id',b.children[0].getAttribute('data-id'));
 				obj.style.display="none";
 

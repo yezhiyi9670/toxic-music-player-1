@@ -15,17 +15,17 @@
 }
 
 .txmp-tag:hover,.text-highlight:hover {
-	box-shadow: 0 6px 20px -4px #0000006A;
+	box-shadow: 0 3px 1px -2px #00000033, -.5px 2px 2px 0 #00000023, .5px 1px 5px 0 #0000001D;
 }
 .txmp-tag.tag-quality-lq:hover {
-	box-shadow: 0 6px 20px -4px #ff5c5c99;
+	box-shadow: 0 3px 1px -2px #ff5c5c33, -.5px 2px 2px 0 #ff5c5c23, .5px 1px 5px 0 #ff5c5c1D;
 }
 .txmp-tag.tag-quality-ll:hover {
-	box-shadow: 0 6px 20px -4px #6b79ff99;
+	box-shadow: 0 3px 1px -2px #6b79ff33, -.5px 2px 2px 0 #6b79ff23, .5px 1px 5px 0 #6b79ff1D;
 }
 .txmp-tag.tag-deep-orange-l:hover {
-	box-shadow: 0 6px 20px -4px #FB8C00FF;
+	box-shadow: 0 3px 1px -2px #FB8C0033, -.5px 2px 2px 0 #FB8C0023, .5px 1px 5px 0 #FB8C001D;
 }
 .txmp-tag.tag-red-l:hover {
-	box-shadow: 0 6px 20px -4px #F44336FF;
+	box-shadow: 0 3px 1px -2px #F4433633, -.5px 2px 2px 0 #F4433623, .5px 1px 5px 0 #F443361D;
 }

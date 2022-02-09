@@ -55,20 +55,20 @@ select:focus,
 }
 
 .txmp-tag,.text-highlight {
-	box-shadow: 0 4px 14px -4px #00000051;
+	/* box-shadow: 0 4px 14px -4px #00000051; */
 	transition: box-shadow .3s;
 }
 .txmp-tag.tag-quality-lq {
-	box-shadow: 0 4px 14px -4px #ff5c5c77;
+	/* box-shadow: 0 4px 14px -4px #ff5c5c77; */
 }
 .txmp-tag.tag-quality-ll {
-	box-shadow: 0 4px 14px -4px #6b79ff77;
+	/* box-shadow: 0 4px 14px -4px #6b79ff77; */
 }
 .txmp-tag.tag-deep-orange-l {
-	box-shadow: 0 4px 14px -4px #FB8C00CC;
+	/* box-shadow: 0 4px 14px -4px #FB8C00CC; */
 }
 .txmp-tag.tag-red-l {
-	box-shadow: 0 6px 20px -4px #F44336CC;
+	/* box-shadow: 0 6px 20px -4px #F44336CC; */
 }
 
 .am-btn:hover {
