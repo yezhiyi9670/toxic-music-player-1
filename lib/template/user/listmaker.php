@@ -98,7 +98,10 @@ var cloudLenLimit = <?php echo _CT('user_playlist_limit') ?>;
 <?php } ?>
 
 </script>
-<script src="<?php echo BASIC_URL ?>static/js/maker/makerapp.js?v=<?php echo VERSION ?>"></script>
+<?php
+	load_js('js/maker/makerapp');
+	load_css('css/maker/maker');
+?>
 <div class="txmp-page-full">
 	<h3><?php LNGe('led.title') ?></code></h3>
 	<div style="border:1px solid #DDD;padding:16px;padding-bottom:0;margin-bottom:16px;" class="tooltip-box">

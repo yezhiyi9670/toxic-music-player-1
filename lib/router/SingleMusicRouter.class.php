@@ -79,7 +79,7 @@ class SingleMusicRouter {
 		if($type == 'refresh-cache') {
 			return $this -> routeRefreshCache();
 		}
-		if($type == 'avatar') {
+		if($type == 'avatar' || preg_match('/^avatar\.(\w+)$/',$type)) {
 			return $this -> routeAvatar();
 		}
 		if($type == 'edit') {

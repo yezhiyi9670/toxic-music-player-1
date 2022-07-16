@@ -315,7 +315,7 @@ class kuwoCrawler {
 		echo LNG('rp.info.internalid') . COLON . $this->cache['id'] . "\n";
 		echo LNG('rp.info.mainpage') . COLON . LNG('rp.info.mainpage.null') . "\n";
 		echo LNG('rp.info.lrcdata') . COLON . 'http://kuwo.cn/newh5/singles/songinfoandlrc?musicId='.$id . "\n";
-		echo LNG('rp.info.audioinfo') . COLON . LNG('rp.info.audioinfo.hidden') . "\n";
+		echo LNG('rp.info.audioinfo') . COLON . 'http://www.kuwo.cn/api/v1/www/music/playUrl?mid='.$this->cache['id'].'&type=music&httpsStatus=1&reqId=' . randomUUID() . "\n";
 		echo LNG('rp.info.audioloc') . COLON . $this->url() . "\n";
 		echo LNG('rp.info.avatar') . COLON . ($this->cache['info']['pic'] ? $this->cache['info']['pic'] : LNG('rp.info.avatar.null')) . "\n";
 		echo LNG('rp.info.last_cache') . COLON . $this->cachedDate . "\n";
@@ -324,7 +324,7 @@ class kuwoCrawler {
 
 	//获取音频地址并[存入内存]
 	//由于大多数音乐网站有[反盗链系统]，通常每次使用音频都要重新获取地址。
-	function url() {
+	function _url() {
 		if(!isset($this->cache['url'])){
 			if(_CT('rp_allow_pay_crack')) { // 这个接口可以绕过付费限制
 				@$url=ex_url_get_contents('http://kuwo.cn/bd/search/getSongUrlByMid?mid='.$this->cache['id'].'&format=mp3&br=192kmp3&bdfrom=xshow&c=nfmbhi6fxwaj',['User-Agent'=>'Dalvik/2.1.0 (Linux; U; Android 7.1.2; LIO-AN00 Build/N2G47O)']);
@@ -342,6 +342,15 @@ class kuwoCrawler {
 			$this->cache['url'] = str_replace('http://','https://',$this->cache['url']);
 		}
 		return $this->cache['url'];
+	}
+	function url($remain_retry = 5) {
+		if($remain_retry <= 0) return '';
+		$res = $this->_url();
+		if('' == trim($res)) {
+			unset($this->cache['url']);
+			return $this->url($remain_retry - 1);
+		}
+		return $res;
 	}
 
 	//清除歌名的说明文字
@@ -412,14 +421,14 @@ class kuwoCrawler {
 					'S  '.$this->cache['info']['artist'] . "\n" . 
 					'LA --' . "\n" . 
 					'MA --' . "\n" . 
-					'C  --' . "\n" . 
+					'C  '.$this->cache['info']['album'] . "\n" . 
 					// 'A  #'.substr(md5($this->simplify($this->cache['name'])),0,6) . "\n" . 
 					'A  #'.rgb2hex($cp[0]) . "\n" . 
 					'G1 #'.rgb2hex($cp[0]) . "\n" . 
 					'G2 #'.rgb2hex($cp[1]) . "\n" . 
 					'O  '.'http://www.kuwo.cn/play_detail/'.$this->cache['id'].'/' . "\n" .
 					($this->cache['info']['pic'] ? 'P  K_' . $this->cache['id'] . '/avatar' . "\n" : '') .
-					'' . "\n" . 
+					'' . "\n" .
 					'// ' . LNG('rp.code.bycrawler') . "\n" . 
 					'' . "\n" . 
 					'[Para All ' . LNG('rp.code.content') . ']' . "\n" . 

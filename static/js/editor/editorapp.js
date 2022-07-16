@@ -107,21 +107,20 @@ function editor_entag(txt) {
 function editor_sni(x){
 	var sni={
 		"info": `[Info]
-N  <Title>
-S  <Singer>
-C  <Cate>
-LA <Lyric Author>
-MA <Music Author>
-G1 <Gradiant C1>
-G2 <Gradiant C2>
-O  <Origin>
-P  -`,
-		"para": "[Para @ID AC <Name>]",
-		"hidden": "[Hidden @ID AC <Name>]",
+N  Untitled
+S  Unknown_Singer
+C  --
+LA --
+MA --
+G1 #777777
+G2 #AAAAAA
+O  URL_Here`,
+		"para": "[Para @ID AC Name]",
+		"hidden": "[Hidden @ID AC Name]",
 		"reuse": "[Reuse @UID __LT__]",
-		"similar": "[Similar @ID @UID __LT__ AC <Name>]",
-		"line": "L __LT__ <Content>",
-		"mid": `[Para -- <Name>]
+		"similar": "[Similar @ID @UID __LT__ AC Name]",
+		"line": "L __LT__ Content",
+		"mid": `[Para -- Name]
 L __LT__ - - - - - - -`,
 		"split": `[Split]`,
 		"final": `[Final __LT__]`

@@ -3,17 +3,17 @@
 // 码率与品质的关系。返回品质描述词。
 function bitrate_tag($x,$useName=true) {
 	if($x <= -1) {
-		return '<span class="txmp-tag tag-quality-ll">' . fa_icon('file') . ($useName ? LNG('quality.400') : $x . 'k') . '</span>';
+		return '<span class="txmp-tag tag-quality-ll txmp-tag-quality">' . fa_icon('file') . ($useName ? LNG('quality.400') : $x . 'k') . '</span>';
 	} else if($x <= 32) {
-		return '<span class="txmp-tag tag-deep-orange-l">' . fa_icon('file') . ($useName ? LNG('quality.24') : $x . 'k') . '</span>';
+		return '<span class="txmp-tag tag-deep-orange-l txmp-tag-quality">' . fa_icon('file') . ($useName ? LNG('quality.24') : $x . 'k') . '</span>';
 	} else if($x <= 64) {
-		return '<span class="txmp-tag tag-quality-lq">' . fa_icon('file') . ($useName ? LNG('quality.48') : $x . 'k') . '</span>';
+		return '<span class="txmp-tag tag-quality-lq txmp-tag-quality">' . fa_icon('file') . ($useName ? LNG('quality.48') : $x . 'k') . '</span>';
 	} else if($x <= 160) {
-		return '<span class="txmp-tag tag-quality-mq">' . fa_icon('file') . ($useName ? LNG('quality.128') : $x . 'k') . '</span>';
+		return '<span class="txmp-tag tag-quality-mq txmp-tag-quality">' . fa_icon('file') . ($useName ? LNG('quality.128') : $x . 'k') . '</span>';
 	} else if($x <= 256) {
-		return '<span class="txmp-tag tag-quality-hq">' . fa_icon('file') . ($useName ? LNG('quality.192') : $x . 'k') . '</span>';
+		return '<span class="txmp-tag tag-quality-hq txmp-tag-quality">' . fa_icon('file') . ($useName ? LNG('quality.192') : $x . 'k') . '</span>';
 	} else {
-		return '<span class="txmp-tag tag-quality-sq">' . fa_icon('file') . ($useName ? LNG('quality.320') : $x . 'k') . '</span>';
+		return '<span class="txmp-tag tag-quality-sq txmp-tag-quality">' . fa_icon('file') . ($useName ? LNG('quality.320') : $x . 'k') . '</span>';
 	}
 }
 

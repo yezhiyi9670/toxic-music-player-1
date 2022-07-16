@@ -26,7 +26,8 @@ $('document').ready(function() {
 		var tpl=obj.innerHTML;
 		obj.innerHTML="";
 		for(var i=0;i<list.length;i++) {
-			obj.innerHTML+=tpl;
+			// obj.innerHTML+=tpl;
+			$(obj).append($(tpl));
 		}
 		for(var i=0;i<obj.children.length;i++) {
 			var b=obj.children[i];

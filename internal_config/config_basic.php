@@ -2,9 +2,9 @@
 
 //////// 色彩 ////////
 
-define("MAIN_COLOR","4CAF50"); // [默认]主颜色
+define("MAIN_COLOR","E64A19"); // [默认]主颜色
 define("GC_COLOR_1",MAIN_COLOR);
-define("GC_COLOR_2","CDDC39"); // 渐变色2
+define("GC_COLOR_2","FFA000"); // 渐变色2
 
 //////// 地址 ////////
 

@@ -126,8 +126,9 @@ function userLanguage() {
 	return $userLanguage;
 }
 
-global $currentLanguageArr;
+global $currentLanguageArr, $defaultLanguageArr;
 $currentLanguageArr = getLangArray($userLanguage);
+$defaultLanguageArr = getLangArray(DEFAULT_LANG);
 /**
  * 获取语言值
  */
@@ -173,13 +174,23 @@ function LNGe($key = '', ...$templates) {
 }
 
 /**
+ * 默认语言键是否存在
+ */
+function defaultKeyExists($key) {
+	global $defaultLanguageArr;
+
+	return isset($defaultLanguageArr[$key]);
+}
+
+/**
  * 获取语言定义型列表
  * （以默认语言文件为依据，用户可以覆盖）
  */
 function getListOf($t) {
-	$arr = getLangArray(DEFAULT_LANG);
+	global $defaultLanguageArr;
+
 	$ret = [];
-	foreach($arr as $k => $v) {
+	foreach($defaultLanguageArr as $k => $v) {
 		$p = $k;
 		if(substr($k,0,2) == '_.') {
 			$k = substr($k,2);

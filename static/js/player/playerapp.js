@@ -571,7 +571,7 @@ function trackSwitch() {
 
 async function downloadAudio(url) {
 	if($('.download-button .tag-rplim-paydl').length) {
-		if(!await modal_confirm_p(LNG('player.alert.paydl'),LNG('player.alert.paydl.tips'),LNG('ui.cancel'),LNG('ui.continue'))) {
+		if(!await modal_confirm_p(LNG('player.alert.paydl'),LNG('player.alert.paydl.tips'),LNG('ui.nohack'),LNG('ui.yeshack'))) {
 			return;
 		}
 	}
@@ -633,7 +633,7 @@ function roll_toggle(st)
 
 // 确认危险变速
 async function confirmUnsafeSpeed() {
-	if(await modal_confirm_p(LNG('player.alert.unsafe_speed'),LNG('player.alert.unsafe_speed.tips'),LNG('ui.cancel'),LNG('ui.continue'))) {
+	if(await modal_confirm_p(LNG('player.alert.unsafe_speed'),LNG('player.alert.unsafe_speed.tips'),LNG('ui.cancel'),LNG('ui.yeshack'))) {
 		highspeed_unlocked = true;
 		return true;
 	}
@@ -836,10 +836,11 @@ function playPreInit() {
 		}
 	}
 
+	// 显示歌曲详情签
 	$('.menu-curr-display').html(listName[curr_idx]);
 	$('.menu-curr-display > .addition-cmt > .txmp-tag.tag-blue-g').remove();
 	$('.menu-curr-display > .addition-cmt > .txmp-tag.tag-purple-g').remove();
-	$('.menu-curr-display > .addition-cmt').append($('<span class="txmp-tag tag-cyan-g">'+fa_icon('pencil')+escapeXml(listMeta[curr_idx]['LA'])+' | '+escapeXml(listMeta[curr_idx]['MA'])+'</span>'));
+	$('.menu-curr-display > .addition-cmt').append($('<span class="txmp-tag tag-cyan-g">'+fa_icon('pencil')+escapeXml(listMeta[curr_idx]['LA'])+' | '+escapeXml(listMeta[curr_idx]['MA'])+'</span>'+'<span class="txmp-tag tag-orange-g">'+fa_icon('book')+escapeXml(listMeta[curr_idx]['C'])+'</span>'));
 
 	updated_lrcpos = [null,null];
 

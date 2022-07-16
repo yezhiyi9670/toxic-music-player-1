@@ -2,9 +2,9 @@
 error_reporting(~E_ALL);
 
 define("IN_SYSTEM",'WMSDFCL/txmp');
-define("VERSION","128a-pre5");
+define("VERSION","128a-pre7");
 define("CSV_VERSION","1");
-define("DATAVER","201804");
+define("DATAVER","201805");
 define("BASIC_PATH",str_replace("\\","/",__DIR__)."/");
 
 define("LIB_PATH",BASIC_PATH."lib/");

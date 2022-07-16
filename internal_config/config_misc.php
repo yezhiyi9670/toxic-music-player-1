@@ -30,7 +30,7 @@ function _C(){
 		"compiled_cache" => true, // 对已转换的歌词文件进行缓存
 
 		"debug" => true, // 是否调试模式
-		"show_comp_process" => false, // 在调试代码页显示完整编译过程
+		"show_comp_process" => true, // 在调试代码页显示完整编译过程
 	);
 }
 

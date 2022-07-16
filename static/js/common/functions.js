@@ -276,7 +276,7 @@ function handle_rp_item() {
 	});
 	$('.song-item-rp a').on('click',async function() {
 		if($('.tag-rplim-payplay',$(this.parentElement)).length && location.search.indexOf('iframe') == -1) {
-			if(await modal_confirm_p(LNG('list.alert.norp'),LNG(G.can_pay_play ? 'list.alert.norp.tips.true' : 'list.alert.norp.tips.false'),LNG('ui.cancel'),LNG('ui.continue'))) {
+			if(await modal_confirm_p(LNG('list.alert.norp'),LNG(G.can_pay_play ? 'list.alert.norp.tips.true' : 'list.alert.norp.tips.false'),LNG('ui.nohack'),LNG('ui.yeshack'))) {
 				window.open(G.basic_url + $(this).attr('data-id'));
 			}
 			return false;

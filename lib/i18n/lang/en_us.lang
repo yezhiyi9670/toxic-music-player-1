@@ -13,7 +13,7 @@ unit.day = day(s)
 
 # Configuration
 config.app_name = Nesic Player
-config.app_name.title = Nesic Player (offline)
+config.app_title = Nesic Player (offline)
 config.app_desc = Individual Music Archive Site
 
 # UI
@@ -58,6 +58,8 @@ ui.error = Oops
 ui.nonpro_stop = STOP
 ui.nonpro_confirm = Continue Anyway
 ui.continue = Continue
+ui.nohack = Cancel
+ui.yeshack = Continue
 ui.or = OR
 ui.trash_cleaned = Trash cleaned. Thanks!
 ui.trash_no_clean = A trash cleanup is not needed at this moment.
@@ -688,7 +690,7 @@ rp.info.internalid = Internal ID
 rp.info.mainpage = Mainpage
 rp.info.mainpage.null = (Invalid)
 rp.info.lrcdata = Lyric Data
-rp.info.audioinfo = Audio Info
+rp.info.audioinfo = Audio Info (unpaid)
 rp.info.audioinfo.hidden = (Temporarily Hidden)
 rp.info.audioloc = Audio URL (temporary)
 rp.info.avatar = Avatar
@@ -719,12 +721,10 @@ comp.error.unstd = NonStandard
 comp.error.warn = Warning
 comp.error.error = Error
 comp.error.fatal = Fatal
-comp.errorw.punc = Line ${0} - Puntuation(s) other than /:$—~[]'. appeared in a non-comment lyric line.
 comp.errorw.role = Line ${0} - Non-comment line used to mark role. Use commented lines or color annotations.
 comp.errorw.fullspace = Line ${0} - Full space detected. Use two half spaces instead.
 comp.errorw.fullspace_h = Line ${0} - Continuous spaces or full space found in paragraph header.
 comp.errorw.wronginterval = Line ${0} - The way of marking an empty line is incorrect.
-comp.errorw.oddspace = Line ${0} - Odd number of continuous spaces found. This won't be of any use.
 comp.errorw.sametime = Line ${0} - The lyric line has exactly the same time as the previous one.
 comp.errorw.id_tan90 = Line ${0} - Referred para ID does not exist.
 comp.errorw.similar_exceeded = Line ${0} - The length of similar para is longer than the referred one.
@@ -747,6 +747,16 @@ comp.errorw.fake_final = Line ${0} - Paragraph defined after finalizing.
 comp.errorw.no_final = Line ${0} - Final point of lyric area is not defined.
 comp.errorw.dup_final = Line ${0} - Duplicate final point.
 comp.errorw.early_final = Line ${0} - Final point of lyric area is earlier than the last lyric line.
+comp.errorw.unclosed_string = Line ${0} - String unclosed.
+comp.errorw.invalid_argument = Line ${0} - Invalid argument format.
+comp.errorw.invoke_level_tan90 = Line ${0} - Invoked error level '${1}' does not exist.
+comp.errorw.invoke_id_tan90 = Line ${0} - Invoked error '${1}' does not exist.
+comp.errorw.lyric_ambiguity = Line ${0} - Lyrics to be verified.
+comp.errorw.lyric_mismatch = Line ${0} - Lyrics mismatch.
+comp.errorw.lyric_missing = Line ${0} - Lyrics missing.
+comp.errorw.audio_missing = Line ${0} - Audio file missing.
+comp.errorw.audio_changeable = Line ${0} - Audio to be changed.
+comp.errorw.custom = Line ${0} - ${1}
 comp.invalid_song = Unavailable
 
 # Pagination

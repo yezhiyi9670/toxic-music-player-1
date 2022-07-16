@@ -15,8 +15,8 @@
 	<?php
 		// --- load css ---
 		if(!_CT('offline_usage')) {
-			load_css_e('https://cdn.jsdelivr.net/gh/yezhiyi9670/akioi-cdn/fonts/SakuraFonts-v5/part-1.css');
-			load_css_e('https://cdn.jsdelivr.net/gh/yezhiyi9670/akioi-cdn/fonts/Common/Noto%20Sans%20SC/index.css');
+			load_css_e('https://fastly.jsdelivr.net/gh/yezhiyi9670/akioi-cdn/fonts/SakuraFonts-v5/part-1.css');
+			load_css_e('https://fastly.jsdelivr.net/gh/yezhiyi9670/akioi-cdn/fonts/Common/Noto%20Sans%20SC/index.css');
 		} else {
 			load_css('cdn-clone/fonts/SakuraFonts-v5/part-1','','5');
 			load_css('cdn-clone/fonts/Common/Noto%20Sans%20SC/index','','5');

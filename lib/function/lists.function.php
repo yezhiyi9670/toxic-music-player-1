@@ -61,9 +61,9 @@ function printIndexList($item,$url=true) {
 		echo '<span class="txmp-tag tag-red-l">' . fa_icon('exclamation-triangle') . LNG('quality.err') . '</span>';
 	}
 	// 作者
-	echo '<span class="txmp-tag tag-cyan-g">'.fa_icon('pencil').htmlspecial2(GSM($item)['LA']).' | '.htmlspecial2(GSM($item)['MA']).'</span>';
-	// 分类
-	// echo '<span class="txmp-tag tag-orange-g">'.LNG('list.tag.cate').htmlspecial2(GSM($item)['C']).'</span>';
+	echo '<span class="txmp-tag tag-cyan-g txmp-tag-author">'.fa_icon('pencil').htmlspecial2(GSM($item)['LA']).' | '.htmlspecial2(GSM($item)['MA']).'</span>';
+	// 专辑
+	echo '<span class="txmp-tag tag-orange-g txmp-tag-album">'.fa_icon('book').htmlspecial2(GSM($item)['C']).'</span>';
 	// 上传日期
 	if(!$url && getAudioPath(FILES . $item . '/song',false)) echo '<span class="txmp-tag tag-blue-g">'.fa_icon('calendar').date('Y/m/d H:i:s',getAudioMtime(FILES . $item . '/song')).'</span>';
 	// 权限
@@ -119,11 +119,13 @@ function printRmpList($item,$dataType=false) {
 	// 时长
 	echo '<span class="txmp-tag tag-length">' . fa_icon('clock-o') . formatDuration($item['duration']) . '</span>';
 	// 质量
-	echo '<span class="txmp-tag tag-quality-hq">' . fa_icon('file') . LNG('quality.192') . '</span>';
+	echo bitrate_tag(192);
 	// 上传日期
 	// if(!$dataType) echo '<span class="txmp-tag tag-purple-g">'.fa_icon('calendar').$item['releaseDate'].'</span>';
 	// 专辑名称
-	echo '<span class="txmp-tag tag-orange-g">'.fa_icon('book').($item['album']).'</span>';
+	if($item['album']) {
+		echo '<span class="txmp-tag tag-orange-g txmp-tag-album">'.fa_icon('book').($item['album']).'</span>';
+	}
 	// 评价（我们发现存在 102%）
 	echo '<span class="txmp-tag tag-blue-g">'.fa_icon('asterisk').$item['score100'].'%</span>';
 	// 限制标签
@@ -222,8 +224,14 @@ function printPlayerList($item, $isCloud = false, $isNull = false) {
 		// $txt.='<span class="txmp-tag tag-cyan-g"';
 		// if(!is_wap()) $txt.='>'.LNG('list.tag.author').htmlspecial2(GSM($item)['LA']).' | '.htmlspecial2(GSM($item)['MA']).'</span>';
 		// $txt.='<span class="txmp-tag tag-orange-g">'.LNG('list.tag.cate').htmlspecial2(GSM($item)['C']).'</span>';
-		$txt.='<span class="txmp-tag tag-blue-g">'.fa_icon('eye').'<span id="list-playtimes-'.$item.'">&nbsp;</span></span>';
-		if($isCloud) $txt.='<span class="txmp-tag tag-purple-g">'.fa_icon('asterisk').'<span id="list-rating-'.$item.'"></span>';
+		// 查看次数
+		$txt.='<span class="txmp-tag tag-blue-g txmp-tag-times">'.fa_icon('eye').'<span id="list-playtimes-'.$item.'">&nbsp;</span></span>';
+		// 权值
+		if($isCloud) $txt.='<span class="txmp-tag tag-purple-g txmp-tag-weight">'.fa_icon('asterisk').'<span id="list-rating-'.$item.'"></span></span>';
+		// 付费标签
+		if(paymentStatus($item)['pay_play']) {
+			$txt .= '<span class="txmp-tag tag-vip tag-rplim tag-rplim-payplay">'.fa_icon('diamond').LNG('list.tag.rp_lim.payplay').'</span>';
+		}
 		$txt.='</span>';
 	}
 

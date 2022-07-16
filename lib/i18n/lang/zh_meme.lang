@@ -2,7 +2,7 @@
 # ADD OVERRIDES IN `data/i18n` INSTEAD.
 
 # Init
-init.empty_prefix = APP_PREFIX 未定义。在 v127a 前，该值为“txmp”。
+init.empty_prefix = APP_PREFIX 未定义。你好好读更新日志了吗？
 init.empty_key = 密码哈希密钥不能留空。建议用至少 40 位的任意字符串作为 PASS_KEY。
 
 # Punctuation
@@ -17,24 +17,24 @@ config.app_title = 阴乐播放器（离线）
 config.app_desc = 个人音乐本地存档站
 
 # UI
-ui.menu.language = 语言/Language
-ui.menu.admin = 后台管理
+ui.menu.language = 你精通八国语言吗？
+ui.menu.admin = 行政中心
 ui.menu.admin.music = 歌曲管理
 ui.menu.admin.user = 用户管理
 ui.menu.user = 用户
 ui.menu.user.center = 用户中心
 ui.menu.user.pass = 修改密码
-ui.menu.user.logout = 登出
-ui.menu.main = 主页
+ui.menu.user.logout = 逊出系统
+ui.menu.main = 回家
 ui.menu.about = 关于
 ui.menu.menu = 菜单
-ui.csrf_attack = 安全令牌已失效，请刷新页面。
-ui.hide_notice = 好
+ui.csrf_attack = 你把网页挂在这多久了？
+ui.hide_notice = 啊对对对
 ui.show = 显示
-ui.search = 搜索
-ui.logout = 登出
+ui.search = 查找
+ui.logout = 逊出系统
 ui.user_manager = 用户管理
-ui.return_mainpage = 返回主页
+ui.return_mainpage = 回家
 ui.user_center = 用户中心
 ui.user_setting = 配置参数
 ui.list_maker = 创建歌单
@@ -690,7 +690,7 @@ rp.info.internalid = 内部ID
 rp.info.mainpage = 主页
 rp.info.mainpage.null = (无效)
 rp.info.lrcdata = 歌词数据
-rp.info.audioinfo = 音频信息（非付费）
+rp.info.audioinfo = 音频信息
 rp.info.audioinfo.hidden = (暂不公开)
 rp.info.audioloc = 音频地址（临时）
 rp.info.avatar = 封面图片
