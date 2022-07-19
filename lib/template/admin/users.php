@@ -149,9 +149,7 @@ else {
 </script>
 <div class="txmp-page-full">
 	<h3><?php LNGe('ua.title') ?></h3>
-	<?php if(isset($_GET['msg'])) { ?><p id="head-notice"><?php echo htmlspecial($_GET['msg']) ?>
-		<a href="javascript:;" onclick="F_HideNotice()" class="notice-confirm"><?php LNGe('ua.hide_notice') ?></a>
-	</p><?php } ?>
+	<?php showToastMessage(); ?>
 	<p><a href="<?php echo BASIC_URL ?>admin"><?php LNGe('ui.return_admin') ?></a></p>
 	<style>
 		.user-manage-table th,

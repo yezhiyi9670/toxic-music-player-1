@@ -99,6 +99,9 @@
 	font-weight: 700;
 	margin-bottom: 0.5em;
 }
+.lrc-wap-title-singer {
+	margin-top: -0.1em;
+}
 
 .volume-select-list {
 	max-height: 200px;
@@ -125,6 +128,10 @@ body {
 #skip-button {
 	left: 0;
 	top: -144px;
+}
+#coverpage-button {
+	left: 0;
+	top: -192px;
 }
 #volume-div {
 	left: 0;

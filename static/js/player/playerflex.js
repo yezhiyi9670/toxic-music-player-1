@@ -30,10 +30,38 @@ function autofit(){
 			(20)
 		.toString()+"px");
 	}
+
+	// 移动端封面页
+	if(G.is_wap) {
+		let totalwidth = $('.txmp-coverpage-pic-container').width();
+		let totalheight =
+			(navigator.userAgent.toLowerCase().indexOf('firefox')>=0 ? $('html').height()-52 : $('body').height())
+			- ($('header').height() ?? 48.67);
+		let ch_height = 160 + 64;
+		let pad = 0;
+		let remain = totalheight - ch_height - totalwidth;
+		let $flex = $('.txmp-coverpage-flex');
+		if(remain < 0) {
+			$flex.css('height', 0);
+			$('.txmp-coverpage-pic')
+				.css('height', remain + totalwidth - 16)
+				.css('width', remain + totalwidth - 16);
+		} else {
+			remain -= pad;
+			$('.txmp-coverpage-pic')
+				.css('height', totalwidth - 16)
+				.css('width', totalwidth - 16);
+			if(remain < 0) {
+				remain = 0;
+			}
+			$($flex[0]).css('height', (remain / 3 * 1) + 'px');
+			$($flex[1]).css('height', (remain / 3 * 1) + 'px');
+			$($flex[2]).css('height', (remain / 3 * 1) + 'px');
+			$($flex[3]).css('height', (remain / 3 * 0) + 'px');
+		}
+	}
 }
 
 setResizeFunc(autofit);
-
-window.onload = autofit;
 
 // setInterval(autofit,1500);

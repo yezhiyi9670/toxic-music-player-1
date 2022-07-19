@@ -101,4 +101,12 @@ body ::-moz-selection {
 	color:<?php echo $color ?>;
 }
 
+.float-btn.float-btn-active,
+.float-btn.float-btn-active:hover {
+	/* border: 2px solid <?php echo $color ?>;
+	color: <?php echo $color ?>; */
+	background-color: <?php echo $color ?>;
+	color: #FFF;
+}
+
 /* </style> */

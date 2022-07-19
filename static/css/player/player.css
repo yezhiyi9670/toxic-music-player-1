@@ -1,5 +1,6 @@
 body {
 	overflow-x: hidden;
+	overflow-y: hidden;
 }
 
 .txmp-page-left{
@@ -13,8 +14,6 @@ body {
 	margin-right:24px;
 	margin-bottom: 20px;
 	background-color:#EEE;
-}
-.song-avatar img {
 }
 
 .song-title{
@@ -329,22 +328,6 @@ body {
 .para-active{
 	background-color:#F7F7F7;
 }
-.float-btn {
-	position:fixed;
-	background-color:#FFF;
-	border: 2px solid transparent;
-	color: #444;
-	width: 36px;
-	height: 36px;
-	font-size: 28px;
-	padding: 3px;
-	opacity:0.9;
-	transition: border .15s, color .15s, box-shadow .3s, background-color .15s;
-}
-.float-btn:hover {
-	color: #444;
-	border: 2px solid transparent;
-}
 
 #right-menu-overlay {
 	position: fixed;
@@ -367,11 +350,11 @@ body {
 
 .rmenu-selection-tabs {}
 .rmenu-tab,
-.rmenu-close {
+.rmenu-btn {
 	padding: 4px;
 	margin-right:4px;
 }
-.rmenu-close {
+.rmenu-btn {
 	height: 31px;
 	width: 31px;
 	margin-top:-3px;
@@ -386,6 +369,12 @@ body {
 	height: calc(100% - 42px);
 	overflow-y:scroll;
 	font-size: 0.92em;
+}
+
+#rmenu-list-showbox {
+	overflow-y: scroll;
+	height: calc(100% - 101px);
+	margin-bottom: -16px;
 }
 
 .song-list-item {
@@ -426,8 +415,13 @@ body {
 	margin-top:4px;
 }
 
-.rmenu-close {
+.rmenu-btn {
 	text-align:center;
+}
+
+#rmenu-list-filterbox li {
+	margin-top: 8px;
+	margin-bottom: 8px;
 }
 
 .songlist-status-none {
@@ -451,25 +445,37 @@ body {
 }
 
 /* Controls */
-#speed-button {
+.float-btn#speed-button {
 	font-size: 20px;
 	padding-left: 7px;
 	padding-top: 6px;
 }
-#sync-button {
+.float-btn#sync-button {
 	font-size: 22px;
 	padding-left: 4px;
 	padding-top: 5px;
 }
-#skip-button {
+.float-btn#skip-button {
 	font-size: 22px;
 	padding-left: 4px;
 	padding-top: 5px;
 }
-#volume-button {
+.float-btn#coverpage-button {
+	font-size: 22px;
+	padding-left: 4px;
+	padding-top: 6px;
+}
+.float-btn#volume-button {
 	font-size: 22px;
 	padding-left: 4px;
 	padding-top: 5px;
+}
+.float-btn#folder-button {
+	font-size: 22px;
+	padding-left: 5px;
+	padding-top: 6px;
+	top: 20px;
+	right: 20px;
 }
 .lyric-controls__wrapperin>* {
 	position: absolute;
@@ -485,4 +491,59 @@ body {
 	overflow: visible;
 	width: 36px;
 	height: 36px;
+}
+
+/* 移动端封面页 */
+.txmp-coverpage-pic {
+	max-width: 100%;
+}
+.txmp-page-left.cover-area {
+	padding-top: 32px;
+	padding-left: 36px;
+	padding-right: 36px;
+}
+.txmp-coverpage-pic {
+	border-radius: 12px;
+	margin: 8px;
+}
+.txmp-coverpage-title-line {
+	margin-top: 20px;
+}
+.txmp-coverpage-title-line-title {
+	font-weight: 700;
+	font-size: 28px;
+	margin-bottom: 0px;
+	white-space: nowrap;
+	overflow-x: hidden;
+}
+.txmp-coverpage-title-line-singer {
+	font-size: 16px;
+	opacity: .8;
+	margin-top: 0;
+	white-space: nowrap;
+	overflow-x: hidden;
+}
+.txmp-coverpage-next-line {
+	background-color: #EEE;
+	border-radius: 6px;
+	padding: 8px 16px;
+	font-size: 14px;
+	display: none;
+}
+.txmp-coverpage-next-line>p {
+	margin-bottom: 0;
+	opacity: .6;
+	overflow-x: hidden;
+	white-space: nowrap;
+	text-align: center;
+}
+.txmp-coverpage-lrc-line {
+	font-size: 16px;
+}
+.txmp-coverpage-lrc-line-current {
+	white-space: nowrap;
+	overflow-x: hidden;
+}
+.wcl-scrollable-i {
+	transition: margin-left .1s;
 }

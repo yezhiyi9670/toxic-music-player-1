@@ -19,9 +19,7 @@ if($_POST['isSubmit']=='yes') {
 </script>
 <div class="txmp-page-full">
     <h3><?php echo LNGk('setting.title') ?></h3>
-    <?php if(isset($_GET['msg'])) { ?><p id="head-notice"><?php echo htmlspecial($_GET['msg']) ?>
-        <a href="javascript:;" onclick="F_HideNotice()" class="notice-confirm">知道了</a>
-    </p><?php } ?>
+    <?php showToastMessage(); ?>
     <p><form method="POST">
         <input type="hidden" name="csrf-token-name" value="<?php echo $GLOBALS['sess'] ?>">
         <input type="hidden" name="csrf-token-value" value="<?php echo $GLOBALS['token'] ?>">

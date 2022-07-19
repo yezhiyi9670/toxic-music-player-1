@@ -159,7 +159,7 @@ function _SINGLE($dest,$isfirst=true,$islast=true) {
 		'&#0032;'
 	);
 
-	$c=json_decode(parseCmpLyric(preSubstr($_GET['_lnk']),false),true);
+	$c=json_decode(parseCmpLyric(cid(),false),true);
 
 	//预处理【分段方式】区域的内容
 	$paraov="";
@@ -197,7 +197,7 @@ function _SINGLE($dest,$isfirst=true,$islast=true) {
 	_E($dest,_T('1-5',array(
 		'%{G}','%{N}','%{LA}','%{MA}','%{S}','%{C}','%{LO}','%{PL}','@fontname','%{newline}'
 	),array(
-		htmlspecial3($canName[preSubstr($_GET['_lnk'])]),
+		htmlspecial3($canName[cid()]),
 		htmlspecial3($c['meta']['N']),
 		htmlspecial3($c['meta']['LA']),
 		htmlspecial3($c['meta']['MA']),
@@ -349,8 +349,8 @@ if(!$isList || ($alwaysGen || !file_exists($dest) || filemtime($source) > filemt
 }
 //单曲很小，为了方便字体设置，不缓存，一次性输出（不可断点续传）
 if(!$isList) {
-	$c=json_decode(parseCmpLyric(preSubstr($_GET['_lnk'])),true);
-	header('Content-Disposition: filename='.preSubstr($_GET['_lnk'])." ".$c['meta']['N'].'.doc');
+	$c=json_decode(parseCmpLyric(cid()),true);
+	header('Content-Disposition: filename='.cid()." ".$c['meta']['N'].'.doc');
 	header('Content-Type: application/x-doc');
 	echo str_replace('@fontname','"'.htmlspecial3($font).'"',file_get_contents($dest));
 }

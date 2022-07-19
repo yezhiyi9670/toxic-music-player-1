@@ -275,3 +275,22 @@ function redirectToPage($str) {
 function redirectToGet() {
 	echo '<script>location.href=location.href.substring(0,location.href.indexOf("?"))</script>';
 }
+
+// 显示 msg 通知（Toast 模式）
+function showToastMessage() {
+	?><?php if(isset($_GET['msg'])) { ?>
+		<script>
+			$(() => {
+				Toast.make_toast_text('<?php echo addslashes($_GET['msg']) ?>', 2500);
+				F_HideNotice();
+			});
+		</script>
+	<?php } ?><?php
+}
+
+// 显示 msg 通知（顶部通知模式）
+function showTopMessage() {
+	?><?php if(isset($_GET['msg'])) { ?><p id="head-notice"><?php echo htmlspecial($_GET['msg']) ?>
+		<a href="javascript:;" onclick="F_HideNotice()" class="notice-confirm"><?php LNGe('ui.hide_notice') ?></a>
+	</p><?php } ?><?php
+}

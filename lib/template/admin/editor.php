@@ -1,5 +1,5 @@
 <?php if(!defined('IN_SYSTEM')) exit;//Silence is golden ?><?php
-	$id=preSubstr($_GET['_lnk']);
+	$id=cid();
 	if($_POST['isSubmit']=='yes')
 	{
 		if(!file_exists(FILES.$id."/")) {
@@ -9,7 +9,7 @@
 		file_put_contents(FILES.$id."/lyric.txt",$_POST['lyricfile']);
 
 		echo '+';
-		echo parseCmpLyric(preSubstr($_GET['_lnk']));
+		echo parseCmpLyric(cid());
 		exit;
 	}
 
@@ -27,7 +27,7 @@ load_js('js/editor/editorapp');
 	set_section_name(LNG('editor.title'));
 </script>
 <script>
-	var current_data = <?php echo parseCmpLyric(preSubstr($_GET['_lnk'])) ?>;
+	var current_data = <?php echo parseCmpLyric(cid()) ?>;
 </script>
 <form style="position:<?php echo is_wap()?"auto":"fixed" ?>;" method="POST" enctype="multipart/form-data">
 	<input type="hidden" name="csrf-token-name" value="<?php echo $GLOBALS['sess'] ?>">
@@ -85,16 +85,14 @@ load_js('js/editor/editorapp');
 		<div style="font-family:'Consolas','Source Code Pro','Courier New'!important;font-size:15px;" id="lyricfile__wrapper"><textarea style="width:100%;height:300px;" id="lyricfile" name="lyricfile"></textarea></div>
 		<script>
 			document.getElementById('lyricfile').value=`<?php
-				echo esline(file_get_contents(FILES.preSubstr($_GET['_lnk']).'/lyric.txt'));
+				echo esline(file_get_contents(FILES.cid().'/lyric.txt'));
 			?>`;
 		</script>
 	</div>
 	<div class="txmp-page-right" style="position:<?php echo is_wap()?"auto":"fixed" ?>; overflow-y:scroll;">
-		<?php if(isset($_GET['msg'])) { ?><p id="head-notice"><?php echo htmlspecial($_GET['msg']) ?>
-			<a href="javascript:;" onclick="F_HideNotice()" class="notice-confirm"><?php LNGe('ui.hide_notice') ?></a>
-		</p><?php } ?>
+		<?php showTopMessage(); ?>
 		<p><?php LNGe('editor.status'); ?><?php
-			if(isValidMusic(preSubstr($_GET['_lnk']))) {
+			if(isValidMusic(cid())) {
 				LNGe('editor.status.canplay');
 			} else {
 				LNGe('editor.status.no_audio');
@@ -110,17 +108,17 @@ load_js('js/editor/editorapp');
 		
 		<p>
 			<button type="button" class="am-btn submit-btn am-btn-primary"><?php LNGe('editor.submit.update') ?></button>
-			<button type="button" onclick="window.open('<?php echo BASIC_URL.preSubstr($_GET['_lnk']) ?>')" class="am-btn am-btn-secondary"><?php LNGe('editor.submit.view') ?></button>
-			<?php if(true || isValidMusic(preSubstr($_GET['_lnk']))){ ?>
+			<button type="button" onclick="window.open('<?php echo BASIC_URL.cid() ?>')" class="am-btn am-btn-secondary"><?php LNGe('editor.submit.view') ?></button>
+			<?php if(true || isValidMusic(cid())){ ?>
 				<button type="button" onclick="reloadIframe($('.preview'))" class="am-btn am-btn-warning"><?php LNGe('editor.submit.refresh') ?></button>
 				<button type="button" onclick="togglePreviewPage()" class="am-btn am-btn-thirdary btn-page-toggle"><?php LNGe('editor.submit.page.player') ?></button>
 			<?php } ?>
 		</p>
 
 		<p>
-			<?php if(true || isValidMusic(preSubstr($_GET['_lnk']))){ ?>
-				<iframe class="preview preview-play" src="<?php echo BASIC_URL.preSubstr($_GET['_lnk']).'?wap=force-phone&iframe' ?>" style="<?php if(stristr($_SERVER['HTTP_USER_AGENT'],'firefox/')){ ?>margin-bottom: 51px;<?php } ?>"></iframe>
-				<iframe class="preview preview-info" src="<?php echo BASIC_URL.preSubstr($_GET['_lnk']).'/comp-info?iframe' ?>" style="display:none;<?php if(stristr($_SERVER['HTTP_USER_AGENT'],'firefox/')){ ?>margin-bottom: 51px;<?php } ?>"></iframe>
+			<?php if(true || isValidMusic(cid())){ ?>
+				<iframe class="preview preview-play" src="<?php echo BASIC_URL.cid().'?wap=force-phone&preview&iframe' ?>" style="<?php if(stristr($_SERVER['HTTP_USER_AGENT'],'firefox/')){ ?>margin-bottom: 51px;<?php } ?>"></iframe>
+				<iframe class="preview preview-info" src="<?php echo BASIC_URL.cid().'/comp-info?iframe' ?>" style="display:none;<?php if(stristr($_SERVER['HTTP_USER_AGENT'],'firefox/')){ ?>margin-bottom: 51px;<?php } ?>"></iframe>
 			<?php } ?>
 		</p>
 	</div>

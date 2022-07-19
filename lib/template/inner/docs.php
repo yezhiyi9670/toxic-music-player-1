@@ -181,7 +181,9 @@ $('#multi-form')[0].onsubmit=function(){
 function resetDefault() {
 	$('.field-remember:not(#mfont)').each(function(x) {
 		var e = this;
-		$(e).val($(e).attr('data-default'));
+		if(!$(e).attr('disabled')) {
+			$(e).val($(e).attr('data-default'));
+		}
 	});
 }
 

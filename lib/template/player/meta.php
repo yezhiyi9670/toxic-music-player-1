@@ -5,8 +5,9 @@ $modified = modifiedTime(cid());
 echo encode_data([
 	'baseurl' => BASIC_URL . cid(),
 	'song_id' => cid(),
-	'src1' => getAudioUrl(preSubstr($_GET['_lnk'])),
-	'src2' => getAudioUrl(preSubstr($_GET['_lnk']),"back","background"),
+	'src1' => getAudioUrl(cid()),
+	'src2' => getAudioUrl(cid(),"back","background"),
+	'cover' => getCoverUrl(cid()),
 	'player_colored_css' => BASIC_URL . 'dynamic/css/player/player-colored.css?v=' . VERSION . '&w=' . is_wap() . '&A=X' . GCM()['A'] . '&S=X' . GCM()['X'] . '&G1=X' . GCM()['G1'] . '&G2=X' . GCM()['G2'],
 	'main_colored_css' => BASIC_URL . 'dynamic/css/common/main-colored.css?v=' . VERSION . '&w=' . is_wap() . '&A=X' . GCM()['A'] . '&S=X' . GCM()['X'] . '&G1=X' . GCM()['G1'] . '&G2=X' . GCM()['G2'],
 

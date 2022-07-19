@@ -70,9 +70,7 @@
 <div class="txmp-page-full">
 	<h3><?php LNGe('admin.title') ?></h3>
 	<p><a href="<?php echo BASIC_URL ?>admin/users"><?php LNGe('ui.user_manager') ?></a><span style="width:8px;">&nbsp;&nbsp;&nbsp;&nbsp;</span><a href="<?php echo BASIC_URL ?>"><?php LNGe('ui.return_mainpage') ?></a></p>
-	<?php if(isset($_GET['msg'])) { ?><p id="head-notice"><?php echo htmlspecial($_GET['msg']) ?>
-		<a href="javascript:;" onclick="F_HideNotice()" class="notice-confirm"><?php LNGe('ui.hide_notice') ?></a>
-	</p><?php } ?>
+	<?php showToastMessage(); ?>
 	<div class="tooltip-box">
 		<p><?php LNGe('admin.select_page') ?>&nbsp;&nbsp;
 			<a onclick="show_page('all')"><?php LNGe('admin.page.all') ?></a>&nbsp;&nbsp;&nbsp;&nbsp;

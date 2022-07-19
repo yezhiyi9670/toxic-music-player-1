@@ -14,7 +14,7 @@ function setting_def() {
 		'no-color-switch'=>'N',
 		'limited-selection'=>'Y',
 		'aggressive-optimize'=>'N',
-		'wap-font-size'=>'16',
+		'wap-font-size'=>'16.8',
 		'wap-scale'=>'0.92'
 	);
 }

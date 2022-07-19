@@ -9,9 +9,7 @@
 	<h3><?php LNGe('uc.title') ?></h3>
 	<p><?php LNGe('uc.welcome',uauth_username()) ?></p>
 	<p><a href="<?php echo BASIC_URL ?>user/passwd"><?php LNGe('ui.change_password') ?></a><span style="width:8px;">&nbsp;&nbsp;&nbsp;&nbsp;<a href="<?php echo BASIC_URL ?>user/logout"><?php LNGe('ui.logout') ?></a><span style="width:8px;">&nbsp;&nbsp;&nbsp;&nbsp;</span><a href="<?php echo BASIC_URL ?>"><?php LNGe('ui.return_mainpage') ?></a></p>
-	<?php if(isset($_GET['msg'])) { ?><p id="head-notice"><?php echo htmlspecial($_GET['msg']) ?>
-		<a href="javascript:;" onclick="F_HideNotice()" class="notice-confirm"><?php LNGe('ui.hide_notice') ?></a>
-	</p><?php } ?>
+	<?php showToastMessage(); ?>
 	<?php
 		$uname = uauth_username();
 		$jsonlst = uauth_list_data($uname,'playlist','.json');

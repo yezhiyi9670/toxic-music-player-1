@@ -4,8 +4,14 @@
 	<span data-tab="list"   class="shadowed rmenu-tab rmenu-tab-list rmenu-tab-active"><?php LNGe('player.hub.list') ?></span>
 	<span data-tab="saving" class="shadowed rmenu-tab rmenu-tab-saving"><?php LNGe('player.hub.action') ?></span>
 	<span data-tab="stats"  class="shadowed rmenu-tab rmenu-tab-stats"><?php LNGe('player.hub.stats') ?></span>
-	<a class="rmenu-close" href="javascript:;" onclick="rmenu_hide()" style="color: #000; float:right; font-size:20px;">
+	<a class="rmenu-btn rmenu-close" href="javascript:;" onclick="rmenu_hide()" style="color: #000; float:right; font-size:20px;">
 		<i class="fa fa-times"></i>
+	</a>
+	<a class="rmenu-btn rmenu-scrollme" href="javascript:;" onclick="rmenu_scrollme()" style="color: #000; float:right; font-size:20px;">
+		<i class="fa fa-sort"></i>
+	</a>
+	<a class="rmenu-btn rmenu-random" href="javascript:;" style="color: #000; float:right; font-size:20px;">
+		<i class="fa fa-random"></i>
 	</a>
 	<div class="rmenu-content rmenu-content-list">
 		<!--h2 class="rmenu-clt">

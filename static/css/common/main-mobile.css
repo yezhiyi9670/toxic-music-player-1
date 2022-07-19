@@ -9,3 +9,13 @@
 body {
 	overflow-x: hidden;
 }
+
+input[type=text],
+input[type=password],
+select.field-large {
+	width: 65%;
+}
+
+.am-modal-dialog input {
+	width: 95%;
+}

@@ -231,6 +231,20 @@ function getAudioUrl($d,$basename="song",$urlname="audio",$idx=0) {
 	// return BASIC_URL.'data/music/'.$d.'/'.$basename.substr($g,strrpos($g,'.'));
 }
 
+// 获取歌曲的封面图URL
+function getCoverUrl($n) {
+	$picture_info = GSM($n)['P'];
+	$pic_url = '';
+	if(!$picture_info || strlen($picture_info) == 0) {
+		$pic_url = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
+	} else if(!str_included($picture_info,['//','data:'])) {
+		$pic_url =  BASIC_URL . $picture_info;
+	} else {
+		$pic_url = $picture_info;
+	}
+	return $pic_url;
+}
+
 // 获取当前歌曲或指定歌曲的meta
 global $compilation_cache;
 $compilation_cache = [];

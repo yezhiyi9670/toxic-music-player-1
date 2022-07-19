@@ -385,25 +385,34 @@ function setResizeFunc(func) {
 	}
 })();
 
+/**
+ * 帧函数注册工具
+ */
 (() => {
-	var frame_funcs = [];
+	var frame_funcs = {};
+	var frame_func_id = 0;
 	window.registerFrameFunc = (func) => {
-		frame_funcs.push(func);
+		frame_func_id += 1;
+		frame_funcs['s' + frame_func_id] = func;
+		return 's' + frame_func_id;
 	};
-	window.removeFrameFunc = (func) => {
-		var new_frame_func = [];
-		for(let fn of frame_funcs) {
-			if(fn != func) {
-				new_frame_func.push(fn);
-			}
+	window.removeFrameFunc = (id) => {
+		if(frame_funcs[id]) {
+			delete frame_funcs[id];
 		}
-		frame_funcs = new_frame_func;
 	};
 	var runFrameFunc = (timer) => {
-		for(let fn of frame_funcs) {
-			fn(timer);
+		for(let id in frame_funcs) {
+			frame_funcs[id](timer);
 		}
 		requestAnimationFrame(runFrameFunc);
 	}
 	requestAnimationFrame(runFrameFunc);
 })();
+
+// 自动调节
+$(() => {
+	if(autofit) {
+		autofit();
+	}
+});

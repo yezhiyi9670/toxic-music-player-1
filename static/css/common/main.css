@@ -60,9 +60,16 @@ a{
 
 input[type=text],
 input[type=password],
-select.field-large,
-.am-modal-dialog input{
-	height:37px;width:30%;padding:4px;
+select.field-large {
+	height:37px;width:30%;padding:6px;
+	padding-top: 1px;
+	padding-bottom: 3px;
+	margin-left: 4px;
+	margin-right: 4px;
+}
+
+.am-modal-dialog input {
+	height:37px;width:70%;padding:6px;
 	padding-top: 1px;
 	padding-bottom: 3px;
 	margin-left: 4px;
@@ -413,4 +420,22 @@ code {
 
 body {
 	overscroll-behavior-x: none;
+}
+
+.float-btn {
+	position:fixed;
+	background-color:#FFF;
+	border: 2px solid transparent !important;
+	color: #444;
+	width: 36px;
+	height: 36px;
+	font-size: 28px;
+	padding: 3px;
+	opacity:0.9;
+	transition: border .15s, color .15s, box-shadow .3s, background-color .15s !important;
+}
+.float-btn:hover,
+.float-btn:focus {
+	color: #444;
+	border: 2px solid transparent !important;
 }

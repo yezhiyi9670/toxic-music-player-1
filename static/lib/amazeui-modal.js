@@ -133,7 +133,7 @@
 					<div class="am-modal-hd">${title}</div>
 					<div class="am-modal-bd">
 						${content}
-						<input type="${type}" class="am-modal-prompt-input amjs-modal-input" style="width:unset" spellcheck="false">
+						<input type="${type}" class="am-modal-prompt-input amjs-modal-input" spellcheck="false">
 					</div>
 					<div class="am-modal-footer">
 						<span class="am-modal-btn amjs-modal-close amjs-modal-cancel">${LNG('ui.cancel')}</span>

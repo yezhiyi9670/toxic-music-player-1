@@ -19,7 +19,7 @@ function kuwo_search_httpget($url) {
 	}
 	// $token = 'LZZ31RUTJ22';
 	return ex_url_get_contents($url,[
-		'Referer: http://kuwo.cn/',
+		'Referer: https://kuwo.cn/',
 		'Cookie: kw_token='.$token,
 		'csrf: '.$token,
 	]);
@@ -61,9 +61,8 @@ function kuwoPayStatus($val) {
 function kuwoSearchSong() {
 	if(isset($_GET['json'])) {
 		header('Content-Type: application/json');
-		echo kuwo_search_httpget('http://kuwo.cn/api/www/search/searchMusicBykeyWord?key='.urlencode($_GET['key']).'&pn='.$_GET['pageid'].'&rn=50');
-	}
-	else {
+		echo kuwo_search_httpget('https://kuwo.cn/api/www/search/searchMusicBykeyWord?key='.urlencode($_GET['key']).'&pn='.$_GET['pageid'].'&rn=50');
+	} else {
 		header('Content-Type: text/plain');
 
 		if($_GET['key'][0]==':' || preg_match('/^K_(\d+)$/',$_GET['key'])) {
@@ -99,7 +98,7 @@ function kuwoSearchSong() {
 				// 数据串全局匹配歌单信息。
 				// [修复] 酷我音乐试图将变量置入播放量位置干掉爬虫。v127a-pre10。
 				$matcher = '/name:"(.+?)",listencnt:([0-9A-Za-z]+),id:(\d+)/';
-				@$text = kuwo_search_get_json('http://kuwo.cn/');
+				@$text = kuwo_search_get_json('https://kuwo.cn/');
 
 				// 当场返回
 				if(isset($_GET['initial'])) {
@@ -130,7 +129,7 @@ function kuwoSearchSong() {
 		// 直接访问一个歌单。（方便起见，有两种数据格式）
 		if($_GET['key'][0]=='^') {
 			$id = trim(substr($_GET['key'],1));
-			@$data = json_decode(kuwo_search_get_json('http://kuwo.cn/api/www/playlist/playListInfo?pid='.$id.'&pn='.$_GET['pageid'].'&rn=50'),true);
+			@$data = json_decode(kuwo_search_get_json('https://kuwo.cn/api/www/playlist/playListInfo?pid='.$id.'&pn='.$_GET['pageid'].'&rn=50'),true);
 
 			$npage=ceil($data['data']['total']/50.0);
 			$startid=50*$_GET['pageid']-49;
@@ -166,7 +165,7 @@ function kuwoSearchSong() {
 		//歌手名称搜索
 		if($_GET['key'][0]=='@') {
 			$res=[];
-			@$res=kuwo_search_get_json('http://kuwo.cn/api/www/search/searchArtistBykeyWord?key='.urlencode(substr($_GET['key'],1)).'&pn='.$_GET['pageid'].'&rn=50'); //获取歌手列表
+			@$res=kuwo_search_get_json('https://kuwo.cn/api/www/search/searchArtistBykeyWord?key='.urlencode(substr($_GET['key'],1)).'&pn='.$_GET['pageid'].'&rn=50'); //获取歌手列表
 			@$res=json_decode($res,true);
 			if($res['data']['total']==0) {
 				echo LNG('rp.search.null');
@@ -195,15 +194,15 @@ function kuwoSearchSong() {
 			echo LNG('page.itemdesc',$data['data']['total'],$startid,min($endid,$data['data']['total']));
 
 			echo '&nbsp;&nbsp;<a onclick="'.($_GET['pageid']>=$npage?'':'kuwo_search(curr_pageid+1)').'">' . LNG('page.next') . ' &gt;</a>&nbsp;&nbsp;<a onclick="kuwo_search('.$npage.')">' . LNG('page.last') . '</a></p>';
-			echo '<p>' . LNG('rp.search.kuworef','http://kuwo.cn/') .'</p>' . "\n";
+			echo '<p>' . LNG('rp.search.kuworef','https://kuwo.cn/') .'</p>' . "\n";
 			echo '<p>' . LNG('rp.search.notres') . '</p>';
 			exit;
 		}
 
 		//普通搜索
 		$res=[];
-		if($_GET['key'][0]!='%') @$res=kuwo_search_get_json('http://kuwo.cn/api/www/search/searchMusicBykeyWord?key='.urlencode($_GET['key']).'&pn='.$_GET['pageid'].'&rn=50'); //常规搜索
-		else @$res=kuwo_search_get_json('http://kuwo.cn/api/www/artist/artistMusic?artistid='.urlencode(substr($_GET['key'],1)).'&pn='.$_GET['pageid'].'&rn=50'); //指定歌手
+		if($_GET['key'][0]!='%') @$res=kuwo_search_get_json('https://kuwo.cn/api/www/search/searchMusicBykeyWord?key='.urlencode($_GET['key']).'&pn='.$_GET['pageid'].'&rn=50'); //常规搜索
+		else @$res=kuwo_search_get_json('https://kuwo.cn/api/www/artist/artistMusic?artistid='.urlencode(substr($_GET['key'],1)).'&pn='.$_GET['pageid'].'&rn=50'); //指定歌手
 		@$res=json_decode($res,true);
 		if($res['code'] == -1) {
 			echo LNG('rp.search.null');
@@ -232,7 +231,7 @@ function kuwoSearchSong() {
 		echo LNG('page.itemdesc',$res['data']['total'],$startid,min($endid,$res['data']['total']));
 
 		echo '&nbsp;&nbsp;<a onclick="'.($_GET['pageid']>=$npage?'':'kuwo_search(curr_pageid+1,'."'".addslashes($_GET['key'])."'".')').'">' . LNG('page.next') . ' &gt;</a>&nbsp;&nbsp;<a onclick="kuwo_search('.$npage.','."'".addslashes($_GET['key'])."'".')">' . LNG('page.last') . '</a></p>';
-		echo '<p>' . LNG('rp.search.kuworef','http://kuwo.cn/') .'</p>' . "\n";
+		echo '<p>' . LNG('rp.search.kuworef','https://kuwo.cn/') .'</p>' . "\n";
 		echo '<p>' . LNG('rp.search.notres') . '</p>';
 	}
 }
@@ -285,8 +284,8 @@ class kuwoCrawler {
 			}
 		}
 		try{
-			@$lrc=file_get_contents('http://kuwo.cn/newh5/singles/songinfoandlrc?musicId='.$id);
-			// @$name=file_get_contents('http://www.kuwo.cn/play_detail/'.$id.'/');
+			@$lrc=file_get_contents('https://kuwo.cn/newh5/singles/songinfoandlrc?musicId='.$id);
+			// @$name=file_get_contents('https://www.kuwo.cn/play_detail/'.$id.'/');
 			@$lrc=json_decode($lrc,true);
 			// @$name=strstr($name,'<input id="songinfo-name" type="hidden" value="');
 			// @$name=substr($name,strlen('<input id="songinfo-name" type="hidden" value="'));
@@ -314,8 +313,8 @@ class kuwoCrawler {
 		$id = $this->cache['id'];
 		echo LNG('rp.info.internalid') . COLON . $this->cache['id'] . "\n";
 		echo LNG('rp.info.mainpage') . COLON . LNG('rp.info.mainpage.null') . "\n";
-		echo LNG('rp.info.lrcdata') . COLON . 'http://kuwo.cn/newh5/singles/songinfoandlrc?musicId='.$id . "\n";
-		echo LNG('rp.info.audioinfo') . COLON . 'http://www.kuwo.cn/api/v1/www/music/playUrl?mid='.$this->cache['id'].'&type=music&httpsStatus=1&reqId=' . randomUUID() . "\n";
+		echo LNG('rp.info.lrcdata') . COLON . 'https://kuwo.cn/newh5/singles/songinfoandlrc?musicId='.$id . "\n";
+		echo LNG('rp.info.audioinfo') . COLON . 'https://www.kuwo.cn/api/v1/www/music/playUrl?mid='.$this->cache['id'].'&type=music&httpsStatus=1&reqId=' . randomUUID() . "\n";
 		echo LNG('rp.info.audioloc') . COLON . $this->url() . "\n";
 		echo LNG('rp.info.avatar') . COLON . ($this->cache['info']['pic'] ? $this->cache['info']['pic'] : LNG('rp.info.avatar.null')) . "\n";
 		echo LNG('rp.info.last_cache') . COLON . $this->cachedDate . "\n";
@@ -327,7 +326,7 @@ class kuwoCrawler {
 	function _url() {
 		if(!isset($this->cache['url'])){
 			if(_CT('rp_allow_pay_crack')) { // 这个接口可以绕过付费限制
-				@$url=ex_url_get_contents('http://kuwo.cn/bd/search/getSongUrlByMid?mid='.$this->cache['id'].'&format=mp3&br=192kmp3&bdfrom=xshow&c=nfmbhi6fxwaj',['User-Agent'=>'Dalvik/2.1.0 (Linux; U; Android 7.1.2; LIO-AN00 Build/N2G47O)']);
+				@$url=ex_url_get_contents('https://kuwo.cn/bd/search/getSongUrlByMid?mid='.$this->cache['id'].'&format=mp3&br=192kmp3&bdfrom=xshow&c=nfmbhi6fxwaj',['User-Agent'=>'Dalvik/2.1.0 (Linux; U; Android 7.1.2; LIO-AN00 Build/N2G47O)']);
 				@$url=json_decode($url,true);
 				$url = $url['data']['url'];
 				$arr = [];
@@ -335,7 +334,7 @@ class kuwoCrawler {
 				$url = $arr[1] . str_replace('.','-',$arr[2]) . $arr[3];
 				$this->cache['url'] = $url;
 			} else {
-				@$url=ex_url_get_contents('http://www.kuwo.cn/api/v1/www/music/playUrl?mid='.$this->cache['id'].'&type=music&httpsStatus=1&reqId=' . randomUUID());
+				@$url=ex_url_get_contents('https://www.kuwo.cn/api/v1/www/music/playUrl?mid='.$this->cache['id'].'&type=music&httpsStatus=1&reqId=' . randomUUID());
 				@$url=json_decode($url,true);
 				$this->cache['url']=$url['data']['url'];
 			}
@@ -386,7 +385,7 @@ class kuwoCrawler {
 					'A  #'.rgb2hex($cp[0]) . "\n" . 
 					'G1 #'.rgb2hex($cp[0]) . "\n" . 
 					'G2 #'.rgb2hex($cp[1]) . "\n" . 
-					'O  '.'http://www.kuwo.cn/play_detail/'.$this->cache['id'].'/' . "\n" .
+					'O  '.'https://www.kuwo.cn/play_detail/'.$this->cache['id'].'/' . "\n" .
 					($this->cache['info']['pic'] ? 'P  K_' . $this->cache['id'] . '/avatar' . "\n" : '') .
 					'' . "\n" . 
 					'// ' . LNG('rp.code.bycrawler') . "\n" . 
@@ -421,12 +420,12 @@ class kuwoCrawler {
 					'S  '.$this->cache['info']['artist'] . "\n" . 
 					'LA --' . "\n" . 
 					'MA --' . "\n" . 
-					'C  '.$this->cache['info']['album'] . "\n" . 
+					'C  '. ($this->cache['info']['album'] ? $this->cache['info']['album'] : '--') . "\n" . 
 					// 'A  #'.substr(md5($this->simplify($this->cache['name'])),0,6) . "\n" . 
 					'A  #'.rgb2hex($cp[0]) . "\n" . 
 					'G1 #'.rgb2hex($cp[0]) . "\n" . 
 					'G2 #'.rgb2hex($cp[1]) . "\n" . 
-					'O  '.'http://www.kuwo.cn/play_detail/'.$this->cache['id'].'/' . "\n" .
+					'O  '.'https://www.kuwo.cn/play_detail/'.$this->cache['id'].'/' . "\n" .
 					($this->cache['info']['pic'] ? 'P  K_' . $this->cache['id'] . '/avatar' . "\n" : '') .
 					'' . "\n" .
 					'// ' . LNG('rp.code.bycrawler') . "\n" . 

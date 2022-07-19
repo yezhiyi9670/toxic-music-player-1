@@ -256,6 +256,11 @@ var cloudLenLimit = <?php echo _CT('user_playlist_limit') ?>;
 			</ul>
 		</div>
 	</div>
+
+	<a class="float-btn shadowed fab-gotop" href="javascript:;" onclick="scrollto(0, 'body')">
+		<i class="fa fa-arrow-up"></i>
+	</a>
+
 	<div class="toxic-dialog-cover" id="selector" style="display:none;">
 		<iframe style="position:fixed;left:0;top:0;width:100%;height:100%;border:1px solid #000000;" src="<?php echo BASIC_URL ?>?iframe"></iframe>
 		<button style="top:12px;right:12px;position:fixed;z-index:1;" class="am-btn am-btn-danger shadowed" id="button-cancel"><?php LNGe('led.list.cancel') ?></button>

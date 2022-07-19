@@ -6,3 +6,11 @@
 .txmp-tag-author {
 	display: none;
 }
+
+.fab-gotop {
+	right: 32px;
+	bottom: 32px;
+	font-size: 23px;
+	padding-left: 5.5px;
+	padding-top: 4px;
+}

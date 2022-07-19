@@ -71,9 +71,7 @@ else {echo '<script>location.href=location.href;</script>';exit;}
 </script>
 <div class="txmp-page-full">
     <h3><?php LNGe('login.login.caption') ?></h3>
-    <?php if(isset($_GET['msg'])) { ?><p id="head-notice"><?php echo htmlspecial($_GET['msg']) ?>
-        <a href="javascript:;" onclick="F_HideNotice()" class="notice-confirm"><?php LNGe('ui.hide_notice') ?></a>
-    </p><?php } ?>
+    <?php showToastMessage(); ?>
     <p><form method="post">
         <input type="hidden" name="csrf-token-name" value="<?php echo $GLOBALS['sess'] ?>">
         <input type="hidden" name="csrf-token-value" value="<?php echo $GLOBALS['token'] ?>">

@@ -72,9 +72,7 @@ else {echo '<script>location.href=location.href;</script>';exit;}
 </script>
 <div class="txmp-page-full">
 	<h3><?php LNGe('pass.title') ?></h3>
-	<?php if(isset($_GET['msg'])) { ?><p id="head-notice"><?php echo htmlspecial($_GET['msg']) ?>
-		<a href="javascript:;" onclick="F_HideNotice()" class="notice-confirm"><?php LNGe('ui.hide_notice') ?></a>
-	</p><?php } ?>
+	<?php showToastMessage(); ?>
 	<?php if(uauth_username()) { ?>
 	<p><form method="post">
 		<input type="hidden" name="csrf-token-name" value="<?php echo $GLOBALS['sess'] ?>">

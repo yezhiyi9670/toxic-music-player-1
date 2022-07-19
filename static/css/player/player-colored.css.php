@@ -50,19 +50,16 @@
 }
 <?php } ?>
 
-.float-btn.float-btn-active,
-.float-btn.float-btn-active:hover {
-	/* border: 2px solid <?php echo $color ?>;
-	color: <?php echo $color ?>; */
-	background-color: <?php echo $color ?>;
-	color: #FFF;
-}
-
 /* [R] Reverse */
 .lrc-active .reverse-sound-o {
   background-color: <?php echo $color ?>;
 }
 .lrc-active .reverse-sound-i {
   background-color: <?php echo $color ?>;
+}
+
+.txmp-coverpage-lrc-active {
+	color: <?php echo $color ?>;
+	font-weight: 700;
 }
 /*</style>*/

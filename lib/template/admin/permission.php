@@ -1,7 +1,7 @@
 <?php if(!defined('IN_SYSTEM')) exit;//Silence is golden ?><?php
 
 	if($_POST['isSubmit']=='yes') {
-		$id=preSubstr($_GET['_lnk']);
+		$id=cid();
 		if(!file_exists(FILES.$id."/")) {
 			redirectToNote(LNG('editor.msg.tan90'));
 			exit;
@@ -31,9 +31,7 @@
 		<a href="<?php echo BASIC_URL . cid() ?>/resource"><?php LNGe('resource.title') ?></a>&nbsp;▪
 		<strong><?php LNGe('permitter.title') ?></strong>
 	</span>
-	<?php if(isset($_GET['msg'])) { ?><p id="head-notice"><?php echo htmlspecial($_GET['msg']) ?>
-		<a href="javascript:;" onclick="F_HideNotice()" class="notice-confirm"><?php LNGe('ui.hide_notice') ?></a>
-	</p><?php } ?>
+	<?php showToastMessage(); ?>
 	<p><?php LNGe('permitter.tip1') ?><br>
 	<?php LNGe('permitter.tip2') ?></p>
 	<p><form method="post">

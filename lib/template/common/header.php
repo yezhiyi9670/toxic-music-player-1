@@ -60,6 +60,8 @@
 		load_js('lib/md5');
 		load_js('lib/base64');
 		load_js('lib/amazeui-modal');
+		load_js('lib/toasts');
+		load_js('lib/scroller');
 		load_js('lib/async-worker');
 		load_js('lib/pr-rule-editor');
 		load_js('codemirror/lib/codemirror','5.59.2');
@@ -84,7 +86,7 @@
 	</script>
 	<script>
 		// --- audio url ---
-		var yp_src='<?php echo getAudioUrl(preSubstr($_GET['_lnk'])) ?>';
+		var yp_src='<?php echo getAudioUrl(cid()) ?>';
 	</script>
 </head>
 
@@ -94,7 +96,7 @@
 			<?php
 				$backlink = '';
 				if(preSubstr($GLOBALS['linktype'])=='music') {
-					$backlink = BASIC_URL.preSubstr($_GET['_lnk']);
+					$backlink = BASIC_URL.cid();
 				}
 				else if(preSubstr($GLOBALS['linktype'])=='admin') {
 					$backlink = BASIC_URL.'admin';
