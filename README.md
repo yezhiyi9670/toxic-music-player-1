@@ -2,7 +2,7 @@ TOXIC Music Player 1 (txmp)
 ===========================
 
 ![][latest_version] ![][build_date]  
-[![][license]][license_link] ![][dev_php_version]![][should_work_php_version]
+[![][license]][license_link] ![][dev_php_version]![][should_work_php_version]  
 ![][rp_kuwo] ![][rp_kuwo_date] ![][rp_kuwo_hack_level]
 
 [latest_version]: https://img.shields.io/badge/Version-v128a%20pre16-orange.svg?style=flat-square
@@ -20,7 +20,7 @@ Changelog (in Chinese): [changelog.txt](./changelog/changelog.txt)
 
 ![](./_docs/gallery/detailed-walkthrough/player-index.png)
 
-<img src="./_docs/gallery/detailed-walkthrough/player-index-playlist.png" style="max-width: calc(50% - 16px)" /> <img src="./_docs/gallery/detailed-walkthrough/player-index-mobile1.png" style="max-width: calc(50% - 16px)" />
+![](./_docs/gallery/detailed-walkthrough/combined1.png)
 
 ## What's this project about?
 

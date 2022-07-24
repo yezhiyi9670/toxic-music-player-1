@@ -42,9 +42,9 @@ Want shadowed cards, but don't know how to do it.
 
 ![](./brief-history-of-ui/v126a-A/player-index.png)
 
-<img src="./brief-history-of-ui/v126a-A/player-index__dropdown.png" style="max-width: calc(50% - 16px)" /> <img src="./brief-history-of-ui/v126a-A/player-index__playlist.png" style="max-width: calc(50% - 16px)" />
+![](./brief-history-of-ui/v126a-A/combined1.png)
 
-<img src="./brief-history-of-ui/v126a-A/player-index__mobile.png" style="max-width: calc(50% - 16px)" />
+![](./brief-history-of-ui/v126a-A/combined2.png)
 
 ![](./brief-history-of-ui/v126a-A/admin-editor.png)
 
@@ -54,9 +54,9 @@ The shadowed cards are a failed experiment. Let's try something flat and differe
 
 ![](./brief-history-of-ui/v126d/player-index.png)
 
-<img src="./brief-history-of-ui/v126a-B/player-index__dropdown.png" style="max-width: calc(50% - 16px)" /> <img src="./brief-history-of-ui/v126d/player-index__playlist.png" style="max-width: calc(50% - 16px)" />
+![](./brief-history-of-ui/v126d/combined1.png)
 
-<img src="./brief-history-of-ui/v126d/player-index__mobile.png" style="max-width: calc(50% - 16px)" />
+![](./brief-history-of-ui/v126d/combined2.png)
 
 ![](./brief-history-of-ui/v126d/admin-editor.png)
 
@@ -68,9 +68,9 @@ Also, separated song editing pages.
 
 ![](./brief-history-of-ui/v127a-pre8/player-index.png)
 
-<img src="./brief-history-of-ui/v127a-pre8/player-index__dropdown.png" style="max-width: calc(50% - 16px)" /> <img src="./brief-history-of-ui/v127a-pre8/player-index__playlist.png" style="max-width: calc(50% - 16px)" />
+![](./brief-history-of-ui/v127a-pre8/combined1.png)
 
-<img src="./brief-history-of-ui/v127a-pre8/player-index__mobile.png" style="max-width: calc(50% - 16px)" />
+![](./brief-history-of-ui/v127a-pre8/combined2.png)
 
 ![](./brief-history-of-ui/v127a-pre8/admin-editor.png)
 
@@ -84,9 +84,9 @@ Will properly shadowed cards without round angles be good?
 
 ![](./brief-history-of-ui/v127a-pre15/player-index.png)
 
-<img src="./brief-history-of-ui/v127a-pre15/player-index__dropdown.png" style="max-width: calc(50% - 16px)" /> <img src="./brief-history-of-ui/v127a-pre15/player-index__playlist.png" style="max-width: calc(50% - 16px)" />
+![](./brief-history-of-ui/v127a-pre15/combined1.png)
 
-<img src="./brief-history-of-ui/v127a-pre15/player-index__mobile.png" style="max-width: calc(50% - 16px)" />
+![](./brief-history-of-ui/v127a-pre15/combined2.png)
 
 ![](./brief-history-of-ui/v127a-pre15/admin-editor.png)
 
@@ -100,9 +100,9 @@ Not really, I guess.
 
 ![](./brief-history-of-ui/v127a-rc6/player-index.png)
 
-<img src="./brief-history-of-ui/v127a-rc6/player-index__dropdown.png" style="max-width: calc(50% - 16px)" /> <img src="./brief-history-of-ui/v127a-rc6/player-index__playlist.png" style="max-width: calc(50% - 16px)" />
+![](./brief-history-of-ui/v127a-rc6/combined1.png)
 
-<img src="./brief-history-of-ui/v127a-rc6/player-index__mobile.png" style="max-width: calc(50% - 16px)" />
+![](./brief-history-of-ui/v127a-rc6/combined2.png)
 
 ![](./brief-history-of-ui/v127a-rc6/admin-editor.png)
 
@@ -116,9 +116,9 @@ Just add a little implicity, then things will be perfect.
 
 ![](./brief-history-of-ui/v128a-pre16/player-index.png)
 
-<img src="./brief-history-of-ui/v128a-pre16/player-index__dropdown.png" style="max-width: calc(50% - 16px)" /> <img src="./brief-history-of-ui/v128a-pre16/player-index__playlist.png" style="max-width: calc(50% - 16px)" />
+![](./brief-history-of-ui/v128a-pre16/combined1.png)
 
-<img src="./brief-history-of-ui/v128a-pre16/player-index__mobile1.png" style="max-width: calc(50% - 16px)" /> <img src="./brief-history-of-ui/v128a-pre16/player-index__mobile2.png" style="max-width: calc(50% - 16px)" />
+![](./brief-history-of-ui/v128a-pre16/combined2.png)
 
 ![](./brief-history-of-ui/v128a-pre16/admin-editor.png)
 
