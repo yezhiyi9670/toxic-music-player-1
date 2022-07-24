@@ -79,11 +79,11 @@ Users can login and store playlists.
 
 ▲ Player on PC, clean layout. Administrator-uploaded songs may use paragraphing.
 
-<img src="./detailed-walkthrough/player-index-dropdown.png" style="max-width: calc(50% - 16px)" /> <img src="./detailed-walkthrough/player-index-playlist.png" style="max-width: calc(50% - 16px)" />
+![](./detailed-walkthrough/combined1.png)
 
 ▲ Title menu (click title to open) and playlist menu.
 
-<img src="./detailed-walkthrough/player-index-mobile1.png" style="max-width: calc(50% - 16px)" /> <img src="./detailed-walkthrough/player-index-mobile2.png" style="max-width: calc(50% - 16px)" />
+![](./detailed-walkthrough/combined2.png)
 
 ▲ Mobile player with two pages.
 
