@@ -40,4 +40,4 @@ This is now under construction.
 
 ~~[Obtaining printable document](./usage/lrc-book.md)~~
 
-[Preparing offline repo for your MP3](./usage/offline.md)
+~~[Preparing offline repo for your MP3](./usage/offline.md)~~
