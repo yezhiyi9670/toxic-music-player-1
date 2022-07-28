@@ -114,6 +114,8 @@ function _N($a) {
 //打印一个歌曲的文档到缓存   [single_document:id]
 //在生成歌词本时，最后一个部分的格式与其他略有不同，要判断
 function _SINGLE($dest,$isfirst=true,$islast=true) {
+	global $font;
+
 	$W_1=array(
 		'[U]',              // [U]
 		'[/U]',                                               // [/?]
@@ -213,14 +215,14 @@ function _SINGLE($dest,$isfirst=true,$islast=true) {
 	foreach($c['lyrics'] as $p)
 	{
 		if($p['type'] == 'lyrics' && !isset($p['premark'])) {
-			//Writes para header
+			// 写入段头【样式 a11】
 			_E($dest,_T(2,array(
 				'%{xid}','%{c}','@fontname',
 			),array(
 				'11',_W('['.htmlspecial3($p['n']).' '.$p['ac'].']',$W_1,$W_2),'"'.htmlspecial3($font).'"'
 			)));
-			foreach($p['in'] as $v)
-			{
+			// 写入正文【样式 歌词=a15，注释=a18】
+			foreach($p['in'] as $v) {
 				//Writes line
 				_E($dest,_T(2,array(
 					'%{xid}','%{c}','@fontname'

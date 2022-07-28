@@ -64,7 +64,7 @@ if(isset($_GET['isSubmit'])) {
 			<button id="kuwo-show-suggestion" class="am-btn am-btn-primary" onclick="kuwo_search(1,'> __mp_suggestions__','#list-kuwo-suggestion')"><?php LNGe('ui.show') ?></button>
 		</div>
 		<p><strong><?php LNGe('list.caption.kuwo.search') ?></strong></p>
-		<input name="kuwo-keyword" id="kuwo-keyword" type="text" />
+		<input name="kuwo-keyword" id="kuwo-keyword" type="text" data-wcl-enter-target=".txmp-kuwo-go" />
 		<button type="button" class="am-btn am-btn-primary txmp-kuwo-go" onclick="kuwo_search(1)"><?php LNGe('ui.search') ?></button>
 		<p id="list-kuwo-show">
 			<!-- -->
@@ -73,7 +73,7 @@ if(isset($_GET['isSubmit'])) {
 	<div id="list-id" class="txmp-list-type" style="display:none;">
 		<p><strong><?php LNGe('list.caption.id') ?></strong></p>
 		<p><?php echo LNG('list.desc.id') ?></p>
-		<input name="id-keyword" id="id-keyword" type="text" />
+		<input name="id-keyword" id="id-keyword" type="text" data-wcl-enter-target=".txmp-id-go" />
 		<button type="button" class="am-btn am-btn-primary txmp-id-go" onclick="kuwo_search(1, '', '#list-id-show', '#id-keyword', 'IDSearch')"><?php LNGe('ui.search') ?></button>
 		<p id="list-id-show">
 			<!-- -->

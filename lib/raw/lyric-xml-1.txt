@@ -533,7 +533,7 @@
                 <w:link w:val="a15" />
                 <w:rPr>
                     <w:rFonts w:ascii=@fontname w:h-ansi=@fontname w:fareast=@fontname w:hint="default" />
-                    <w:sz w:val="24" /></w:rPr>
+                    <w:sz w:val="22" /></w:rPr>
             </w:style>
             <w:style w:type="paragraph" w:styleId="a18">
                 <w:name w:val="注解" />
@@ -545,7 +545,7 @@
                     <w:rFonts w:ascii=@fontname w:h-ansi=@fontname w:fareast=@fontname w:hint="default" />
                     <w:i/>
                     <w:color w:val="2E75B5" />
-                    <w:sz w:val="24" /></w:rPr>
+                    <w:sz w:val="22" /></w:rPr>
             </w:style>
             <w:style w:type="character" w:styleId="a19">
                 <w:name w:val="注解 Char" />
@@ -555,7 +555,7 @@
                     <w:rFonts w:ascii=@fontname w:h-ansi=@fontname w:fareast=@fontname w:hint="default" />
                     <w:i/>
                     <w:color w:val="2E75B5" />
-                    <w:sz w:val="24" /></w:rPr>
+                    <w:sz w:val="22" /></w:rPr>
             </w:style>
             <w:style w:type="paragraph" w:styleId="a20">
                 <w:name w:val="CIP文字" />
