@@ -19,7 +19,7 @@
 		var ele=$(s)[0];
 		var old=ele.scrollTop;
 		// 检验极值
-		ele.scrollTop = 1610612736;
+		ele.scrollTop = 1610612739;
 		var mx = ele.scrollTop;
 		ele.scrollTop = old;
 		if(v < 0) v = 0;
@@ -64,7 +64,7 @@
 		var ele=$(s)[0];
 		var old=ele.scrollLeft;
 		// 检验极值
-		ele.scrollLeft = 1610612736;
+		ele.scrollLeft = 1610612739;
 		var mx = ele.scrollLeft;
 		ele.scrollLeft = old;
 		if(v < 0) v = 0;

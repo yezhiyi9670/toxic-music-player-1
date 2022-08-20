@@ -1,5 +1,7 @@
 <?php if(!defined('IN_SYSTEM')) exit;//Silence is golden ?><?php
 
+define('TS_IS_COMMENT', 1610612736);
+
 // 寻找 NBTTagCompound[] 中 $v[$key] == $value 的一个值，并返回其值。
 function findKVInArray($s,$key,$value)
 {
@@ -37,16 +39,16 @@ function strToFloat($num) {
 }
 
 // 给出描述时间的文本，返回时间的实际值（单位为 0.1秒）。返回的格式是字符串。
-// 如果是未填写的值或者空白值，返回 1610612736 以表示该行为注释行。
+// 如果是未填写的值或者空白值，返回 TS_IS_COMMENT 以表示该行为注释行。
 function strToCurrtime($str,$delta = 0)
 {
-	if($str=='-' || $str=='__FTIME__' || $str=='__LT__' || $str=='NULL') return 1610612736 - $delta;
+	if($str=='-' || $str=='__FTIME__' || $str=='__LT__' || $str=='NULL') return TS_IS_COMMENT - $delta;
 	$t2=explode("-",$str);
 	if(count($t2)==1){
 		$t2[1]=$t2[0];
 		$t2[0]="0";
 	}
-	if(count($t2)!=2) return 1610612736 - $delta;
+	if(count($t2)!=2) return TS_IS_COMMENT - $delta;
 	$egg=strToFloat($t2[0])*60.0+strToFloat($t2[1]);
 	$egg=floatval(intval($egg*10));
 	return strval($egg);
@@ -178,7 +180,7 @@ function errorJson() {
 			"title"=>false,
 			"in"=>array(array(
 				"id"=>0,
-				"ts"=>1610612736,
+				"ts"=>TS_IS_COMMENT,
 				"c"=>LNG('ui.error'),
 			)),
 		)),
@@ -639,10 +641,10 @@ function parseCmpLyric($u,$parseTags = true, $debug = false,$ADD_ERROR='cmpi_ADD
 					$meta['lyrics'][$pid]['in'][$f]['id']=$rid;
 					$meta['lyrics'][$pid]['in'][$f]['ts']+=$timealt;
 					$meta['timestamps'][$meta['lyrics'][$pid]['in'][$f]['ts']]=array($pid,$rid);
-					if($lastTime == $meta['lyrics'][$pid]['in'][$f]['ts'] && $lastTime < 1610612736) {
+					if($lastTime == $meta['lyrics'][$pid]['in'][$f]['ts'] && $lastTime < TS_IS_COMMENT) {
 						$msg .= '<strong>' . LNG('comp.error.warn') . COLON . '</strong>' . LNG('comp.errorw.sametime',$v['__line']) . "\n";
 					}
-					if($meta['lyrics'][$pid]['in'][$f]['ts'] < 1610612736) {
+					if($meta['lyrics'][$pid]['in'][$f]['ts'] < TS_IS_COMMENT) {
 						$lastTime = $meta['lyrics'][$pid]['in'][$f]['ts'];
 						$maxTime = max($maxTime, $meta['lyrics'][$pid]['in'][$f]['ts']);
 					}
@@ -729,16 +731,16 @@ function parseCmpLyric($u,$parseTags = true, $debug = false,$ADD_ERROR='cmpi_ADD
 						}
 						$meta['timestamps'][$meta['lyrics'][$pid]['in'][$k]['ts']]=array($pid,$rid);
 						$meta['lyrics'][$pid]['in'][$k]['c']="";
-						if($lastTime == $meta['lyrics'][$pid]['in'][$k]['ts'] && $lastTime < 1610612736) {
+						if($lastTime == $meta['lyrics'][$pid]['in'][$k]['ts'] && $lastTime < TS_IS_COMMENT) {
 							cmpi_invoke($ADD_ERROR, $supressed, $msg,'warn','sametime',$h['__line']);
 						}
-						if($meta['lyrics'][$pid]['in'][$k]['ts'] < 1610612736) {
+						if($meta['lyrics'][$pid]['in'][$k]['ts'] < TS_IS_COMMENT) {
 							$lastTime = $meta['lyrics'][$pid]['in'][$k]['ts'];
 							$maxTime = max($maxTime, $meta['lyrics'][$pid]['in'][$k]['ts']);
 						}
 						$str = concat_arguments($h['arg'],1);
 						// 禁止角色标示
-						if($meta['lyrics'][$pid]['in'][$k]['ts'] < 1610612736) {
+						if($meta['lyrics'][$pid]['in'][$k]['ts'] < TS_IS_COMMENT) {
 							$is_role = false;
 							$role = '';
 							if(mb_substr($str,mb_strlen($str)-1) == '：') {
@@ -809,16 +811,16 @@ function parseCmpLyric($u,$parseTags = true, $debug = false,$ADD_ERROR='cmpi_ADD
 						$meta['lyrics'][$pid]['in'][$k]['ts']=strToCurrtime($h['arg'][0],$time_delta) + $time_delta;
 						$meta['timestamps'][strToCurrtime($h['arg'][0],$time_delta)+$time_delta]=array($pid,$rid);
 						$meta['lyrics'][$pid]['in'][$k]['c']="";
-						if($lastTime == $meta['lyrics'][$pid]['in'][$k]['ts'] && $lastTime < 1610612736) {
+						if($lastTime == $meta['lyrics'][$pid]['in'][$k]['ts'] && $lastTime < TS_IS_COMMENT) {
 							cmpi_invoke($ADD_ERROR, $supressed, $msg,'warn','sametime',$h['__line']);
 						}
-						if($meta['lyrics'][$pid]['in'][$k]['ts'] < 1610612736) {
+						if($meta['lyrics'][$pid]['in'][$k]['ts'] < TS_IS_COMMENT) {
 							$lastTime = $meta['lyrics'][$pid]['in'][$k]['ts'];
 							$maxTime = max($maxTime, $meta['lyrics'][$pid]['in'][$k]['ts']);
 						}
 						$str = concat_arguments($h['arg'],1);
 						// 禁止角色标示
-						if($meta['lyrics'][$pid]['in'][$k]['ts'] < 1610612736) {
+						if($meta['lyrics'][$pid]['in'][$k]['ts'] < TS_IS_COMMENT) {
 							$is_role = false;
 							$role = '';
 							if(mb_substr($str,mb_strlen($str)-1) == '：') {
@@ -1155,17 +1157,47 @@ function replaceLrcMark($str) {
 	],$str);
 }
 
-function lrcTimestamp($val) {
+function lrcTimestamp($val, $tweak) {
 	$val = max(0, $val + intval(round($GLOBALS['lrcopt']['delta'] * 10)));
 	$i = strval(floor($val / 600));
 	$s = strval(floor($val % 600 / 10));
 	while(strlen($i) < 2) $i = '0' . $i;
 	while(strlen($s) < 2) $s = '0' . $s;
 	$g = strval($val % 10);
-	return $i . ':' . $s . '.' . $g . '00';
+
+	if($tweak < 0) {
+		$tweak = 0;
+	} else if($tweak > 99) {
+		$tweak = 99;
+	}
+	$tweak = sprintf("%02d", intval($tweak));
+	
+	return $i . ':' . $s . '.' . $g . $tweak;
 }
 
 function fmtDataForLrc($data) {
+	// 找出最后一段的属性
+	$lastParaId = '';
+	$hasFinal = false;
+	foreach($data['lyrics'] as $i=>&$para) {
+		if($para['type'] == 'final') {
+			$hasFinal = true;
+		} else {
+			$lastParaId = $para['id'];
+		}
+	}
+	// 在每段最后添加一个空行，以注释形式。
+	foreach($data['lyrics'] as $i=>&$para) {
+		if(!$hasFinal && $lastParaId == $para['id']) continue;
+		if($para['type'] != 'final' && !$para['premark']) {
+			$para['in'][] = [
+				'id' => -3,
+				'ts' => TS_IS_COMMENT,
+				'c' => ''
+			];
+		}
+	}
+	// 统计时刻，并处理间奏
 	$timelist = [];
 	foreach($data['lyrics'] as $i=>&$para) {
 		if($para['type'] == 'lyrics') {
@@ -1177,9 +1209,10 @@ function fmtDataForLrc($data) {
 			// 正常段落
 			foreach($para['in'] as $j=>&$item) {
 				// 填充间奏
-				if($para['ac'] == '--') {
+				if(isIntervalContent($item['c']) > 4) {
 					$item['c'] = '(Break)';
 				}
+				// 统计时刻
 				$timelist[] = [intval($item['ts']),$i,$j];
 				if($item['ts'] <= 5) {
 					$item['ts'] = 5;
@@ -1189,6 +1222,8 @@ function fmtDataForLrc($data) {
 				}
 			}
 		} else if($para['type'] == 'final') {
+			$timelist[] = [intval($para['ts']),$i,0];
+			// 添加空白结尾标记
 			$para = [
 				'id' => -2,
 				'type' => 'lyrics',
@@ -1200,24 +1235,26 @@ function fmtDataForLrc($data) {
 					[
 						'id' => -2,
 						'ts' => $para['ts'],
-						'c' => '(End)'
+						'c' => '- End -'
 					]
 				]
 			];
 		}
 	}
+
+	// 设置间奏
 	$cmt_size = intval(round($GLOBALS['lrcopt']['comment'] * 10));
 	$j = 0;
 	$prevtime = 0;
 	for($i=0;$i<count($timelist);) {
-		if($timelist[$i][0] < 1610612736) {
+		if($timelist[$i][0] < TS_IS_COMMENT) {
 			$prevtime = $timelist[$i][0];
 			$i++;
 			continue;
 		}
 		$nexttime = -1;
 		$j = $i;
-		while($j < count($timelist) && $timelist[$j][0] >= 1610612736) {
+		while($j < count($timelist) && $timelist[$j][0] >= TS_IS_COMMENT) {
 			$j++;
 		}
 		if($j < count($timelist)) {
@@ -1239,6 +1276,24 @@ function fmtDataForLrc($data) {
 		}
 		$i = $j;
 	}
+
+	// 调整歌词行切入时间防止重叠
+	$tweak = 0;
+	$prevTs = -1;
+	foreach($data['lyrics'] as $i=>&$para) {
+		// 对任意段落生效
+		foreach($para['in'] as $j=>&$item) {
+			if($item['ts'] == $prevTs) {
+				$tweak += 1;
+			} else {
+				$tweak = 0;
+			}
+			$prevTs = $item['ts'];
+
+			$item['tweak'] = $tweak;
+		}
+	}
+
 	return $data;
 }
 
@@ -1263,7 +1318,7 @@ function buildMinifiedLrc($data) {
 					if(!isset($contmap[$cont])) {
 						$contmap[$cont] = [];
 					}
-					$contmap[$cont][] = intval($item['ts']);
+					$contmap[$cont][] = [intval($item['ts']), intval($item['tweak'])];
 				}
 			}
 		}
@@ -1271,7 +1326,7 @@ function buildMinifiedLrc($data) {
 
 	foreach($contmap as $cont => $tsl) {
 		foreach($tsl as $ts) {
-			$ret .= '[' . lrcTimestamp($ts) . ']';
+			$ret .= '[' . lrcTimestamp($ts[0], $ts[1]) . ']';
 		}
 		$ret .= $cont . "\n";
 	}
@@ -1295,18 +1350,21 @@ function buildExtendedLrc($data) {
 
 	foreach($data['lyrics'] as $para) {
 		if($para['id'] == -1) continue;
-		if($para['type'] == 'lyrics' && $para['ac'] != '__E') {
-			$ret .= '[txmp_para:' . strip_tags($para['ac']) . ' ' . $para['n'] . ']' . "\n";
+		if($para['type'] == 'lyrics' && $para['ac'] == '__E') {
+			$ret .= '[txmp_final:' . lrcTimestamp($para['ts'], 0) . ']' . "\n";
+		}
+		if($para['type'] == 'lyrics') {
+			if($para['ac'] != '__E') {
+				$ret .= '[txmp_para:' . strip_tags($para['ac']) . ' ' . $para['n'] . ']' . "\n";
+			}
 			foreach($para['in'] as $item) {
 				if($item['ts'] > 0) {
 					$cont = trim(replaceLrcMark($item['c']));
-					$ret .= '[' . lrcTimestamp($item['ts']) . ']' . $cont . "\n";
+					$ret .= '[' . lrcTimestamp($item['ts'], $item['tweak']) . ']' . $cont . "\n";
 				}
 			}
 		} else if($para['type'] == 'split') {
 			$ret .= '[txmp_split:0]' . "\n";
-		} else if($para['type'] == 'lyrics') {
-			$ret .= '[txmp_final:' . lrcTimestamp($para['ts']) . ']' . "\n";
 		}
 	}
 
