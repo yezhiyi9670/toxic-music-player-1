@@ -1210,7 +1210,7 @@ function fmtDataForLrc($data) {
 			foreach($para['in'] as $j=>&$item) {
 				// 填充间奏
 				if(isIntervalContent($item['c']) > 4) {
-					$item['c'] = '(Break)';
+					$item['c'] = '- Break -';
 				}
 				// 统计时刻
 				$timelist[] = [intval($item['ts']),$i,$j];
