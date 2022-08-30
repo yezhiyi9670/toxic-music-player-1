@@ -107,58 +107,57 @@ strong, b{
 }
 
 .txmp-tag.tag-default {
-	border-color: #9E9E9E;
-	background-color: #E0E0E0;
+	border-color: #D5D5D5;
+	background-color: #D5D5D5;
 	color: #000;
 }
 
 .txmp-tag.tag-canonical {
-	border-color: #03A9F4;
-	background-color: #81D4FA;
+	border-color: #a3d3eb;
+	background-color: #a3d3eb;
 	color: #000;
 }
 
 .txmp-tag.tag-length {
-	border-color: #FB8C00;
+	border-color: #FBC02D;
 	background-color: #FBC02D;
 	color: #000;
 }
 
 .txmp-tag.tag-quality {
-	border-color: #ff4ec4;
+	border-color: #ffb7e1;
 	background-color: #ffb7e1;
 	color: #000;
 }
 
 .txmp-tag.tag-quality-lq {
-	border-color: #ff5c5c;
+	border-color: #ffa9a9;
 	background-color: #ffa9a9;
 	box-shadow: 0 0 4px 0 #ff5c5c;
 	color: #000;
 }
 
 .txmp-tag.tag-quality-mq {
-	border-color: #ff8fda;
-	background-color: #ffc4e6;
+	border-color: #ffafde;
+	background-color: #ffafde;
 	color: #000;
 }
 
 .txmp-tag.tag-quality-hq {
-	border-color: #06ff27;
-	background-color: #a0ff8e;
+	border-color: #91f47d;
+	background-color: #91f47d;
 	color: #000;
 }
 
 .txmp-tag.tag-quality-sq {
-	border-color: #6b79ff;
-	background-color: #d3d6ff;
+	border-color: #c3c7ff;
+	background-color: #c3c7ff;
 	color: #000;
 }
 
 .txmp-tag.tag-quality-ll {
-	border-color: #6b79ff;
-	background-color: #d3d6ff;
-	box-shadow: 0 0 4px 0 #6b79ff;
+	border-color: #c3c7ff;
+	background-color: #c3c7ff;
 	color: #000;
 }
 

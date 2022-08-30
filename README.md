@@ -3,18 +3,17 @@ TOXIC Music Player 1 (txmp)
 
 ![][latest_version] ![][build_date]  
 [![][license]][license_link] ![][dev_php_version]![][should_work_php_version]  
-![][rp_kuwo] ![][rp_kuwo_date] ![][rp_kuwo_hack_level]
+![][rp_kuwo] ![][rp_kuwo_date]
 
 [latest_version]: https://img.shields.io/badge/Version-v128a%20pre16-orange.svg?style=flat-square
 [build_date]: https://img.shields.io/badge/Build%20Date-20220719-blue.svg?style=flat-square
 [dev_php_version]: https://img.shields.io/badge/PHP-7.4.9-green.svg?style=flat-square
 [should_work_php_version]: https://img.shields.io/badge/7.1+-lightgreen.svg?style=flat-square
-[license]: https://img.shields.io/badge/License-MIT%20License-green.svg?style=flat-square
+[license]: https://img.shields.io/badge/License-GNU%20GPL%20v3-blue.svg?style=flat-square
 [license_link]: https://mit-license.org/
 
 [rp_kuwo]: https://img.shields.io/badge/RemotePlay-Kuwo%20Music-orange.svg?style=flat-square
 [rp_kuwo_date]: https://img.shields.io/badge/API%20On-20211030-orange.svg?style=flat-square
-[rp_kuwo_hack_level]: https://img.shields.io/badge/Hack%20Level-pay_play-yellow.svg?style=flat-square
 
 Changelog (in Chinese): [changelog.txt](./changelog/changelog.txt)
 
@@ -24,9 +23,9 @@ Changelog (in Chinese): [changelog.txt](./changelog/changelog.txt)
 
 ## What's this project about?
 
-TOXIC Music Player is a Apache-PHP based application used for establishing your unique **personal music archive site**, which can be used anywhere, by your phone or PC.
+TOXIC Music Player is a Apache-PHP based application used for establishing your very own **personal music archive site**, which can be used anywhere, by your phone or PC.
 
-Songs could be upload by an Administrator (YOU), and can also be crawled from Kuwo Music. This feature is called RemotePlay.
+Songs could be upload by an Administrator (YOU), and can also be crawled from Kuwo Music (This feature is called RemotePlay).
 
 For other users visiting your music archive site, they could access your uploaded songs if your configuration allows, and can access and download any songs from RemotePlay. They could use it as a download site of Kuwo Music.
 
