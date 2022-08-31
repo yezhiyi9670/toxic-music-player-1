@@ -8,7 +8,7 @@ This is now under construction.
 
 [URL routing cheatsheet](./cheatsheet/router.md)
 
-~~[DeltaDesc V201805 quick reference](./cheatsheet/deltadesc201805.md)~~
+[DeltaDesc V201805 quick reference](./cheatsheet/deltadesc201805.md)
 
 [Song filter quick reference](./cheatsheet/song-filter.md)
 
@@ -26,7 +26,7 @@ This is now under construction.
 
 ## Usage
 
-~~[Registering and logging in](./usage/login.md)~~
+[Registering and logging in](./usage/login.md)
 
 ~~[Changing password](./usage/passwd.md)~~
 

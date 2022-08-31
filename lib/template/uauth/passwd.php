@@ -81,7 +81,7 @@ else {echo '<script>location.href=location.href;</script>';exit;}
 		<input style="margin-bottom:8px;" type="password" name="pass" autocomplete="off" placeholder="<?php LNGe('pass.field.old') ?>"><br>
 		<input style="margin-bottom:8px;" type="password" name="newpass" autocomplete="off" placeholder="<?php LNGe('pass.field.new') ?>"><br>
 		<input style="margin-bottom:8px;" type="password" name="newpassagain" autocomplete="off" placeholder="<?php LNGe('pass.field.new2') ?>"><br>
-		<input type="submit" class="am-btn am-btn-secondary <?php if(uauth_ip_cnt($_SERVER['REMOTE_ADDR']) >= _CT('ip_reg_limit')) echo 'am-disabled' ?>" value="<?php LNGe('pass.field.change') ?>">
+		<input type="submit" class="am-btn am-btn-secondary" value="<?php LNGe('pass.field.change') ?>">
 	</form></p>
 	<hr>
 	<p><strong><?php LNGe('pass.remove.caption') ?></strong></p>
@@ -91,7 +91,7 @@ else {echo '<script>location.href=location.href;</script>';exit;}
 		<input type="hidden" name="isSubmit" value="remove">
 		<input style="margin-bottom:8px;" type="text" name="rm_uname" autocomplete="off" placeholder="<?php LNGe('pass.field.username') ?>"><br>
 		<input style="margin-bottom:8px;" type="password" name="pass" autocomplete="off" placeholder="<?php LNGe('pass.field.pass') ?>"><br>
-		<input type="submit" class="am-btn am-btn-danger <?php if(uauth_ip_cnt($_SERVER['REMOTE_ADDR']) >= _CT('ip_reg_limit')) echo 'am-disabled' ?>" value="<?php LNGe('pass.field.delete') ?>">
+		<input type="submit" class="am-btn am-btn-danger" value="<?php LNGe('pass.field.delete') ?>">
 	</form></p>
 	<hr>
 	<p><strong><?php LNGe('pass.dump.caption') ?></strong></p>

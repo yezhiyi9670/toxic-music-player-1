@@ -6,7 +6,7 @@
 
 Songs are stored under `data/music/` and can be managed manually.
 
-For UI management, go to the Song Management page. To do this, click the key icon on the header bar and select it.
+For UI management, go to the Song Management page. To do this, click the key icon on the header bar and select 'Manage Songs'.
 
 At the bottom of page, you can see this form.
 

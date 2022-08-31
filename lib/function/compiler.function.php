@@ -642,7 +642,7 @@ function parseCmpLyric($u,$parseTags = true, $debug = false,$ADD_ERROR='cmpi_ADD
 					$meta['lyrics'][$pid]['in'][$f]['ts']+=$timealt;
 					$meta['timestamps'][$meta['lyrics'][$pid]['in'][$f]['ts']]=array($pid,$rid);
 					if($lastTime == $meta['lyrics'][$pid]['in'][$f]['ts'] && $lastTime < TS_IS_COMMENT) {
-						$msg .= '<strong>' . LNG('comp.error.warn') . COLON . '</strong>' . LNG('comp.errorw.sametime',$v['__line']) . "\n";
+						cmpi_invoke($ADD_ERROR, $supressed, $msg,'warn','sametime',$v['__line']);
 					}
 					if($meta['lyrics'][$pid]['in'][$f]['ts'] < TS_IS_COMMENT) {
 						$lastTime = $meta['lyrics'][$pid]['in'][$f]['ts'];

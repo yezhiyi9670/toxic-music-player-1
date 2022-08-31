@@ -200,6 +200,8 @@ Commands:
 - If G1 and G2 are not defined, will use single theme color.
 - P is by default `<song_id>/avatar`.
 
+Due to a bug, if a song is renamed, it may not be able to show its default cover image. Re-saving the lyrics file could fix it.
+
 ## Lyrics
 
 Lyrics section header has 4 heads.
@@ -230,7 +232,7 @@ Lyrics are paired with timestamps in the song, so time should be included in a D
 - `078.0` 78s.
 - `01-18.0` 78s.
 
-Lyric lines with null timestamps will be interpreted as 'commented', and will be rendered gray and italic.
+Lyric lines with null timestamps will be interpreted as 'commented', and will be rendered gray and italic (blue and italic in the generated Word document).
 
 ### Describing metadata
 
@@ -267,6 +269,8 @@ L 37.7 孤独地转个不停
 
 You can use `@` to assign it with an id. ID should only contain alpha, numbers and `_`.
 
+Lyric lines can have punctuations (ASCII ones recommended, if possible), or no punctuations at all.
+
 ### Reusing paragraph
 
 Use `[Reuse]` to reuse everything from a defined paragraph, except for assigning a new starting time.
@@ -286,6 +290,8 @@ L - 谱成生命的乐章
 ```
 
 Lyric lines here should have null timestamps.
+
+The reused paragraph must appear earlier than the reference.
 
 ### Splitting and finalizing
 
@@ -332,4 +338,4 @@ Specially, `// @<annotation_name> <content>` means annotation. For available ann
 
 - [DeltaDesc V201805 quick reference](../cheatsheet/deltadesc201805.md)
 
-Using custom language keys, you can add annotations by yourself.
+Using custom language keys, you can add annotations by yourself. You can reference to the default language files to find out how.

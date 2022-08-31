@@ -434,7 +434,7 @@ function uauth_veri_pass($name,$code) {
 
 	if(!isset($ulist[$name])) return null;
 
-	return $ulist[$name]['pass'] == md5($code);
+	return uauth_hash_verify($code, $ulist[$name]['pass']);
 }
 
 /**

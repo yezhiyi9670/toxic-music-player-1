@@ -16,11 +16,11 @@ All available URLs in the system. If you want to write a crawler, you may need t
 
 ## Global parameters
 
-| Param    | Values                   | Comment                |
-| -------- | ------------------------ | ---------------------- |
-| wap      | `force-phone` `force-pc` | Simulate a device type |
-| iframe   | -                        | iFramed page           |
-| isSubmit | ...                      | POST submit data       |
+| Param    | Values                   | Comment                                   |
+| -------- | ------------------------ | ----------------------------------------- |
+| wap      | `force-phone` `force-pc` | Simulate a device type                    |
+| iframe   | -                        | iFramed page. Not all pages support this. |
+| isSubmit | ...                      | POST submit data                          |
 
 ## Top level
 
