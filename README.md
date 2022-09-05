@@ -5,8 +5,8 @@ TOXIC Music Player 1 (txmp)
 [![][license]][license_link] ![][dev_php_version]![][should_work_php_version]  
 ![][rp_kuwo] ![][rp_kuwo_date]
 
-[latest_version]: https://img.shields.io/badge/Version-v128a%20pre16-orange.svg?style=flat-square
-[build_date]: https://img.shields.io/badge/Build%20Date-20220719-blue.svg?style=flat-square
+[latest_version]: https://img.shields.io/badge/Version-v128a%20pre22-orange.svg?style=flat-square
+[build_date]: https://img.shields.io/badge/Build%20Date-20220905-blue.svg?style=flat-square
 [dev_php_version]: https://img.shields.io/badge/PHP-7.4.9-green.svg?style=flat-square
 [should_work_php_version]: https://img.shields.io/badge/7.1+-lightgreen.svg?style=flat-square
 [license]: https://img.shields.io/badge/License-GNU%20GPL%20v3-blue.svg?style=flat-square
@@ -50,7 +50,11 @@ Webkit based browser, or Firefox, the last two versions.
 
 ### Client (Android)
 
-Microsoft Edge (recommended), the last two versions; or Google Chrome ≥ 82.
+Browser with chromium kernel **≥ 82**; Firefox (not recommended), the last two versions.
+
+Note that the integrated browser in some Android flavors do use **ancient kernels**, and cannot run this app properly.
+
+Due to the unability to store persistent data, please do not use Webview in your chat apps, such as Tencent QQ.
 
 ### Client (iOS)
 

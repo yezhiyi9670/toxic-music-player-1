@@ -34,14 +34,15 @@
 				init_t = last_t = timer;
 				return;
 			}
-			curr_t = timer - init_t;
-			prev_t = last_t - init_t;
+			var curr_t = timer - init_t;
+			var prev_t = last_t - init_t;
 			last_t = timer;
 			if(curr_t > d) {
 				curr_t = d;
 			}
-			var D = E * (ease_function(curr_t / d) - ease_function(prev_t / d));
-			ele.scrollTop += D;
+			// var D = E * (ease_function(curr_t / d) - ease_function(prev_t / d));
+			// ele.scrollTop += D;
+			ele.scrollTop = old + ease_function(curr_t / d) * (v - old);
 			if(curr_t >= d) {
 				removeFrameFunc(scroller_interval_T);
 				$(s).removeAttr('data-scroll-t');
@@ -79,14 +80,15 @@
 				init_t = last_t = timer;
 				return;
 			}
-			curr_t = timer - init_t;
-			prev_t = last_t - init_t;
+			var curr_t = timer - init_t;
+			var prev_t = last_t - init_t;
 			last_t = timer;
 			if(curr_t > d) {
 				curr_t = d;
 			}
-			var D = E * (ease_function(curr_t / d) - ease_function(prev_t / d));
-			ele.scrollLeft += D;
+			// var D = E * (ease_function(curr_t / d) - ease_function(prev_t / d));
+			// ele.scrollLeft += D;
+			ele.scrollLeft = old + ease_function(curr_t / d) * (v - old);
 			if(curr_t >= d) {
 				removeFrameFunc(scroller_interval_L);
 				$(s).removeAttr('data-scroll-l');

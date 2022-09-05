@@ -1,6 +1,12 @@
 "mod PlayerFlex";
 
 function autofit(){
+	let isFirefox = $('body').height() == 0;
+	let headerDefault = 0;
+	if(!isFirefox) {
+		headerDefault = 48.67;
+	}
+
 	// 进度条宽度
 	$('.player-processbar').css("width",
 		($('.right-second-row').width()-$('#play-button').width()-$('#repeat-button').width()-(G.is_wap ? 18 : 24))
@@ -9,9 +15,9 @@ function autofit(){
 	// 歌词区域
 	$('.lrc-content').css("height",
 		(((
-			navigator.userAgent.toLowerCase().indexOf('firefox')>=0?
+			isFirefox ?
 				$('html').height()-52:$('body').height()
-		)-($('header').height() ?? 48.67))-$('.lrc-overview').height()-16-18-18+(G.is_wap?20:-4))
+		)-($('header').height() ?? headerDefault))-$('.lrc-overview').height()-16-18-18+(G.is_wap?20:-4))
 	.toString()+"px");
 
 	// 控制按钮
@@ -35,8 +41,9 @@ function autofit(){
 	if(G.is_wap) {
 		let totalwidth = $('.txmp-coverpage-pic-container').width();
 		let totalheight =
-			(navigator.userAgent.toLowerCase().indexOf('firefox')>=0 ? $('html').height()-52 : $('body').height())
-			- ($('header').height() ?? 48.67);
+			(isFirefox ? $('html').height() - 52 : $('body').height())
+			- ($('header').height() ?? headerDefault);
+		console.log(isFirefox ? $('html').height() - 52 : $('body').height());
 		let ch_height = 160 + 64;
 		let pad = 0;
 		let remain = totalheight - ch_height - totalwidth;
