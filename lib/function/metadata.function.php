@@ -268,10 +268,15 @@ function GSM($x) {
 	return __getCmpLyric2($x)['meta'];
 }
 function GCM() {
-	$t = GSM(cid());
-	if(cid()[0] == '$') {
-		$t['X'] = $t['A'] = substr(cid(),1);
+	if(!$GLOBALS['isMusicCurrent']) {
+		return [
+			'A' => MAIN_COLOR,
+			'X' => darkenColorHex(MAIN_COLOR),
+			'G1' => GC_COLOR_1,
+			'G2' => GC_COLOR_2,
+		];
 	}
+	$t = GSM(cid());
 	return $t;
 }
 

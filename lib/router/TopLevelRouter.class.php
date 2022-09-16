@@ -25,6 +25,9 @@ class TopLevelRouter {
 	*/
 
 	public function route(){
+		$GLOBALS['linktype'] = 'normal';
+		$GLOBALS['isMusicCurrent'] = false;
+
 		checkCSRF();
 
 		$type = preSubstr($this->url);

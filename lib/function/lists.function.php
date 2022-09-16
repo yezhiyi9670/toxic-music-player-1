@@ -14,7 +14,7 @@ function printFuncLink($id) {
 
 // 主页上的列表
 function printIndexList($item,$url=true) {
-	echo '<li style="color:#'.htmlspecial2(GSM($item)['A']).';" class="song-item">';
+	echo '<li style="color:#'.htmlspecial2(GSM($item)['A']).';" class="song-item" id="item-' . strval($item) . '">';
 	if(!$url) echo '<span class="am-dropdown song-item-title" data-am-dropdown>';
 	echo '<a';
 	if($url) {

@@ -733,6 +733,7 @@ comp.error.warn = 警告
 comp.error.error = 错误
 comp.error.fatal = 致命错误
 comp.errorw.role = 第${0}行 - 非注释歌词行被用于标示唱词的角色。请使用注释行或颜色标记。
+comp.errorw.rolecolor = 第${0}行 - 未知的角色标记配色方案 ${1}。
 comp.errorw.fullspace = 第${0}行 - 文档中出现全角空格。请使用两个半角空格代替。
 comp.errorw.fullspace_h = 第${0}行 - 歌词段标题中出现全角空格或多个连续空格。
 comp.errorw.wronginterval = 第${0}行 - 标记空行的方式有误。

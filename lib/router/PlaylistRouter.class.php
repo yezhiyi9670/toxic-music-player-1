@@ -72,6 +72,9 @@ class PlaylistRouter {
 	}
 
 	private function routePlay() {
+		$GLOBALS['linktype'] = 'playlist';
+		$GLOBALS['isMusicCurrent'] = true;
+
 		$arr = ['','',''];
 		$t = $this -> url;
 		$arr[1] = preSubstr($t);

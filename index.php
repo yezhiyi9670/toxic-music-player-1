@@ -2,7 +2,7 @@
 error_reporting(~E_ALL);
 
 define("IN_SYSTEM",'WMSDFCL/txmp');
-define("VERSION","128a-pre22");
+define("VERSION","128a-pre24");
 define("CSV_VERSION","1");
 define("DATAVER","201805");
 define("BASIC_PATH",str_replace("\\","/",__DIR__)."/");
@@ -54,7 +54,7 @@ require(VLUSER."index.vluser.php");
  */
 function _CT($i){
 	if(isset(_C()[$i])) return _C()[$i];
-	else return array(
+	$arr = array(
 		"app_name" => LNG('config.app_name'), // 软件名称自定义
 		"app_name_title" => LNG('config.app_title'),
 		"app_desc" => LNG('config.app_desc'), // 应用程序描述
@@ -81,7 +81,11 @@ function _CT($i){
 
 		"show_comp_process" => false, // 在调试代码页显示完整编译过程
 		"debug" => false, // 是否调试模式 [NYI]
-	)[$i];
+	);
+	if(!isset($arr[$i])) {
+		throw new Exception('Undefined config key ' . strval($i));
+	}
+	return $arr[$i];
 }
 
 if(_CT('debug')) {

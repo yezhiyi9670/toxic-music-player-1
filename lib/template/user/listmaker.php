@@ -10,6 +10,7 @@
 	if($listType == 'internal') {
 		$uname = uauth_username();
 		$listdata = readPlaylistData($uname,$intlist_arr[1]);
+		$is_csv = uauth_has_data($uname,'playlist',$intlist_arr[1].'.csv');
 	}
 ?>
 
@@ -33,7 +34,7 @@ var isRandShuffle=<?php echo (isset($_GET['randShuffle']) ? "true":"false") ?>;
 var list=[
 	<?php 
 		$hasInvalid = false;
-		$otherList = explode('|',$_GET['list']);
+		$otherList = explode('|',$_GET['list'] ?? '');
 		$isInvalid = [];
 		if($listType == 'internal') {
 			$otherList = [];
@@ -87,12 +88,12 @@ var listColor=[
 var home='<?php echo BASIC_URL ?>';
 
 var isCloudSave=<?php echo ($listType == 'internal')?'true':'false'; ?>;
-var cloudId='<?php echo strval($intlist_arr[1]); ?>';
+var cloudId='<?php echo strval($intlist_arr[1] ?? ''); ?>';
 
 <?php if($listType == 'internal') { ?>
 var cloudData = <?php echo encode_data($listdata) ?>;
 
-var isCsv = <?php $is_csv = uauth_has_data($uname,'playlist',$intlist_arr[1].'.csv'); echo $is_csv ? 'true' : 'false'; ?>;
+var isCsv = <?php echo $is_csv ? 'true' : 'false'; ?>;
 
 var cloudLenLimit = <?php echo _CT('user_playlist_limit') ?>;
 <?php } ?>
@@ -117,9 +118,9 @@ var cloudLenLimit = <?php echo _CT('user_playlist_limit') ?>;
 			</span>
 		</span>
 		<span class="internalsave-disabled" style="display:<?php echo ($listType == 'internal')?'inline-block':'none' ?>">
-			<a onclick="toggleVisible(this,'.type-form-content')" style="font-weight:bold;margin-bottom:16px;display:block;">▶ <?php LNGe('led.type.online') ?> <span style="font-weight:normal"><?php echo uauth_username() . '/' . $intlist_arr[1] ?></span></a>
+			<a onclick="toggleVisible(this,'.type-form-content')" style="font-weight:bold;margin-bottom:16px;display:block;">▶ <?php LNGe('led.type.online') ?> <span style="font-weight:normal"><?php echo uauth_username() . '/' . ($intlist_arr[1] ?? '') ?></span></a>
 			<span class="type-form-content" style="display:none;margin-bottom:16px">
-				<?php if(!$is_csv) { ?>
+				<?php if($listType == 'internal' && !$is_csv) { ?>
 					<p class="text-danger"></p>
 				<?php } ?>
 				<p><?php LNGe('led.type.online.tip.1') ?></p>

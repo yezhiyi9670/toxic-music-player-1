@@ -1,6 +1,6 @@
 <?php if(!defined('IN_SYSTEM')) exit;//Silence is golden ?><?php
 	$id=cid();
-	if($_POST['isSubmit']=='yes')
+	if(($_POST['isSubmit'] ?? '')=='yes')
 	{
 		if(!file_exists(FILES.$id."/")) {
 			echo LNG('editor.msg.tan90');

@@ -1,6 +1,6 @@
 <?php if(!defined('IN_SYSTEM')) exit;//Silence is golden ?><?php
 
-	if($_POST['isSubmit']=='yes') {
+	if(($_POST['isSubmit'] ?? '')=='yes') {
 		$id=cid();
 		if(!file_exists(FILES.$id."/")) {
 			redirectToNote(LNG('editor.msg.tan90'));

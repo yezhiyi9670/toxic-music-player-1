@@ -1,7 +1,7 @@
 <?php if(!defined('IN_SYSTEM')) exit;//Silence is golden ?><?php
 
 	// 创建
-	if($_POST['isSubmit']=='create-item') {
+	if(($_POST['isSubmit'] ?? '')=='create-item') {
 		if(!isset($_POST['code']) || $_POST['code']=='') {
 			redirectToNote(LNG('admin.msg.noinput'));
 			exit;
@@ -30,7 +30,7 @@
 	}
 
 	// 改编号
-	if($_POST['isSubmit']=='rname-item') {
+	if(($_POST['isSubmit'] ?? '')=='rname-item') {
 		if(!isset($_POST['ocode']) || $_POST['ocode']=='' || !isset($_POST['ncode']) || $_POST['ncode']=='') {
 			redirectToNote(LNG('admin.msg.noinput'));
 			exit;

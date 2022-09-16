@@ -78,7 +78,7 @@ else if(!$uname) {
 
 	$jsonfid = 'user/' . $uname . '/playlist/' . $id;
 	$csvfid = 'user/' . $uname . '/playlist/' . $id . '-csv';
-	if($_POST['delete'] == 'true') {
+	if(($_POST['delete'] ?? '') == 'true') {
 		wait_file($csvfid);
 		if(file_exists(USER_DATA.$uname.'/playlist/'.$id.'.csv')) {
 			unlink(USER_DATA.$uname.'/playlist/'.$id.'.csv');

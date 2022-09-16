@@ -56,6 +56,7 @@
 		load_js('amazeui/amazeui.min','2.7.2');
 		load_js_e(BASIC_URL . 'i18n-script?v=' . VERSION);
 		load_js('js/common/functions');
+		// load_js('js/common/wcl-dynamicstyles');
 		load_js('js/common/garbage_cleaner');
 		load_js('lib/md5');
 		load_js('lib/base64');
@@ -79,7 +80,7 @@
 		G.is_real_wap = <?php echo is_real_wap() ? 'true' : 'false' ?>;
 		G.is_iframe = <?php echo isset($_GET['iframe']) ? 'true' : 'false' ?>;
 		G.app_name = '<?php echo addslashes(_CT('app_name')) ?>';
-		G.app_title = '<?php echo addslashes(_CT('app_title')) ?>';
+		G.app_title = '<?php echo addslashes(_CT('app_name_title')) ?>';
 		G.app_prefix = '<?php echo APP_PREFIX ?>';
 		G.dataver = '<?php echo DATAVER ?>';
 		G.can_pay_play = <?php echo _CT('rp_allow_pay_crack') ? 'true' : 'false' ?>;

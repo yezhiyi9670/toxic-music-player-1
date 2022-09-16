@@ -52,9 +52,9 @@ $dbg = parseCmpLyric(preSubstr($_GET["_lnk"],"/"),true,true,'cmpi_ADD_ERROR_P');
 
 <?php
 	$GLOBALS['lrcopt'] = [
-		'delta' => clampLimit($_GET['delta'],0,0.1), // 偏移量
-		'comment' => clampLimit($_GET['comment'],0.7,0.1,0,65535), // 注释展示时长
-		'precision' => clampLimit($_GET['precision'],0.1,0.1,0.1,60.0), // 基准精度
+		'delta' => clampLimit($_GET['delta'] ?? '',0,0.1), // 偏移量
+		'comment' => clampLimit($_GET['comment'] ?? '',0.7,0.1,0,65535), // 注释展示时长
+		'precision' => clampLimit($_GET['precision'] ?? '',0.1,0.1,0.1,60.0), // 基准精度
 	];
 ?>
 <div class="cdp-page" data-cdp-name="<?php LNGe('code.page.lrc') ?>">

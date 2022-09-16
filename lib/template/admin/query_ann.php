@@ -34,7 +34,7 @@ foreach($menu as $item) {
 					if(strlen($linecont) < 1 || trim($ch) != $ch) {
 						// 锁定成功。取出标记内容。
 						$linecont = trim($linecont);
-						if(!is_array($found_data[$item])) {
+						if(!is_array($found_data[$item] ?? null)) {
 							$found_data[$item] = [];
 							$tot++;
 						}

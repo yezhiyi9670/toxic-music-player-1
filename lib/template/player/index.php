@@ -31,7 +31,7 @@ var isRandShuffle=<?php echo (isset($_GET['randShuffle']) ? "true":"false") ?>;
 var list=[
 	<?php
 		$isInvalid = [];
-		$otherList = explode('|',$_GET['list']);
+		$otherList = explode('|',$_GET['list'] ?? '');
 
 		echo '"'.cid().'"';
 		if(isset($_GET['list'])){
@@ -177,7 +177,7 @@ if(isRandShuffle) {
 	listName=listTmp.second;
 }
 
-var fmRandId='<?php echo $_GET['fmid'] ?>';
+var fmRandId='<?php echo $_GET['fmid'] ?? '' ?>';
 var isFmSave=<?php echo isset($_GET['fmid'])?'true':'false' ?>;
 </script>
 <script src="<?php echo BASIC_URL ?>static/js/player/playerflex.js?v=<?php echo VERSION ?>"></script>
@@ -300,7 +300,7 @@ var isFmSave=<?php echo isset($_GET['fmid'])?'true':'false' ?>;
 				preload="none"
 				hidden="true"
 				src="<?php echo getAudioUrl(cid()) ?>"
-				<?php echo ($_GET['autoplay']=='y') ? 'autoplay="autoplay"':"" ?> >
+				<?php echo (($_GET['autoplay'] ?? '')=='y') ? 'autoplay="autoplay"':"" ?> >
 				<?php LNGe('player.ancient_browser') ?>
 			</audio><audio
 				id="audio_2"

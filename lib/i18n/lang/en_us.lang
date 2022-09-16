@@ -733,6 +733,7 @@ comp.error.warn = Warning
 comp.error.error = Error
 comp.error.fatal = Fatal
 comp.errorw.role = Line ${0} - Non-comment line used to mark role. Use commented lines or color annotations.
+comp.errorw.rolecolor = Line ${0} - Unknown role color scheme ${1}.
 comp.errorw.fullspace = Line ${0} - Full space detected. Use two half spaces instead.
 comp.errorw.fullspace_h = Line ${0} - Continuous spaces or full space found in paragraph header.
 comp.errorw.wronginterval = Line ${0} - The way of marking an empty line is incorrect.

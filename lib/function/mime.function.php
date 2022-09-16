@@ -85,7 +85,7 @@ function formatDuration($x) {
 // 分析音频码率、时长数据
 function analyzeAudio($fn) {
 	$result = (new getID3())->analyze($fn);
-	if($result['error']) {
+	if($result['error'] ?? null) {
 		return null;
 	}
 	return [
@@ -153,11 +153,11 @@ function hex2rgb($cd) {
 function rgb2hex($col) {
 	$hex="0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 	return
-		$hex[floor($col[0] / 16)] .
+		$hex[intval($col[0] / 16)] .
 		$hex[$col[0] % 16] .
-		$hex[floor($col[1] / 16)] .
+		$hex[intval($col[1] / 16)] .
 		$hex[$col[1] % 16] .
-		$hex[floor($col[2] / 16)] .
+		$hex[intval($col[2] / 16)] .
 		$hex[$col[2] % 16];
 }
 
@@ -1119,6 +1119,12 @@ function getMime($ext)
  * 写日志到LOG_PATH下		write_log('dd','default|.自建目录.','log|error|warning|debug|info|db')
  */
 
+global $config;
+$config = [
+	'systemCharset' => 'UTF-8',
+	'appCharset' => 'UTF-8'
+];
+
 // 传入参数为程序编码时，有传出，则用程序编码，
 // 传入参数没有和输出无关时，则传入时处理成系统编码。
 function iconv_app($str){
@@ -2069,7 +2075,8 @@ function file_put_out($file,$download=-1,$downFilename=false){
 		if($downFilename === false){
 			return;
 		}else{
-			show_json($error,false);
+			return;
+			// show_json($error,false);
 		}
 	}
 
@@ -2120,6 +2127,10 @@ function file_put_out($file,$download=-1,$downFilename=false){
 	if (isset($_SERVER['HTTP_IF_NONE_MATCH']) && $_SERVER['HTTP_IF_NONE_MATCH'] == $etag){
 		header("Etag: ".$etag, true, 304);
 		exit;
+	}
+	$filenameOutput = basename($file);
+	if($downFilename) {
+		$filenameOutput = $downFilename;
 	}
 	header('Etag: '.$etag);
 	header('Last-Modified: '.$time.' GMT');
@@ -2588,6 +2599,9 @@ function dir_list_tree($dir,&$dst){
 */
 
 function htmlspecial($str){
+	if($str == null) {
+		return '';
+	}
 	return str_replace(
 		array('&','<','>','"',"'"),
 		array('&amp;','&lt;','&gt;','&quot;','&#039;'),
@@ -2595,6 +2609,9 @@ function htmlspecial($str){
 	);
 }
 function htmlspecial3($str){
+	if($str == null) {
+		return '';
+	}
 	return str_replace(
 		array('&','<','>'),
 		array('&amp;','&lt;','&gt;'),
@@ -2602,6 +2619,9 @@ function htmlspecial3($str){
 	);
 }
 function htmlspecial2($str){
+	if($str == null) {
+		return '';
+	}
 	return str_replace(
 		array('&','<','>'),
 		array('&amp;','&lt;','&gt;'),
@@ -2710,8 +2730,8 @@ function ua_has($str){
 	return false;
 }
 function is_wap(){
-	if($_GET['wap']=='force-phone') return 1;
-	if($_GET['wap']=='force-pc') return 0;
+	if(($_GET['wap'] ?? '')=='force-phone') return 1;
+	if(($_GET['wap'] ?? '')=='force-pc') return 0;
 	if(!isset($_SERVER['HTTP_USER_AGENT'])){
 		return false;
 	}
@@ -3381,7 +3401,7 @@ function in($name,$default='',$filter=null) {
 		case 'session' :   $input =& $_SESSION;   break;
 		case 'cookie'  :   $input =& $_COOKIE;    break;
 		case 'server'  :   $input =& $_SERVER;    break;
-		case 'globals' :   $input =& $GLOBALS;    break;
+		// case 'globals' :   $input =& $GLOBALS;    break;
 		default:return NULL;
 	}
 	$filters = isset($filter)?$filter:$default_filter;

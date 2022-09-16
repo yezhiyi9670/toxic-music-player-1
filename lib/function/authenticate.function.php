@@ -3,7 +3,7 @@
 function is_root($flag = true) {
 	if(isset($_GET['deauth']) && $flag) return false;
 
-	if($GLOBALS['root_li']) {
+	if($GLOBALS['root_li'] ?? '') {
 		if($GLOBALS['root_li'] == '+') return true;
 		return false;
 	}

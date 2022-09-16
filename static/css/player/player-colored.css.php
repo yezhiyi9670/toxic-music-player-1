@@ -9,7 +9,6 @@
 	$color7="#f7f7f7";
 	$colorG1="";
 	$colorG2="";
-	$w=($_GET["w"]=="1");
 	if(isset($_GET['A']) && $_GET['A'][0]=='X' && strlen($_GET['A'])==7) $color='#'.substr($_GET['A'],1);
 	if(isset($_GET['S']) && $_GET['S'][0]=='X' && strlen($_GET['S'])==7) $color4='#'.substr($_GET['S'],1);
 	if(isset($_GET['G1']) && $_GET['G1'][0]=='X' && strlen($_GET['G1'])==7) $colorG1='#'.substr($_GET['G1'],1);

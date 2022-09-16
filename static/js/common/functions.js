@@ -416,15 +416,6 @@ function setResizeFunc(func) {
 $(() => {
 	$('input[data-wcl-enter-target]:not([data-wcl-enter-target-ok]),textarea[data-wcl-enter-target]:not([data-wcl-enter-target-ok])')
 		.attr('data-wcl-enter-target-ok', '')
-		// .on('input', function() {
-		// 	var sel = $(this).attr('data-wcl-enter-target');
-		// 	var $btn = $(sel);
-		// 	if(this.value.trim()) {
-		// 		$btn.removeAttr('disabled');
-		// 	} else {
-		// 		$btn.attr('disabled', '');
-		// 	}
-		// })
 		.on('keyup', function(e) {
 			if(e.keyCode == 13) {
 				if(this.tagName == 'INPUT' || (this.tagName == 'TEXTAREA' && e.ctrlKey)) {

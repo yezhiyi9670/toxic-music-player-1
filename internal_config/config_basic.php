@@ -26,4 +26,5 @@ define("APP_PREFIX",'nesic-player');
  * 建议随机。长度至少 11（建议 64）。
  * 一旦设置，不得更改，否则会错乱
  */
-define("PASS_KEY",'undefined');
+if(!defined('PASS_KEY'))
+	define("PASS_KEY",'undefined');

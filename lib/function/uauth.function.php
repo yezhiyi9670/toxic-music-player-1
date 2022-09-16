@@ -112,7 +112,7 @@ function uauth_hash_summary($hash) {
  * @return  string  username    当前登录的用户名。未登录返回的是一个假值（空字符串）
  */
 function uauth_username() {
-	if($GLOBALS['uauth_username']) {
+	if($GLOBALS['uauth_username'] ?? null) {
 		if($GLOBALS['uauth_username'] == '-') return '';
 		else return $GLOBALS['uauth_username'];
 	}
@@ -317,7 +317,7 @@ function uauth_register($name,$pass,$flag=false,$ip='none') {
 	$iplist[$ip] = $cnt+1;
 	$ulist[$name] = [
 		"name"  => $name,
-		"pass"  => md5($pass),
+		"pass"  => uauth_hash_create($pass),
 		"enabled"=> true,
 		"ip"    => $ip,
 	];

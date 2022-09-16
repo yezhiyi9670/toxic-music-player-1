@@ -1,6 +1,6 @@
 <?php if(!defined('IN_SYSTEM')) exit;//Silence is golden ?><?php
 	$id=cid();
-	if($_POST['isSubmit']=='yes')
+	if(($_POST['isSubmit'] ?? '')=='yes')
 	{
 		if(!file_exists(FILES.$id."/")) {
 			redirectToNote(LNG('editor.msg.tan90'));
@@ -176,7 +176,7 @@ load_js('js/resource/resourceapp');
 		</p>
 
 		<!--来源链接-->
-		<?php $origin_url=GCM()['O'];if(GCM()['O']) { ?>
+		<?php $origin_url=(GCM()['O'] ?? null);if($origin_url) { ?>
 			<hr>
 			<a href="<?php echo $origin_url ?>" target="_blank"><?php LNGe('editor.open_source') ?> <i class="fa fa-external-link"></i></a>
 		<?php } ?>

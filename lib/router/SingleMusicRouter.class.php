@@ -31,6 +31,7 @@ class SingleMusicRouter {
 
 	public function route(){
 		$GLOBALS['linktype'] = 'music';
+		$GLOBALS['isMusicCurrent'] = true;
 
 		$id = preSubstr($this->url);
 		$this->url = stripFirstUrl($this->url);

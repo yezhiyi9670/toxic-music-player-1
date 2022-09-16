@@ -44,7 +44,7 @@ function Field($name,$default,$extra='') {
 	echo '<input class="field-remember '.$extra.'" type="text" id="'.$name.'" name="'.$name.'" value="'.$default.'" data-default="'.$default.'">';
 }
 function Text($name) {
-	echo '<span class="follow-field" data-name="'.$name.'" data-default="'.$default.'">'.$name.'</span>';
+	echo '<span class="follow-field" data-name="'.$name.'">'.$name.'</span>';
 }
 
 $ioi = null;

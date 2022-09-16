@@ -8,7 +8,7 @@
 		$curr_id = -1;
 		foreach($data['lyrics'] as $v)
 		{
-			if(is_array($v['in']) && count($v['in']))
+			if(isset($v['in']) && is_array($v['in']) && count($v['in']))
 			{
 				if($v['type'] == 'lyrics') {
 					echo '<div class="para" id="para-'.$v['id'].'">';
