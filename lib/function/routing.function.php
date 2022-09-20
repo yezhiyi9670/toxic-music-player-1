@@ -2,16 +2,14 @@
 
 // 检查CSRF攻击（不返回，错误即终止）
 function checkCSRF() {
-	if(isset($_POST['isSubmit']))
-	{
-		if(!isset($_COOKIE['X-'.APP_PREFIX.'-csrf'][$_POST['csrf-token-name']]) || $_COOKIE['X-'.APP_PREFIX.'-csrf'][$_POST['csrf-token-name']] !== $_POST['csrf-token-value'])
-		{
+	if(isset($_POST['isSubmit'])) {
+		if(!isset($_COOKIE['X-'.APP_PREFIX.'-csrf'][$_POST['csrf-token-name']]) || $_COOKIE['X-'.APP_PREFIX.'-csrf'][$_POST['csrf-token-name']] !== $_POST['csrf-token-value']) {
 			if(!$_POST['isAjax']) redirectToNote(LNG('ui.csrf_attack'));
 			else echo LNG('ui.csrf_attack');
 			exit;
 		}
 	}
-	if(!is_array($_COOKIE['X-'.APP_PREFIX.'-csrf']) || count($_COOKIE['X-'.APP_PREFIX.'-csrf'])==0){
+	if(!isset($_COOKIE['X-'.APP_PREFIX.'-csrf']) || !is_array($_COOKIE['X-'.APP_PREFIX.'-csrf']) || count($_COOKIE['X-'.APP_PREFIX.'-csrf'])==0) {
 		$GLOBALS['sess']=md5(rand()); //创建新会话
 		$GLOBALS['token']=md5(rand());
 		setcookie('X-'.APP_PREFIX.'-csrf['.$GLOBALS['sess'].']',$GLOBALS['token'],time()+43200,'/');
