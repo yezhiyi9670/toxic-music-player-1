@@ -15,7 +15,7 @@
 ?>
 
 <script>
-	document.title="<?php echo LNGk('led.title') ?><?php if($listType == 'internal') echo ' ‹ '.htmlspecial($listdata['title']) ?> - <?php echo htmlspecial2(_CT('app_name_title')) ?>";
+	document.title="<?php echo LNGj('led.title') ?><?php if($listType == 'internal') echo ' ‹ '.htmlspecial($listdata['title']) ?> - <?php echo htmlspecial2(_CT('app_name_title')) ?>";
 	set_section_name(LNG('led.title'));
 </script>
 <style>

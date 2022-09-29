@@ -2,13 +2,13 @@
 
 <script>
 	<?php if(!isset($_GET['list'])){if(!isset($GLOBALS['listname'])) { ?>
-		document.title="<?php echo LNGk('docs.title') ?> ‹ <?php echo addslashes(GCM()['N']) ?> - <?php echo htmlspecial2(_CT('app_name_title')) ?>";
+		document.title="<?php echo LNGj('docs.title') ?> ‹ <?php echo jsspecial(GCM()['N']) ?> - <?php echo htmlspecial2(_CT('app_name_title')) ?>";
 		set_section_name(LNG('docs.title'));
 	<?php } else { ?>
-		document.title="<?php echo LNGk('docs.title.bulk') ?> - <?php echo htmlspecial2(_CT('app_name_title')) ?>";
+		document.title="<?php echo LNGj('docs.title.bulk') ?> - <?php echo htmlspecial2(_CT('app_name_title')) ?>";
 		set_section_name(LNG('docs.title.bulk'));
 	<?php }}else{ ?>
-		document.title="<?php echo LNGk('docs.title.bulk') ?> - <?php echo htmlspecial2(_CT('app_name_title')) ?>";
+		document.title="<?php echo LNGj('docs.title.bulk') ?> - <?php echo htmlspecial2(_CT('app_name_title')) ?>";
 		set_section_name(LNG('docs.title.bulk'));
 	<?php } ?>
 </script>

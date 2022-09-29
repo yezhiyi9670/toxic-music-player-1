@@ -18,7 +18,7 @@ $listdata = readPlaylistData($luser,$lid);
  * You need to include the JS. Use at your own risk!
  */
 
-// TXMP-js by toxic-music-player "<?php echo addslashes(_CT('app_name')) ?>" at "<?php echo addslashes(BASIC_URL) ?>"
+// TXMP-js by toxic-music-player "<?php echo jsspecial(_CT('app_name')) ?>" at "<?php echo jsspecial(BASIC_URL) ?>"
 // Generated for playlist <?php echo $luser ?>/<?php echo $lid ?>.
 // See <?php echo BASIC_URL . 'playlist/' . $luser . '/' . $lid ?> for the playlist.
 

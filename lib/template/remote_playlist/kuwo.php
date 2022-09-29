@@ -1,6 +1,6 @@
 <?php if(!defined('IN_SYSTEM')) exit;//Silence is golden ?>
 <script>
-	document.title='<?php echo addslashes(LNG('rp.list.title')) . COLON ?><?php $ioi = $GLOBALS['remote_playlist'];echo addslashes($ioi['data']['name']) ?> - <?php echo addslashes(LNG('rp.title')) ?> - <?php echo addslashes(_CT('app_name_title')) ?>';
+	document.title='<?php echo jsspecial(LNG('rp.list.title')) . COLON ?><?php $ioi = $GLOBALS['remote_playlist'];echo jsspecial($ioi['data']['name']) ?> - <?php echo jsspecial(LNG('rp.title')) ?> - <?php echo jsspecial(_CT('app_name_title')) ?>';
 	set_section_name(LNG('rp.list.title'));
 </script>
 <div class="txmp-page-full">

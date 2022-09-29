@@ -224,13 +224,13 @@ function kuwoSearchSong() {
 			echo "\n";
 		}
 		echo '</ol>' . "\n";
-		echo '<p><a onclick="kuwo_search(1,'."'".addslashes($_GET['key'])."'".')">' . LNG('page.first') . '</a>&nbsp;&nbsp;<a onclick="'.($_GET['pageid']<=1?'':'kuwo_search(curr_pageid-1,'."'".addslashes($_GET['key'])."'".')').'">&lt; ' . LNG('page.prev') . '</a>&nbsp;&nbsp;';
+		echo '<p><a onclick="kuwo_search(1,'."'".jsspecial($_GET['key'])."'".')">' . LNG('page.first') . '</a>&nbsp;&nbsp;<a onclick="'.($_GET['pageid']<=1?'':'kuwo_search(curr_pageid-1,'."'".jsspecial($_GET['key'])."'".')').'">&lt; ' . LNG('page.prev') . '</a>&nbsp;&nbsp;';
 
 		echo LNG('page.pagedesc',$_GET['pageid'],$npage);
 		echo '&nbsp;&nbsp;';
 		echo LNG('page.itemdesc',$res['data']['total'],$startid,min($endid,$res['data']['total']));
 
-		echo '&nbsp;&nbsp;<a onclick="'.($_GET['pageid']>=$npage?'':'kuwo_search(curr_pageid+1,'."'".addslashes($_GET['key'])."'".')').'">' . LNG('page.next') . ' &gt;</a>&nbsp;&nbsp;<a onclick="kuwo_search('.$npage.','."'".addslashes($_GET['key'])."'".')">' . LNG('page.last') . '</a></p>';
+		echo '&nbsp;&nbsp;<a onclick="'.($_GET['pageid']>=$npage?'':'kuwo_search(curr_pageid+1,'."'".jsspecial($_GET['key'])."'".')').'">' . LNG('page.next') . ' &gt;</a>&nbsp;&nbsp;<a onclick="kuwo_search('.$npage.','."'".jsspecial($_GET['key'])."'".')">' . LNG('page.last') . '</a></p>';
 		echo '<p>' . LNG('rp.search.kuworef','https://kuwo.cn/') .'</p>' . "\n";
 		echo '<p>' . LNG('rp.search.notres') . '</p>';
 	}

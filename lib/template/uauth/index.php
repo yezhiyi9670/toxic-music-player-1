@@ -1,7 +1,7 @@
 <?php if(!defined('IN_SYSTEM')) exit;//Silence is golden ?>
 
 <script>
-	document.title='<?php echo LNGk('uc.title') ?> - <?php echo htmlspecial2(_CT('app_name_title')) ?>';
+	document.title='<?php echo LNGj('uc.title') ?> - <?php echo htmlspecial2(_CT('app_name_title')) ?>';
 	set_section_name(LNG('uc.title'));
 </script>
 <?php declare_allow_overscroll() ?>

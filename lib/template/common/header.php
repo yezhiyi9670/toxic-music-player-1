@@ -79,8 +79,8 @@
 		G.is_wap = <?php echo is_wap() ? 'true' : 'false' ?>;
 		G.is_real_wap = <?php echo is_real_wap() ? 'true' : 'false' ?>;
 		G.is_iframe = <?php echo isset($_GET['iframe']) ? 'true' : 'false' ?>;
-		G.app_name = '<?php echo addslashes(_CT('app_name')) ?>';
-		G.app_title = '<?php echo addslashes(_CT('app_name_title')) ?>';
+		G.app_name = '<?php echo jsspecial(_CT('app_name')) ?>';
+		G.app_title = '<?php echo jsspecial(_CT('app_name_title')) ?>';
 		G.app_prefix = '<?php echo APP_PREFIX ?>';
 		G.dataver = '<?php echo DATAVER ?>';
 		G.can_pay_play = <?php echo _CT('rp_allow_pay_crack') ? 'true' : 'false' ?>;

@@ -12,7 +12,7 @@ if(isset($_GET['isSubmit'])) {
 ?>
 
 <script>
-	document.title='<?php echo addslashes(_CT('app_name_title')) ?> | <?php echo addslashes(_CT('app_desc')) ?>';
+	document.title='<?php echo jsspecial(_CT('app_name_title')) ?> | <?php echo jsspecial(_CT('app_desc')) ?>';
 	set_section_name(LNG('list.title'));
 </script>
 <?php declare_allow_overscroll() ?>

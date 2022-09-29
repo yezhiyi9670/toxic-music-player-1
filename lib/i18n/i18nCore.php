@@ -160,6 +160,13 @@ function printLNGScript() {
 }
 
 /**
+ * JS 转义
+ */
+function LNGj($key = '', ...$templates) {
+	return jsspecial(LNG($key, ...$templates));
+}
+
+/**
  * 语言键引号转义
  */
 function LNGk($key = '', ...$templates) {

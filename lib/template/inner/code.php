@@ -1,6 +1,6 @@
 <?php if(!defined('IN_SYSTEM')) exit;//Silence is golden ?>
 <script>
-	document.title="<?php echo LNGk('code.title') ?> ‹ <?php echo addslashes(GCM()['N']) ?> - <?php echo htmlspecial2(_CT('app_name_title')) ?>";
+	document.title="<?php echo LNGj('code.title') ?> ‹ <?php echo jsspecial(GCM()['N']) ?> - <?php echo htmlspecial2(_CT('app_name_title')) ?>";
 	set_section_name(LNG('code.title'));
 </script>
 <?php

@@ -21,7 +21,7 @@
 
 ?>
 <script>
-	document.title='<?php LNGe('permitter.title') ?> ‹ <?php echo addslashes(GCM()['N']) ?> - <?php echo htmlspecial2(_CT('app_name_title')) ?>';
+	document.title='<?php LNGe('permitter.title') ?> ‹ <?php echo jsspecial(GCM()['N']) ?> - <?php echo htmlspecial2(_CT('app_name_title')) ?>';
 	set_section_name(LNG('permitter.title'));
 </script>
 <div class="txmp-page-full">

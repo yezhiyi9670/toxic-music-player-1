@@ -975,7 +975,13 @@
 		"XRWebGLLayerInit",
 		"XSLTProcessor"
 	];
-
+	
+	/**
+	 * 检验变量名
+	 * 
+	 * @param string str 变量名
+	 * @returns 是否合法
+	 */
 	var isProperVarname = (str) => {
 		if(typeof(str) != 'string') return false;
 		if(str == '') return false;
@@ -996,6 +1002,20 @@
 		}
 		return true;
 	}
+
+	/**
+	 * 在 Worker 中《安全》执行内容
+	 * 
+	 * @param {string[]} arglist 参数列表
+	 * @param {string} definition 函数主体代码
+	 * @param {string} args 参数值（JSON stringifiable）
+	 * @param {number} timeLimit 运行时限
+	 * @returns 执行结果
+	 * -> {type: 'fail', reason: 'argument_list_mismatch'|'argument_list_invalid'}
+	 * -> {type: 'success', data: result}
+	 * -> {type: 'error', data: [lineNumber, message], code: code}
+	 * -> {type: 'tle'}
+	 */
 	var runInWorker = async (arglist,definition,args=[],timeLimit=3000) => {
 		if(arglist.length != args.length) {
 			return {type:'fail',reason:'argument_list_mismatch'};
@@ -1029,7 +1049,7 @@
 		code += "self.onmessage = (e) => {" + "\n";
 		code += "\t"+"self.postMessage(__target_func(\n";
 		for(let i=0;i<args.length;i++) {
-			code += "\t"+"\t"+args[i];
+			code += "\t"+"\t"+JSON.stringify(args[i]);
 			if(i < args.length - 1) {
 				code += ",";
 			}

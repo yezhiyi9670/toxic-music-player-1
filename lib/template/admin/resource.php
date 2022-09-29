@@ -97,7 +97,7 @@ load_js('js/resource/resourceapp');
 	load_css('css/resource/resource','w');
 ?>
 <script>
-	document.title='<?php LNGe('resource.title') ?> ‹ <?php echo addslashes(GCM()['N']) ?> - <?php echo htmlspecial2(_CT('app_name_title')) ?>';
+	document.title='<?php LNGe('resource.title') ?> ‹ <?php echo jsspecial(GCM()['N']) ?> - <?php echo htmlspecial2(_CT('app_name_title')) ?>';
 	set_section_name(LNG('resource.title'));
 </script>
 <form style="position:<?php echo is_wap()?"auto":"fixed" ?>;" method="POST" enctype="multipart/form-data">

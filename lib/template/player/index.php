@@ -183,11 +183,11 @@ var isFmSave=<?php echo isset($_GET['fmid'])?'true':'false' ?>;
 <script src="<?php echo BASIC_URL ?>static/js/player/playerflex.js?v=<?php echo VERSION ?>"></script>
 <script src="<?php echo BASIC_URL ?>static/js/player/playerapp.js?v=<?php echo VERSION ?>"></script>
 <script>
-	document.title="<?php echo addslashes(LNG('player.title')) ?> ‹ <?php echo addslashes(GCM()['N']) ?> - <?php echo htmlspecial2(_CT('app_name_title')) ?>";
+	document.title="<?php echo jsspecial(LNG('player.title')) ?> ‹ <?php echo jsspecial(GCM()['N']) ?> - <?php echo htmlspecial2(_CT('app_name_title')) ?>";
 	set_section_name(LNG('player.title'));
 </script>
 <script>
-	titleformat="<?php echo addslashes(LNG('player.title')) ?> ‹ %{list_name} - <?php echo addslashes(_CT('app_name_title')) ?>";
+	titleformat="<?php echo jsspecial(LNG('player.title')) ?> ‹ %{list_name} - <?php echo jsspecial(_CT('app_name_title')) ?>";
 </script>
 
 <div class="txmp-page-left lrc-area txmp-wappage-lrc">
@@ -330,5 +330,5 @@ var isFmSave=<?php echo isset($_GET['fmid'])?'true':'false' ?>;
 
 <script>
 	$(() => {$('#audio_1,#audio_2').attr('preload','all');});
-	$(() => {$('.txmp-coverpage-pic, .song-avatar img').attr('src', "<?php echo addslashes(getCoverUrl(cid())) ?>")});
+	$(() => {$('.txmp-coverpage-pic, .song-avatar img').attr('src', "<?php echo jsspecial(getCoverUrl(cid())) ?>")});
 </script>

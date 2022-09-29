@@ -2,7 +2,7 @@
 
 if(($_POST['isSubmit'] ?? '')=='yes') {
 	setting_upd($_POST);
-	echo '<script>location.href=location.href.substring(0,location.href.indexOf("?"))+"?msg="+encodeURIComponent("'.LNGk('setting.save.success').'")</script>';
+	echo '<script>location.href=location.href.substring(0,location.href.indexOf("?"))+"?msg="+encodeURIComponent("'.LNGj('setting.save.success').'")</script>';
 	exit;
 }
 
@@ -14,11 +14,11 @@ if(($_POST['isSubmit'] ?? '')=='yes') {
 	}
 ?>
 <script>
-	document.title="<?php echo LNGk('setting.title') ?> - <?php echo htmlspecial2(_CT('app_name_title')) ?>";
+	document.title="<?php echo LNGj('setting.title') ?> - <?php echo htmlspecial2(_CT('app_name_title')) ?>";
 	set_section_name(LNG('setting.title'));
 </script>
 <div class="txmp-page-full">
-	<h3><?php echo LNGk('setting.title') ?></h3>
+	<h3><?php LNGe('setting.title') ?></h3>
 	<?php showToastMessage(); ?>
 	<p><form method="POST">
 		<input type="hidden" name="csrf-token-name" value="<?php echo $GLOBALS['sess'] ?>">

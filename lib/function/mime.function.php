@@ -271,11 +271,6 @@ function preSubstr($u,$f="/") {
 	return $x;
 }
 
-// 对JS中多行文字的转义处理（防止利用</script>和${}等东西进行注入攻击）
-function esline($str) {
-	return str_replace(['<','`','$'],["\\x3c","\\x60","\\x24"],addslashes($str));
-}
-
 // XML 特殊字符反向替换
 function xmlspecial_unescape($str) {
 	return str_replace(
@@ -2608,6 +2603,18 @@ function htmlspecial($str){
 		$str
 	);
 }
+
+/**
+ * JS in HTML 特殊字符转换
+ */
+function jsspecial($str) {
+	return str_replace(
+		['<', '>', '`', '$'],
+		["\\x3c", "\\x3e", "\\x60", "\\x24"],
+		addslashes($str)
+	);
+}
+
 function htmlspecial3($str){
 	if($str == null) {
 		return '';

@@ -235,7 +235,7 @@ function printPlayerList($item, $isCloud = false, $isNull = false) {
 		$txt.='</span>';
 	}
 
-	echo addslashes($txt);
+	echo jsspecial($txt);
 }
 
 // 用户管理列表
@@ -250,7 +250,7 @@ function printUserList($item) {
 
 	echo '<tr data-username="'.$item['name'].'">';
 	echo '<td class="user-name">'.$item['name'].'</td>';
-	echo '<td class="user-hash"><a href="javascript:void" onclick="modal_alert(\''.LNGk('uauth.ui.passhash').'\',\''.LNGk('uauth.ui.passhash.tip').uauth_hash_summary($item['pass']).'\')">'.LNG('uauth.ui.show').'</a></td>';
+	echo '<td class="user-hash"><a href="javascript:void" onclick="modal_alert(\''.LNGj('uauth.ui.passhash').'\',\''.LNGj('uauth.ui.passhash.tip').uauth_hash_summary($item['pass']).'\')">'.LNG('uauth.ui.show').'</a></td>';
 	echo '<td class="user-ban">'.($types[$item['enabled']]).'</td>';
 	echo '<td class="user-ip">'.$item['ip'].'</td>';
 	echo '<td class="user-operation">';
@@ -267,10 +267,10 @@ function printUserList($item) {
 
 // 页面提示（不是列表）
 function redirectToNote($str) {
-	echo '<script>location.href=location.href.substring(0,location.href.indexOf("?"))+"?msg="+encodeURIComponent("'.addslashes($str).'")</script>';
+	echo '<script>location.href=location.href.substring(0,location.href.indexOf("?"))+"?msg="+encodeURIComponent("'.jsspecial($str).'")</script>';
 }
 function redirectToPage($str) {
-	echo '<script>location.href="'.addslashes(BASIC_URL . $str).'"</script>';
+	echo '<script>location.href="'.jsspecial(BASIC_URL . $str).'"</script>';
 }
 function redirectToGet() {
 	echo '<script>location.href=location.href.substring(0,location.href.indexOf("?"))</script>';
@@ -281,7 +281,7 @@ function showToastMessage() {
 	?><?php if(isset($_GET['msg'])) { ?>
 		<script>
 			$(() => {
-				Toast.make_toast_text('<?php echo addslashes($_GET['msg']) ?>', 2500);
+				Toast.make_toast_text('<?php echo jsspecial($_GET['msg']) ?>', 2500);
 				F_HideNotice();
 			});
 		</script>

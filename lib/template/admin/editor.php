@@ -23,7 +23,7 @@ load_js('js/editor/editorapp');
 	load_css('css/editor/editor','w');
 ?>
 <script>
-	document.title='<?php LNGe('editor.title') ?> ‹ <?php echo addslashes(GCM()['N']) ?> - <?php echo htmlspecial2(_CT('app_name_title')) ?>';
+	document.title='<?php LNGe('editor.title') ?> ‹ <?php echo jsspecial(GCM()['N']) ?> - <?php echo htmlspecial2(_CT('app_name_title')) ?>';
 	set_section_name(LNG('editor.title'));
 </script>
 <script>
@@ -85,7 +85,7 @@ load_js('js/editor/editorapp');
 		<div style="font-family:'Consolas','Source Code Pro','Courier New'!important;font-size:15px;" id="lyricfile__wrapper"><textarea style="width:100%;height:300px;" id="lyricfile" name="lyricfile"></textarea></div>
 		<script>
 			document.getElementById('lyricfile').value=`<?php
-				echo esline(file_get_contents(FILES.cid().'/lyric.txt'));
+				echo jsspecial(file_get_contents(FILES.cid().'/lyric.txt'));
 			?>`;
 		</script>
 	</div>
