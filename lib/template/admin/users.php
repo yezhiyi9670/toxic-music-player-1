@@ -145,7 +145,7 @@ else {
 </script>
 <?php declare_allow_overscroll() ?>
 <script>
-	var userTypes = <?php echo encode_data(get_all_user_types()); ?>;
+	var userTypes = <?php echo encode_data_html(get_all_user_types()); ?>;
 </script>
 <div class="txmp-page-full">
 	<h3><?php LNGe('ua.title') ?></h3>

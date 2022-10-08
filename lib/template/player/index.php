@@ -49,18 +49,18 @@ var listMeta=[
 		if(!isValidMusic(cid()) || !_checkPermission('music/audio/out')) {
 			$meta_arr['cant_play'] = true;
 		}
-		echo encode_data($meta_arr);
+		echo encode_data_html($meta_arr);
 		if(isset($_GET['list'])){
 			for($i=0;$i<count($otherList);$i++) {
 				echo ",";
 				if($isInvalid[$otherList[$i]]) {
-					echo encode_data(null);
+					echo encode_data_html(null);
 				} else {
 					$meta_arr = GSM($otherList[$i]);
 					if(!isValidMusic($otherList[$i]) || !_checkPermission('music/audio/out',$otherList[$i])) {
 						$meta_arr['cant_play'] = true;
 					}
-					echo encode_data($meta_arr);
+					echo encode_data_html($meta_arr);
 				}
 			}
 		}
@@ -90,7 +90,7 @@ var listName=[
 <?php
 	$listdata = readPlaylistData($GLOBALS['listname'],$GLOBALS['listid']);
 ?>
-var cloudData = <?php echo encode_data($listdata) ?>;
+var cloudData = <?php echo encode_data_html($listdata) ?>;
 
 var isRand = <?php echo ($listdata['transform']['pick']=='rand')?'true':'false'; ?>;
 var isRandShuffle = <?php echo ($listdata['transform']['random_shuffle'])?'true':'false'; ?>;
@@ -116,13 +116,13 @@ var listMeta=[
 		for($i=0;$i<count($otherList);$i++) {
 			if($i) echo ",";
 			if($isInvalid[$otherList[$i]]) {
-				echo encode_data(null);
+				echo encode_data_html(null);
 			} else {
 				$meta_arr = GSM($otherList[$i]);
 				if(!isValidMusic($otherList[$i]) || !_checkPermission('music/audio/out',$otherList[$i])) {
 					$meta_arr['cant_play'] = true;
 				}
-				echo encode_data($meta_arr);
+				echo encode_data_html($meta_arr);
 			}
 		}
 	?>

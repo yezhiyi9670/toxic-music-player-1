@@ -71,6 +71,16 @@ function encode_data($data, $isStore = false) {
 	return json_encode($data,$flag+JSON_UNESCAPED_SLASHES+JSON_UNESCAPED_UNICODE);
 }
 
+// 编码 json
+function encode_data_html($data) {
+	$flag = 0;
+	if(_CT('debug')) {
+		$flag = JSON_PRETTY_PRINT;
+	}
+
+	return str_replace(['<', '>'], ["\\x3c", "\\x3e"], json_encode($data,$flag+JSON_UNESCAPED_SLASHES+JSON_UNESCAPED_UNICODE));
+}
+
 // 是否为 kuwo RemotePlay ID
 function isKuwoId($x) {
 	$head = preSubstr($x,'_');
