@@ -644,14 +644,14 @@ async function setPlayRate(st) {
 	$('.speed-choice').parent().removeClass('am-active');
 	var found_choice = false;
 	$('.speed-choice').each(function() {
-		if(this.innerText == decimalRps(st,1,2) + 'x') {
+		if(this.innerText == decimalRps(st,1,4) + 'x') {
 			$(this).parent().addClass('am-active');
 			found_choice = true;
 		}
 	});
 	if(!found_choice) {
 		$('.speed-choice-custom').parent().addClass('am-active');
-		$('.speed-choice-custom').text(LNG('player.menu.speed.custom') + LNG('punc.colon') + decimalRps(st,1,2));
+		$('.speed-choice-custom').text(LNG('player.menu.speed.custom') + LNG('punc.colon') + decimalRps(st,1,4));
 	} else {
 		$('.speed-choice-custom').text(LNG('player.menu.speed.custom'));
 	}
@@ -679,7 +679,7 @@ async function setPlayRateCustom() {
 	if(!txt) return;
 	if(1 * txt != txt) return;
 	txt = 1 * txt;
-	txt = Math.round(100 * txt ) / 100;
+	txt = Math.round(10000 * txt ) / 10000;
 	txt = Math.max(0.1,Math.min(16,txt));
 	setPlayRate(txt);
 }

@@ -256,13 +256,14 @@ var isFmSave=<?php echo isset($_GET['fmid'])?'true':'false' ?>;
 			<ul class="am-dropdown-content speed-select-list" onclick="$('.am-dropdown').dropdown('close')">
 				<li class="am-dropdown-header"><?php LNGe('player.menu.speed') ?></li>
 				<li><a class="speed-choice" onclick="setPlayRate(0.5)">0.5x</a></li>
-				<li><a class="speed-choice" onclick="setPlayRate(0.94)">0.94x</a></li>
+				<li><a class="speed-choice" onclick="setPlayRate(0.9439)">0.9439x</a></li>
+				<li><a class="speed-choice" onclick="setPlayRate(0.9818)">0.9818x</a></li>
 				<li><a class="speed-choice" onclick="setPlayRate(1)">1.0x</a></li>
-				<li><a class="speed-choice" onclick="setPlayRate(1.06)">1.06x</a></li>
-				<li><a class="speed-choice" onclick="setPlayRate(1.26)">1.26x</a></li>
-				<li><a class="speed-choice" onclick="setPlayRate(1.5)">1.5x</a></li>
+				<li><a class="speed-choice" onclick="setPlayRate(1.0595)">1.0595x</a></li>
+				<li><a class="speed-choice" onclick="setPlayRate(1.2599)">1.2599x</a></li>
+				<li><a class="speed-choice" onclick="setPlayRate(1.4983)">1.4983x</a></li>
 				<li><a class="speed-choice" onclick="setPlayRate(2)">2.0x</a></li>
-				<li><a class="speed-choice" onclick="setPlayRate(3)">3.0x</a></li>
+				<li><a class="speed-choice" onclick="setPlayRate(2.9966)">2.9966x</a></li>
 				<li><a class="speed-choice speed-choice-custom" onclick="setPlayRateCustom()"><?php LNGe('player.menu.speed.custom') ?></a></li>
 				<li class="am-divider"></li>
 				<li class="am-dropdown-header"><?php LNGe('player.menu.speed.mode') ?></li>
