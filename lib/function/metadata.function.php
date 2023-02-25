@@ -211,9 +211,11 @@ function getDownloadUrl($u,$idx=0) {
 	//return getAudioUrl($u);
 }
 
-// 是否是有效的歌曲ID
-// $requireAudio：是否要求有音频（无论是否有效）
-// $allowRemote：是否认为remoteplay歌曲有效
+/**
+ * 是否是有效的歌曲ID
+ * @param requireAudio 是否要求有音频（无论是否有效）
+ * @param allowRemote 是否认为remoteplay歌曲有效
+ */
 function isValidMusic($n,$requireAudio=true,$allowRemote=true) {
 	if(!preg_match('/^(\w+)$/',$n)) return false;
 	if(isKuwoId($n) && $allowRemote) {

@@ -2,13 +2,14 @@
 error_reporting(~E_ALL);
 
 define("IN_SYSTEM",'WMSDFCL/txmp');
-define("VERSION","128a");
+define("VERSION","128e");
 define("CSV_VERSION","1");
 define("DATAVER","201805");
 define("BASIC_PATH",str_replace("\\","/",__DIR__)."/");
 
 define("LIB_PATH",BASIC_PATH."lib/");
 define("ROUTER",LIB_PATH."router/");
+define("CONTROLLER",LIB_PATH."controller/");
 define("TEMPLATE",LIB_PATH."template/");
 define("FUNCTIONS",LIB_PATH."function/");
 define("CRAWLER",LIB_PATH."crawler/");
@@ -37,7 +38,7 @@ require(FUNCTIONS."index.function.php");
 require(LIB_PATH.'dev_config.php');
 require(BASIC_PATH.'internal_config/config_basic.php');
 require(LIB_PATH.'i18n/i18nCore.php');
-require(ROUTER."TopLevelRouter.class.php");
+require(ROUTER."DataDrivenRouter.router.php");
 require(BASIC_PATH.'internal_config/config_misc.php');
 if(!defined('GC_COLOR_1')) {
 	define("GC_COLOR_1","NULL");
@@ -108,7 +109,5 @@ if(mt_rand(1,20) <= 2) {
 
 if(!isset($_GET['_lnk'])) $_GET['_lnk']="";
 $GLOBALS['_lnk'] = $_GET['_lnk'];
-$router=new TopLevelRouter($GLOBALS['_lnk']);
-if(!($router->route())) {
-	print404("Not Found");
-}
+$router=new DataDrivenRouter($GLOBALS['_lnk']);
+$router->route();

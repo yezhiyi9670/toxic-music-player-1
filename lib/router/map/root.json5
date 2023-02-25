@@ -1,0 +1,114 @@
+{
+	globals: {
+		linktype: 'normal',
+		isMusicCurrent: false,
+	},
+	dest: 'list/index',
+	// 【破坏性更改】 system-meta 移到 api 根目录
+	children: {
+		// API 定义
+		'api': {
+			target: 'api.json5'
+		},
+		'dynamic': {
+			children: {
+				'#path': {
+					variable: 'path',
+					dest: 'static/dynamic'
+				}
+			}
+		},
+		'i18n-script': {
+			dest: 'static/i18n'
+		},
+		'clean-garbage': {
+			dest: 'schedule/clean-garbage'
+		},
+		'version-history': {
+			dest: 'common/version-history'
+		},
+		'user': {
+			target: 'user.json5'
+		},
+		'setting': {
+			nosetting: true,
+			dest: 'user/setting'
+		}
+		'list-maker': {
+			dest: 'user/list-maker-temp',
+			children: {
+				'#integer': {
+					variable: 'list_id',
+					dest: 'user/list-maker-online'
+				}
+			}
+		},
+		'admin': {
+			dest: 'admin/index',
+			children: {
+				'users': {
+					dest: 'admin/users'
+				},
+				'query-comp': {
+					dest: 'admin/query-comp'
+				},
+				'query-ann': {
+					dest: 'admin/query-ann'
+				}
+			}
+		},
+		'playlist': {
+			children: {
+				'save-list': {
+					children: {
+						'#integer': {
+							dest: 'user/save-list'
+						}
+					}
+				},
+				'gen-docs': {
+					children: {
+						'#word': {
+							variable: 'username',
+							children: {
+								'#integer': {
+									variable: 'list_id',
+									globals: {
+										linktype: 'playlist',
+										isMusicCurrent: true
+									},
+									dest: 'user/online-list-docs'
+								}
+							}
+						},
+					}
+				},
+				'#word': {
+					variable: 'username',
+					children: {
+						'#integer': {
+							variable: 'list_id',
+							globals: {
+								linktype: 'playlist',
+								isMusicCurrent: true
+							},
+							dest: 'user/online-list'
+						}
+					}
+				},
+			}
+		},
+		'K_playlist': {
+			children: {
+				'#integer': {
+					variable: 'list_id',
+					dest: 'remote_playlist/kuwo'
+				}
+			}
+		},
+		'#word': {
+			variable: 'song_id',
+			target: 'singles.json5'
+		}
+	}
+}

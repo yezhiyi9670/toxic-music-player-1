@@ -262,6 +262,18 @@ function R($id) {
 	return substr(strstr($id,'_'),1);
 }
 
+/**
+ * 截取第一个 $f 后的所有东西。如果不存在，则返回空串
+ * 主要用来解析网址
+ */
+function strip_first($u,$f="/") {
+	$x=$u;
+	if(strstr($u,$f)){
+		return substr($u,strpos($u,$f) + 1);
+	}
+	return '';
+}
+
 // 截除第一个 $f 以及此后的东西。如果不存在，则返回原字符串
 function preSubstr($u,$f="/") {
 	$x=$u;

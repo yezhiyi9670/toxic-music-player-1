@@ -46,3 +46,34 @@ function declare_allow_overscroll() {
 	echo '.txmp-page-full::after,.txmp-page-left::after,.txmp-page-right::after{padding-bottom:400px;}';
 	echo '</style>';
 }
+
+/**
+ * 设置返回代码
+ * （仅用于 API 返回！如果客户端明确表示其不是浏览器，那么代码将不会被设置）
+ */
+function set_response_code($code,$text) {
+	header("HTTP/1.1 " . $code . ' ' . $text);
+}
+
+/**
+ * 显示 JSON
+ */
+function show_json($code,$data) {
+	header("Content-Type: application/json");
+	$success = false;
+	if(100 <= $code && $code < 400) $success = true;
+	print json_encode([
+		'success' => $success,
+		'code' => $code,
+		'path' => $_GET['_lnk'],
+		'data' => $data,
+	],JSON_PRETTY_PRINT * _CT('debug') + JSON_UNESCAPED_SLASHES + JSON_UNESCAPED_UNICODE);
+	exit;
+}
+
+/**
+ * 显示错误
+ */
+function show_error($code, $error, $msg) {
+	show_json($code, ['error' => $error, 'msg' => $msg]);
+}

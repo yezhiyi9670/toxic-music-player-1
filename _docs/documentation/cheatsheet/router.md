@@ -30,7 +30,6 @@ All available URLs in the system. If you want to write a crawler, you may need t
 | +R   | `/`                | ...   | RemotePlay or ID serach             |
 |      | `/clean-garbage`   | -     | Garbage cleaner                     |
 | R    | `/i18n-script`     | -     | Javascript containing language keys |
-| R    | `/system-meta`     | -     | Basic info about the installation   |
 | R    | `/dynamic/<path>`  | -     | Colored CSS file                    |
 | RL   | `/user`            | -     | User center                         |
 | L    | `/user/logout`     | -     | Logout                              |

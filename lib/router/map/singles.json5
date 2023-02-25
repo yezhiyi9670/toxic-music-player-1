@@ -1,0 +1,78 @@
+{
+	globals: {
+		linktype: 'music',
+		isMusicCurrent: true
+	},
+	dest: 'player/index',
+	children: {
+		'code': {
+			dest: 'inner/code'
+		},
+		'comp-info': {
+			dest: 'inner/comp-info'
+		},
+		'docs': {
+			dest: 'inner/docs'
+		},
+		'make-doc': {
+			dest: 'inner/generate'
+		},
+		'#audiopath': {
+			dest: 'inner/audio-output'
+		},
+		'#backpath': {
+			dest: 'inner/back-output'
+		},
+		'download': {
+			dest: 'inner/download'
+		},
+		'raw': {
+			dest: 'inner/raw'
+		},
+		'html': {
+			children: {
+				'lyric-overview': {
+					variable: 'type',
+					dest: 'player/frag'
+				},
+				'lyric-content': {
+					variable: 'type',
+					dest: 'player/frag'
+				},
+				'fr': {
+					variable: 'type',
+					dest: 'player/frag'
+				},
+				'tr': {
+					variable: 'type',
+					dest: 'player/frag'
+				},
+				'trn': {
+					variable: 'type',
+					dest: 'player/frag'
+				}
+			}
+		},
+		'meta': {
+			dest: 'player/meta'
+		},
+		'switch-all': {
+			dest: 'player/switch-all'
+		},
+		'refresh-cache': {
+			dest: 'inner/refresh-cache'
+		},
+		'#avatarpath': {
+			dest: 'player/avatar'
+		},
+		'edit': {
+			dest: 'admin/edit'
+		},
+		'resource': {
+			dest: 'admin/resource'
+		},
+		'permission': {
+			dest: 'admin/permission'
+		}
+	}
+}

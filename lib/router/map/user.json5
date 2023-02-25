@@ -1,0 +1,14 @@
+{
+	dest: 'uauth/index',
+	children: {
+		'login': {
+			dest: 'uauth/login'
+		},
+		'logout': {
+			dest: 'uauth/logout'
+		},
+		'passwd': {
+			dest: 'uauth/passwd'
+		}
+	}
+}

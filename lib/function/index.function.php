@@ -3,6 +3,9 @@
 // getID3 音频处理
 require(FUNCTIONS."getid3/getid3.php");
 
+// JSON5
+require(FUNCTIONS."json5/index.php");
+
 // Mime、网络和文件操作等基本功能
 require(FUNCTIONS."mime.function.php");
 
