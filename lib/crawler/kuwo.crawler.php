@@ -284,7 +284,7 @@ class kuwoCrawler {
 			}
 		}
 		try{
-			@$lrc=ex_url_get_contents('https://m.kuwo.cn/newh5/singles/songinfoandlrc?musicId='.$id.'&httpsStatus=1');
+			@$lrc=ex_url_get_contents('https://www.kuwo.cn/newh5/singles/songinfoandlrc?musicId='.$id, ['X-Forwarded-For' => $_SERVER['REMOTE_ADDR']]);
 			// @$name=file_get_contents('https://www.kuwo.cn/play_detail/'.$id.'/');
 			@$lrc=json_decode($lrc,true);
 			// @$name=strstr($name,'<input id="songinfo-name" type="hidden" value="');
