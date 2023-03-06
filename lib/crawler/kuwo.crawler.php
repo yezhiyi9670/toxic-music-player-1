@@ -284,7 +284,7 @@ class kuwoCrawler {
 			}
 		}
 		try{
-			@$lrc=file_get_contents('https://kuwo.cn/newh5/singles/songinfoandlrc?musicId='.$id);
+			@$lrc=ex_url_get_contents('https://m.kuwo.cn/newh5/singles/songinfoandlrc?musicId='.$id.'&httpsStatus=1');
 			// @$name=file_get_contents('https://www.kuwo.cn/play_detail/'.$id.'/');
 			@$lrc=json_decode($lrc,true);
 			// @$name=strstr($name,'<input id="songinfo-name" type="hidden" value="');
@@ -338,7 +338,7 @@ class kuwoCrawler {
 				// 	$url = $arr[1] . str_replace('.','-',$arr[2]) . $arr[3];
 				// }
 				// $this->cache['url'] = $url;
-				@$url=ex_url_get_contents('https://www.kuwo.cn/api/v1/www/music/playUrl?mid='.$this->cache['id'].'&type=convert_url3&br=320kmp3', ['User-Agent'=>'Dalvik/2.1.0 (Linux; U; Android 7.1.2; LIO-AN00 Build/N2G47O)']);
+				@$url=ex_url_get_contents('https://www.kuwo.cn/api/v1/www/music/playUrl?mid='.$this->cache['id'].'&type=convert_url3&br=192kmp3', ['User-Agent'=>'Dalvik/2.1.0 (Linux; U; Android 7.1.2; LIO-AN00 Build/N2G47O)']);
 				@$url=json_decode($url,true);
 				if(!is_array($url) || !is_array($url['data'])) {
 					$url = ['data' => ['url' => '']];
@@ -408,7 +408,7 @@ class kuwoCrawler {
 					'A  #'.rgb2hex($cp[0]) . "\n" . 
 					'G1 #'.rgb2hex($cp[0]) . "\n" . 
 					'G2 #'.rgb2hex($cp[1]) . "\n" . 
-					'O  '.'https://www.kuwo.cn/play_detail/'.$this->cache['id'].'/' . "\n" .
+					'O  '.'https://kuwo.cn/play_detail/'.$this->cache['id'].'/' . "\n" .
 					($this->cache['info']['pic'] ? 'P  K_' . $this->cache['id'] . '/avatar' . "\n" : '') .
 					'' . "\n" . 
 					'// ' . LNG('rp.code.bycrawler') . "\n" . 
@@ -448,7 +448,7 @@ class kuwoCrawler {
 					'A  #'.rgb2hex($cp[0]) . "\n" . 
 					'G1 #'.rgb2hex($cp[0]) . "\n" . 
 					'G2 #'.rgb2hex($cp[1]) . "\n" . 
-					'O  '.'https://www.kuwo.cn/play_detail/'.$this->cache['id'].'/' . "\n" .
+					'O  '.'https://kuwo.cn/play_detail/'.$this->cache['id'].'/' . "\n" .
 					($this->cache['info']['pic'] ? 'P  K_' . $this->cache['id'] . '/avatar' . "\n" : '') .
 					'' . "\n" .
 					'// ' . LNG('rp.code.bycrawler') . "\n" . 

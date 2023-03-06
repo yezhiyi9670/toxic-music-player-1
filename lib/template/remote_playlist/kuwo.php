@@ -7,7 +7,7 @@
 	
 	<h3><?php LNGe('klist.caption') ?><?php echo htmlspecial($ioi['data']['name']) ?><span style="font-size:12px;font-weight:normal;">&nbsp;by <?php echo htmlspecial2($ioi['data']['uname']) ?></span></h3>
 	
-	<p><a target="_blank" href="http://kuwo.cn/playlist_detail/<?php echo $GLOBALS['remote_playlist_id'] ?>"><?php LNGe('klist.view') ?></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="<?php echo BASIC_URL ?>playlist/__syscall/1701<?php echo $GLOBALS['remote_playlist_id'] ?>"><?php LNGe('list.play_all') ?></a></p>
+	<p><a target="_blank" href="https://kuwo.cn/playlist_detail/<?php echo $GLOBALS['remote_playlist_id'] ?>"><?php LNGe('klist.view') ?></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href="<?php echo BASIC_URL ?>playlist/__syscall/1701<?php echo $GLOBALS['remote_playlist_id'] ?>"><?php LNGe('list.play_all') ?></a></p>
 	
 	<div id="playlist-showbox"><?php
 		$id = trim(substr($_GET['key'],1));

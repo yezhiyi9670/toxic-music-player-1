@@ -47,7 +47,7 @@ class VlUserSyscall {
 			// 酷我音乐的全部播放
 			if(strlen($name) > 4 && substr($name,0,4) == '1701') {
 				$id = substr($name,4);
-				@$data = json_decode(kuwo_search_httpget('http://kuwo.cn/api/www/playlist/playListInfo?pid='.$id.'&pn=1&rn=1024'),true);
+				@$data = json_decode(kuwo_search_httpget('https://kuwo.cn/api/www/playlist/playListInfo?pid='.$id.'&pn=1&rn=1024'),true);
 				if($data['code'] != '200') {
 					if(!$flag) return false;
 					else {
