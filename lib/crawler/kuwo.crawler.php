@@ -236,6 +236,9 @@ function kuwoSearchSong() {
 	}
 }
 
+global $retrial_remain;
+$retrial_remain = 1;
+
 // （对于单曲的）爬虫类
 class kuwoCrawler {
 	public $cache;
@@ -255,9 +258,11 @@ class kuwoCrawler {
 	// 过期的缓存由GarbageCleaner自动[在enCache之前]删除
 	//   * 如果在flag处传入true，那么系统总是会重新抓取并刷新缓存。
 	function enCache($id,$flag = false) {
+		global $retrial_remain;
+		
 		$cachefile = REMOTE_CACHE.$id.'.json';
 		if(!$flag && file_exists($cachefile)) {
-			if(time() - filemtime($cachefile) <= _CT('cache_expire')) {
+			if(time() - filemtime($cachefile) <= _CT('cache_expire_invalid')) {
 				$this->cache=json_decode(file_get_contents($cachefile),true);
 				$ok=true;
 				if(!isset($this->cache['name']) || $this->cache['name'] == '') $ok=false;
@@ -279,6 +284,17 @@ class kuwoCrawler {
 					if(!is_array($this->cache['lrclist']) && $this->cache['lrclist']!==null) {
 						$this->success=false;
 					}
+					return;
+				}
+				$can_retry = cid() == 'K_' || $id && cid() == 'AK_';
+				if(!$can_retry && $retrial_remain > 0) {
+					if(mt_rand(0, 99) < 50) {
+						$retrial_remain -= 1;
+						$can_retry = true;
+					}
+				} 
+				if(!$can_retry) {
+					$this->success=false;
 					return;
 				}
 			}
