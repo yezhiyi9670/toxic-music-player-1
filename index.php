@@ -2,7 +2,7 @@
 error_reporting(~E_ALL);
 
 define("IN_SYSTEM",'WMSDFCL/txmp');
-define("VERSION","128f");
+define("VERSION","128h");
 define("CSV_VERSION","1");
 define("DATAVER","201805");
 define("BASIC_PATH",str_replace("\\","/",__DIR__)."/");
@@ -63,6 +63,7 @@ function _CT($i){
 		"timezone" => 0, // 时区校准（请勿使用）
 		"cache_expire" => 24*60*60*30, // RemotePlay 缓存有效时长
 		"cache_expire_invalid" => 24*60*60*2, // RemotePlay 失败缓存有效时长
+		"cache_refresh_chance" => 0.35, // RemotePlay 在特定条件下自动尝试刷新缓存的概率
 		"temp_expire" => 3600, // 歌词本临时缓存有效时长
 
 		"rp_search_retry" => 4, // RemotePlay 搜索查询失败后的最大重试次数

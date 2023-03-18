@@ -10,11 +10,12 @@ function _C(){
 		"timezone" => 0, //时区校准
 		"cache_expire" => 24*60*60*93, //爬虫缓存时间（用于查看。爬虫较慢，建议缓存3个月）
 		"cache_expire_inivalid" => 24*60*60*2,
+		"cache_refresh_chance" => 0.35, // RemotePlay 在特定条件下自动尝试刷新缓存的概率
 		"temp_expire" => 3600, //歌词本缓存时间（用于下载。建议1小时）
 
 		"rp_search_retry" => 4, // RemotePlay 搜索查询失败后的最大重试次数
 		"rp_search_retry_delay" => 0.1,
-		"rp_allow_pay_crack" => false,
+		"rp_allow_pay_crack" => true,
 
 		"can_register" => true, // 允许用户注册
 		"ip_reg_limit" => 1, // 一个IP的注册限制量

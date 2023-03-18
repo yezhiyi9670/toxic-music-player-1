@@ -262,7 +262,8 @@ class kuwoCrawler {
 		
 		$cachefile = REMOTE_CACHE.$id.'.json';
 		if(!$flag && file_exists($cachefile)) {
-			if(time() - filemtime($cachefile) <= _CT('cache_expire_invalid')) {
+			$cache_age = time() - filemtime($cachefile);
+			if($cache_age <= _CT('cache_expire')) {
 				$this->cache=json_decode(file_get_contents($cachefile),true);
 				$ok=true;
 				if(!isset($this->cache['name']) || $this->cache['name'] == '') $ok=false;
@@ -292,7 +293,10 @@ class kuwoCrawler {
 						$retrial_remain -= 1;
 						$can_retry = true;
 					}
-				} 
+				}
+				if($cache_age > _CT('cache_expire_invalid')) {
+					$can_retry = true;
+				}
 				if(!$can_retry) {
 					$this->success=false;
 					return;

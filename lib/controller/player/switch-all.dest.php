@@ -20,3 +20,9 @@ echo $boundary;
 tpl("player/thirdrow-n");
 echo $boundary;
 tpl("player/lyric_overview");
+
+if(isKuwoId(cid())) {
+	if(mt_rand(1, 10000) <= _CT('cache_refresh_chance') * 10000) {
+		remoteEncache(cid(),'K',true);
+	}
+}
