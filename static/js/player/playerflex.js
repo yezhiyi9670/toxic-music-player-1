@@ -43,7 +43,6 @@ function autofit(){
 		let totalheight =
 			(isFirefox ? $('html').height() - 52 : $('body').height())
 			- ($('header').height() ?? headerDefault);
-		console.log(isFirefox ? $('html').height() - 52 : $('body').height());
 		let ch_height = 160 + 64;
 		let pad = 0;
 		let remain = totalheight - ch_height - totalwidth;

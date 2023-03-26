@@ -29,6 +29,9 @@ var list_idx = {};                   // ID -> 列表索引查找表
 
 var updated_lrcpos = [null,null];    // 已应用至 HTML 的高亮位置
 
+var timer_end = undefined;           // 计时器结束时间
+var timer_expired = false;           // 计时器已经结束
+
 /**
  * 补全字符串前缀
  */
@@ -368,6 +371,9 @@ $('document').ready(function(){
 		document.querySelector('.player-processbar-i').style.width=
 			(A.currentTime*100/A.duration).toString()+"%";
 
+		// 标记定时关闭状态
+		timedPauseUpdate()
+
 		// 标记播放按钮
 		var X = $('#play-button');
 		if(A.paused) {
@@ -594,14 +600,16 @@ function rep_click(x) {
 	if(!x.hasClass('fa-repeat')){
 		x.removeClass("fa-circle-o");
 		x.addClass("fa-repeat");
-		if(isList) A.onended = RP_next;
-		else A.loop = 'loop';
+		// if(isList) A.onended = RP_next;
+		// else A.loop = 'loop';
+		A.onended = RP_next;
 	}
 	else{
 		x.addClass("fa-circle-o");
 		x.removeClass("fa-repeat");
-		if(isList) A.onended = AK_next;
-		else A.removeAttribute('loop');
+		// if(isList) A.onended = AK_next;
+		// else A.removeAttribute('loop');
+		A.onended = AK_next;
 	}
 }
 
@@ -934,41 +942,38 @@ function playPreInit() {
 		$('.right-second-row').show();
 	}
 
+
 	setNextIndex(isRand);
-	if(isList) {
-		if(nxt_idx === false) {
-			AK_next = function(){addPlaytimes(song_id,'finish');};
-		} else {
-			AK_next = function(){
-				addPlaytimes(song_id,'finish');
-				if(nxt_idx === false) return;
-				curr_idx=nxt_idx;
-				isBeginPlay = 1;
-				changeTo(list[nxt_idx],true);
-			}
-		}
-
-		RP_next = function(){
-			addPlaytimes(song_id,'finish');
-			isBeginPlay = 1;
-			changeTo(list[curr_idx],true);
-		};
-
-		if($('#repeat-button').hasClass('fa-repeat')) A.onended = RP_next;
-		else A.onended = AK_next;
-
-		// 预加载下一个音频
-		// 允许插队
-		if(nxt_idx !== false /*&& preRead_threads < 3*/) {
-			preloadNextSong(list[nxt_idx]);
-		}
-	} else {
-		A.onended=function() {
-			addPlaytimes(song_id,'finish');
-		}
-		// 移除“下一首”
+	if(!isList) {
 		$('.menu-next-song-item').hide();
 	}
+	AK_next = function() {
+		addPlaytimes(song_id,'finish');
+		if(!checkTimedPause()) {
+			return;
+		}
+		if(nxt_idx === false || !isList) return;
+		curr_idx = nxt_idx;
+		isBeginPlay = 1;
+		changeTo(list[nxt_idx],true);
+	}
+	RP_next = function(){
+		addPlaytimes(song_id,'finish');
+		if(!checkTimedPause()) {
+			return;
+		}
+		isBeginPlay = 1;
+		changeTo(list[curr_idx],true);
+	};
+	if($('#repeat-button').hasClass('fa-repeat')) A.onended = RP_next;
+	else A.onended = AK_next;
+	// 预加载下一个音频
+	// 允许插队
+	if(nxt_idx !== false /*&& preRead_threads < 3*/) {
+		preloadNextSong(list[nxt_idx]);
+	}
+
+
 
 	var transform_lyric_html = function() {
 		$('.reverse-sound').each(function(i){
@@ -1521,8 +1526,70 @@ function rmenu_scrollme() {
 	,"#rmenu-list-showbox");
 }
 
-// 准备速查
+/**
+ * 准备速查
+ */
 function ready_for_search_store() {
 	storeData('maker.ready_for_search', song_id);
 	Toast.make_toast_html(LNG('player.toast.rfs_stored'), 1500);
+}
+
+/**
+ * 检查定时暂停
+ */
+function checkTimedPause() {
+	if(timer_end !== undefined && new Date() >= timer_end) {
+		timer_end = undefined
+		Toast.make_toast_html(LNG('player.toast.timer_triggered'), 2500)
+		return false
+	}
+	return true
+}
+/**
+ * 更新定时暂停状态
+ */
+function timedPauseUpdate() {
+	if(timer_end === undefined) {
+		$('.timed-pause-state').text(LNG('player.list.timer'))
+	} else {
+		if(new Date() < timer_end) {
+			$('.timed-pause-state').text(LNG('player.list.timer.on', new Date(timer_end).toLocaleTimeString()))
+			timer_expired = false
+		} else {
+			$('.timed-pause-state').text(LNG('player.list.timer.expire'))
+			if(!timer_expired) {
+				Toast.make_toast_html(LNG('player.toast.timer_zero'))
+			}
+			timer_expired = true
+		}
+	}
+}
+/**
+ * 定时暂停
+ */
+async function timedPause() {
+	if(timer_end === undefined) {
+		let time = await modal_prompt_p(LNG('player.alert.timer'), LNG('player.alert.timer.tips'), '0.0')
+		if(time === undefined) {
+			return
+		}
+		time = +time
+		if(time != time || time < 0 || time > 1440) {
+			Toast.make_toast_html(LNG('player.toast.invalid_time'), 1500);
+			return
+		}
+		let endTime = new Date(+new Date() + time * 60 * 1000)
+		timer_end = +endTime
+		if(time != 0) {
+			Toast.make_toast_html(LNG('player.toast.timer_on', endTime.toLocaleTimeString()), 2500);
+			timer_expired = false;
+		} else {
+			Toast.make_toast_html(LNG('player.toast.timer_zero'), 2500);
+			timer_expired = true;
+		}
+	} else {
+		timer_end = undefined
+		Toast.make_toast_html(LNG('player.toast.timer_off'), 1500);
+	}
+	timedPauseUpdate()
 }

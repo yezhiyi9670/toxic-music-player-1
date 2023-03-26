@@ -11,6 +11,9 @@
 .song-title {
 	font-size: 25px;
 }
+.song-id {
+	display: none;
+}
 .right-first-row {
 	margin-top: 0;
 	margin-bottom: 0;

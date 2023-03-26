@@ -9,9 +9,11 @@
 <?php } ?>
 <?php if(!is_wap()) { ?><center style="margin-bottom:-18px;"><?php } ?>
 <div class="title-dropdown-father am-dropdown <?php if(is_wap()) echo 'am-dropdown-up' ?>">
-	<a class="song-title am-dropdown-toggle" <?php if(getAudioPath(FILES.cid()."/back")) { ?>data-back="yes"<?php } ?>><?php echo htmlspecial2(GCM()['N']) ?></a>
+	<a class="song-title am-dropdown-toggle" <?php if(getAudioPath(FILES.cid()."/back")) { ?>data-back="yes"<?php } ?>>
+		<?php echo htmlspecial2(GCM()['N']) ?><span style="display:inline-block;width:0.15em"></span><?php echo fa_icon('caret-down', '0') ?>
+	</a>
 	<?php // 这里是操作菜单 ?>
-	<ul class="am-dropdown-content song-list-show" onclick="$('.title-dropdown-father').dropdown('close')" style="max-height:480px;overflow:auto;overflow-x:hidden;right:auto;<?php if(!is_wap()) echo 'margin-left:-320px;margin-top:-300px;'; ?>">
+	<ul class="am-dropdown-content song-list-show" onclick="$('.title-dropdown-father').dropdown('close')" style="max-height:520px;overflow:auto;overflow-x:hidden;right:auto;<?php if(!is_wap()) echo 'margin-left:-320px;margin-top:-300px;'; ?>">
 		<li class="am-dropdown-header"><?php LNGe('player.menu.action') ?></li>
 		<li>
 			<a onclick="changeTo(song_id)" oncontextmenu="changeTo(song_id,false,true);return false">
@@ -64,6 +66,7 @@
 		<?php if(!isset($_GET['iframe'])) { ?>
 		<li><a onclick="listEdit()"><?php echo fa_icon('pencil', '0') ?><span class="edit-label"><?php LNGe('player.list.edit') ?></span></a></li>
 		<?php } ?>
+		<li><a onclick="timedPause()"><?php echo fa_icon('hourglass-2', '0') ?><span class="timed-pause-state"><?php LNGe('player.list.timer') ?></span></a></li>
 		<li><a onclick="listPrint()"><?php echo fa_icon('print', '0') ?><?php LNGe('player.list.print') ?></a></li>
 		<?php if(false && isKuwoId(cid())) { ?>
 		<li class="am-divider"></li>
