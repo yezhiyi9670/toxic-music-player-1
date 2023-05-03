@@ -21,7 +21,7 @@ function setting_def() {
 
 function setting_gt($i,$f = "") {
 	$s = setting_def();
-	$t = json_decode($_COOKIE[APP_PREFIX . '-user-settings'],true);
+	$t = json_decode($_COOKIE[APP_PREFIX . '-user-settings'] ?? '{}',true);
 	if(isset($t[$i])) {
 		$v = $t[$i];
 		$not_allowed = '!;<>{}'; $accepted = true;
