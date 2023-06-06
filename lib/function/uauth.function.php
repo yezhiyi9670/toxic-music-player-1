@@ -511,7 +511,12 @@ function uauth_ip_cnt($ip) {
 function uauth_request_id($uname,$cate) {
 	$fid = 'user/'.$uname.'/'.$cate.'/index';
 	$dir = USER_DATA.$uname.'/'.$cate.'/';
-	if(!file_exists($dir)) mkdir($dir);
+	if(!file_exists($dir)) {
+		if(!file_exists(USER_DATA.$uname)) {
+			mkdir(USER_DATA.$uname);
+		}
+		mkdir($dir);
+	}
 	wait_file($fid);
 	lock_file($fid);
 

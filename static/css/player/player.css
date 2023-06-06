@@ -46,6 +46,7 @@ body {
 .right-second-row{
 	position:relative;
 	font-size:0;
+	white-space:nowrap;
 }
 .right-third-row{
 	margin-top:16px;
