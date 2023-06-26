@@ -89,6 +89,20 @@
 		// --- audio url ---
 		var yp_src='<?php echo getAudioUrl(cid()) ?>';
 	</script>
+	<?php
+		// 自定义头部插入内容
+		if(file_exists(DATA_PATH.'bc/head.html')) {
+			require(DATA_PATH.'bc/head.html');
+		}
+	?>
+	<script>
+		/**
+		 * 目前没有可用的追踪事件
+		 */
+		if(!window.sendAnalyticsEvent) {
+			window.sendAnalyticsEvent = (name) => {}
+		}
+	</script>
 </head>
 
 <body>
