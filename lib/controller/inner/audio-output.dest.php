@@ -11,6 +11,7 @@ if(isKuwoId(cid())) {
 	remoteEncache(sid($_GET['_lnk']),'K');
 	if(substr($_GET['_lnk'],strlen($_GET['_lnk'])-4)!= '.url') {
 		header('HTTP/1.1 302 Redirect'); // 将RemotePlay请求导向实际音频地址。不允许缓存。
+		header('Cache-Control: no-cache');
 		header('Location: '.$akCrawler[cid()]->url());
 	}
 	else {
