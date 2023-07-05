@@ -8,7 +8,7 @@
 		<li><a href="javascript:;"><i class="fa fa-pencil"></i> <?php LNGe('player.detail.author') ?><span id="lauthor"><?php echo GCM()['LA'] ?></span> | <span id="mauthor"><?php echo GCM()['MA'] ?></span></a></li>
 		<li><a href="javascript:;"><i class="fa fa-folder"></i> <?php LNGe('player.detail.cate') ?><span id="cate"><?php echo GCM()['C'] ?></span></a></li>
 		<?php if(GCM()['O']){ ?>
-		<li><a href="<?php echo GCM()['O'] ?>" target="_blank"><i class="fa fa-external-link"></i> <?php LNGe('player.detail.origin') ?><span><?php LNGe('player.detail.origin.val') ?></span></a></o>
+		<li><a rel="noreferrer noopener" href="<?php echo GCM()['O'] ?>" target="_blank"><i class="fa fa-external-link"></i> <?php LNGe('player.detail.origin') ?><span><?php LNGe('player.detail.origin.val') ?></span></a></o>
 		<?php } ?>
 	</ul>
 </div>

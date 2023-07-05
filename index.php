@@ -49,6 +49,8 @@ if(!defined('GC_COLOR_2')) {
 require(CRAWLER."index.crawler.php");
 require(VLUSER."index.vluser.php");
 
+header('Referrer-Policy: same-origin');
+
 /**
  * 默认配置函数
  * 注意：请勿修改其中的配置选项。要修改配置，使用 configuration.php。

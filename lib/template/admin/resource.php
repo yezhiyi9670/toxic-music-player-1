@@ -178,7 +178,7 @@ load_js('js/resource/resourceapp');
 		<!--来源链接-->
 		<?php $origin_url=(GCM()['O'] ?? null);if($origin_url) { ?>
 			<hr>
-			<a href="<?php echo $origin_url ?>" target="_blank"><?php LNGe('editor.open_source') ?> <i class="fa fa-external-link"></i></a>
+			<a rel="noreferrer noopener" href="<?php echo $origin_url ?>" target="_blank"><?php LNGe('editor.open_source') ?> <i class="fa fa-external-link"></i></a>
 		<?php } ?>
 	</div>
 	<div class="txmp-page-right" style="position:<?php echo is_wap()?"auto":"fixed" ?>; overflow-y:scroll;">

@@ -729,7 +729,7 @@ rp.search.no_such_id = 该编号不对应任何歌曲。
 rp.search.invalid_purpose = 查询命令错误。
 rp.search.null = 未找到符合条件的项目。
 rp.search.fail = 查询失败。请重试。
-rp.search.kuworef = 若需要更加宽泛的搜索，请前往<a href="${0}" target="_blank">酷我音乐</a>。
+rp.search.kuworef = 若需要更加宽泛的搜索，请前往<a rel="noreferrer noopener" href="${0}" target="_blank">酷我音乐</a>。
 rp.search.notres = 结果根据从酷我音乐抓取的数据显示。本应用不对搜索结果负责。
 
 # Compilation
