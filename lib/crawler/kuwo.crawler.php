@@ -545,7 +545,6 @@ class kuwoCrawler {
 					'G1 #'.rgb2hex($cp[0]) . "\n" . 
 					'G2 #'.rgb2hex($cp[1]) . "\n" . 
 					'O  '.'https://kuwo.cn/play_detail/'.$this->cache['id'].'/' . "\n" .
-					($this->cache['info']['pic'] ? 'P  K_' . $this->cache['id'] . '/avatar' . "\n" : '') .
 					'' . "\n" . 
 					'// ' . LNG('rp.code.bycrawler') . "\n" . 
 					'' . "\n" . 
@@ -585,7 +584,6 @@ class kuwoCrawler {
 					'G1 #'.rgb2hex($cp[0]) . "\n" . 
 					'G2 #'.rgb2hex($cp[1]) . "\n" . 
 					'O  '.'https://kuwo.cn/play_detail/'.$this->cache['id'].'/' . "\n" .
-					($this->cache['info']['pic'] ? 'P  K_' . $this->cache['id'] . '/avatar' . "\n" : '') .
 					'' . "\n" .
 					'// ' . LNG('rp.code.bycrawler') . "\n" . 
 					'' . "\n" . 

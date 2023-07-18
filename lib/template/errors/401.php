@@ -9,14 +9,14 @@
 	<p><?php LNGe('err.401.try') ?></p>
 	<ul>
 		<?php if(!is_root(false)) { ?>
-		<li><?php LNGe('err.401.desc.login_root') ?></li>
-		<li><?php LNGe('err.401.desc.perm_disabled') ?></li>
-		<li><?php LNGe('err.401.desc.private_pl_root') ?></li>
+			<li><?php LNGe('err.401.desc.login_root') ?></li>
+			<li><?php LNGe('err.401.desc.perm_disabled') ?></li>
+			<li><?php LNGe('err.401.desc.private_pl') ?></li>
 		<?php } else { ?>
 		<?php if(isset($_GET['deauth'])) { ?>
 			<li><?php echo LNG('err.401.desc.no_deauth') ?></li>
 		<?php } ?>
-		<li><?php LNGe('err.401.desc.private_pl') ?></li>
+			<li><?php LNGe('err.401.desc.private_pl_root') ?></li>
 		<?php } ?>
 	</ul>
 	<p><?php LNGe('err.401.desc.wd') ?><code><?php echo '401 ' . $GLOBALS['errorWord'] ?></code></p>
