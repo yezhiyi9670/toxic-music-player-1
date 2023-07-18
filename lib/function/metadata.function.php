@@ -222,7 +222,7 @@ function isValidMusic($n,$requireAudio=true,$allowRemote=true) {
 		global $akCrawler;
 		global $akCrawlerInfo;
 		remoteEncache($n,'K');
-		return $akCrawler[$n]->success && (!$requireAudio || _CT('rp_allow_pay_crack') || !paymentStatus($n)['pay_play']);
+		return $akCrawler[$n]->success && (!$requireAudio || rp_can_pay_play() || !paymentStatus($n)['pay_play']);
 	}
 	if($requireAudio==false) return file_exists(FILES.$n."/lyric.txt");
 	return file_exists(FILES.$n."/lyric.txt") && getAudioAnalysis($n) != null;

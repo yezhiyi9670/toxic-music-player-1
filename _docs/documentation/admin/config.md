@@ -71,7 +71,8 @@ Location: `internal_config/config_misc.php`
 // Allow pay_play hack on RemotePlay
 // - false: Paid-to-play songs will be unplayable and undownloadable.
 // - true: One have full access to paid-to-play songs.
-"rp_allow_pay_crack" => true,
+"rp_can_pay_play" => false,
+"rp_pay_play_admin_only" => false,
 
 // Allow visitor register
 "can_register" => true,

@@ -2,7 +2,7 @@
 error_reporting(~E_ALL);
 
 define("IN_SYSTEM",'WMSDFCL/txmp');
-define("VERSION","128l");
+define("VERSION","128m");
 define("CSV_VERSION","1");
 define("DATAVER","201805");
 define("BASIC_PATH",str_replace("\\","/",__DIR__)."/");
@@ -70,7 +70,8 @@ function _CT($i){
 
 		"rp_search_retry" => 4, // RemotePlay 搜索查询失败后的最大重试次数
 		"rp_search_retry_delay" => 0.1,
-		"rp_allow_pay_crack" => false, // RemotePlay 允许在线播放会员曲目
+		"rp_can_pay_play" => false,
+		"rp_pay_play_admin_only" => false,
 
 		"can_register" => false, // 能否注册
 		"ip_reg_limit" => 3, // 单个IP地址注册数量限制

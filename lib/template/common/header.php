@@ -83,7 +83,7 @@
 		G.app_title = '<?php echo jsspecial(_CT('app_name_title')) ?>';
 		G.app_prefix = '<?php echo APP_PREFIX ?>';
 		G.dataver = '<?php echo DATAVER ?>';
-		G.can_pay_play = <?php echo _CT('rp_allow_pay_crack') ? 'true' : 'false' ?>;
+		G.can_pay_play = <?php echo rp_can_pay_play() ? 'true' : 'false' ?>;
 	</script>
 	<script>
 		// --- audio url ---

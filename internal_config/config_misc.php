@@ -15,7 +15,8 @@ function _C(){
 
 		"rp_search_retry" => 4, // RemotePlay 搜索查询失败后的最大重试次数
 		"rp_search_retry_delay" => 0.1,
-		"rp_allow_pay_crack" => true,
+		"rp_can_pay_play" => false,
+		"rp_pay_play_admin_only" => false,
 
 		"can_register" => true, // 允许用户注册
 		"ip_reg_limit" => 1, // 一个IP的注册限制量

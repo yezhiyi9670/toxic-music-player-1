@@ -1,5 +1,75 @@
 <?php if(!defined('IN_SYSTEM')) exit;//Silence is golden ?><?php
 
+function kuwo_fuzzy_parseInt($value) {
+	if(strstr($value, 'e')) {
+		$value = substr($value, 0, strpos($value, 'e'));
+	}
+	if(doubleval($value) > PHP_INT_MAX) {
+		return doubleval($value);
+	}
+	return intval($value);
+}
+function kuwo_fuzzy_toString($value) {
+	$result = strtolower(strval($value));
+	if(strstr($result, 'e')) {
+		$result = sprintf("%.16le", $value);
+	}
+	return strtolower($result);
+}
+
+// 酷我音乐令牌加密算法
+// Transcripted from kuwo-app-research.js
+function kuwo_encrypt_iuvt($value, $key) {
+	if(strlen($key) <= 0) {
+		return '';
+	}
+
+	$n = '';
+	for($i = 0; $i < strlen($key); $i++) {
+		$n .= strval(ord($key[$i]));
+	}
+
+	$r = intval(floor(strlen($n) / 5));
+	$o = intval(
+		$n[$r] . $n[2 * $r] . $n[3 * $r] . $n[4 * $r] . $n[5 * $r]
+	);
+
+	$l = intval(ceil(strlen($key) / 2));
+	$c = 2147483647;
+	if($o < 2) {
+		return '';
+	}
+
+	$d = mt_rand(0, 1000000000) % 1000000000;
+	$n .= sprintf("%d", $d);
+	// $times = 0;
+	// while(strlen($n) > 10) {
+	// 	$n = kuwo_fuzzy_toString(strval(
+	// 		kuwo_fuzzy_parseInt(substr($n, 0, 10)) + kuwo_fuzzy_parseInt(substr($n, 10, strlen($n) - 10))
+	// 	));
+	// 	$times += 1;
+	// 	if($times > 24) {
+	// 		break;
+	// 	}
+	// }
+	// those above is not working, so dirty hack.
+	$n = '59910099';
+
+	$n = ($o * intval($n) + $l) % $c;
+	$h = '';
+	$f = '';
+	for($i = 0; $i < strlen($value); $i++) {
+		$h = intval(ord($value[$i]) ^ intval(floor($n / $c * 255)));
+		$f .= ($h < 16 ? ('0' . dechex($h)) : dechex($h));
+		$n = ($o * $n + $l) % $c;
+	}
+	for($d = dechex($d); strlen($d) < 8; ) {
+		$d = '0' . $d;
+	}
+
+	return $f . $d;
+}
+
 // 酷我音乐爬虫专用 HTTP GET 格式
 function kuwo_search_httpget($url) {
 	// 随机生成 csrf token。
@@ -17,11 +87,23 @@ function kuwo_search_httpget($url) {
 			$token .= $token[$i-1];
 		}
 	}
-	// $token = 'LZZ31RUTJ22';
+
+	// 随机生成 iuvt
+	$str = '0123456789QWERTYUIOPASDFGHJKLKZXCVBNMqwertyuiopasdfghjklzxcvbnm';
+	$iuvt = '';
+	for($i = 0; $i < 32; $i ++) {
+		$idx = mt_rand(0,strlen($str) - 1);
+		$iuvt .= $str[$idx];
+	}
+	$iuvt_key = 'Hm_Iuvt_cdb524f42f0ce19b169b8072123a4727';
+
 	return ex_url_get_contents($url,[
 		'Referer: https://kuwo.cn/',
-		'Cookie: kw_token='.$token,
+		'Cookie: kw_token=' . $token . ';' . $iuvt_key . '=' . $iuvt,
+		'Secret: ' . kuwo_encrypt_iuvt($iuvt, $iuvt_key),
+		'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/116.0',
 		'csrf: '.$token,
+		'X-Forwarded-For: 223.5.5.5',
 	]);
 }
 
@@ -204,7 +286,7 @@ function kuwoSearchSong() {
 		if($_GET['key'][0]!='%') @$res=kuwo_search_get_json('https://kuwo.cn/api/www/search/searchMusicBykeyWord?key='.urlencode($_GET['key']).'&pn='.$_GET['pageid'].'&rn=50'); //常规搜索
 		else @$res=kuwo_search_get_json('https://kuwo.cn/api/www/artist/artistMusic?artistid='.urlencode(substr($_GET['key'],1)).'&pn='.$_GET['pageid'].'&rn=50'); //指定歌手
 		@$res=json_decode($res,true);
-		if($res['code'] == -1) {
+		if(($res['code'] ?? -1) == -1) {
 			echo LNG('rp.search.null');
 			exit;
 		}
@@ -304,12 +386,8 @@ class kuwoCrawler {
 			}
 		}
 		try{
-			@$lrc=ex_url_get_contents('https://www.kuwo.cn/newh5/singles/songinfoandlrc?musicId='.$id, ['X-Forwarded-For' => '223.5.5.5']);
-			// @$name=file_get_contents('https://www.kuwo.cn/play_detail/'.$id.'/');
+			@$lrc=kuwo_search_httpget('https://www.kuwo.cn/newh5/singles/songinfoandlrc?musicId='.$id);
 			@$lrc=json_decode($lrc,true);
-			// @$name=strstr($name,'<input id="songinfo-name" type="hidden" value="');
-			// @$name=substr($name,strlen('<input id="songinfo-name" type="hidden" value="'));
-			// @$name=substr($name,0,strpos($name,'"'));
 			@$this->cache['lrclist']=$lrc['data']['lrclist'];
 			@$this->cache['info']=$lrc['data']['songinfo'];
 			@$this->cache['name']=$this->cache['info']['songName'];
@@ -345,10 +423,12 @@ class kuwoCrawler {
 	//由于大多数音乐网站有[反盗链系统]，通常每次使用音频都要重新获取地址。
 	function _url() {
 		if(!isset($this->cache['url'])){
-			if(_CT('rp_allow_pay_crack')) {
+			if(rp_can_pay_play()) {
+				// API on 2021-10-30
 				// @$url=ex_url_get_contents('https://kuwo.cn/bd/search/getSongUrlByMid?mid='.$this->cache['id'].'&format=mp3&br=192kmp3&bdfrom=xshow&c=nfmbhi6fxwaj',['User-Agent'=>'Dalvik/2.1.0 (Linux; U; Android 7.1.2; LIO-AN00 Build/N2G47O)']); // This f*cking thing isn't working
+				// show_json(false, $url);
 				// @$url=json_decode($url,true);
-				// if(!is_array($url) || !is_array($url['data'])) {
+				// if(!is_array($url) || !is_array($url['data'] ?? null)) {
 				// 	$url = ['data' => ['url' => '']];
 				// }
 				// $url = $url['data']['url'];
@@ -358,16 +438,52 @@ class kuwoCrawler {
 				// 	$url = $arr[1] . str_replace('.','-',$arr[2]) . $arr[3];
 				// }
 				// $this->cache['url'] = $url;
-				@$url=ex_url_get_contents('https://www.kuwo.cn/api/v1/www/music/playUrl?mid='.$this->cache['id'].'&type=convert_url3&br=192kmp3', ['User-Agent'=>'Dalvik/2.1.0 (Linux; U; Android 7.1.2; LIO-AN00 Build/N2G47O)']);
+
+				// Similar one
+				// @$url = kuwo_search_httpget('https://antiserver.kuwo.cn/anti.s?type=convert_url2&format=mp3&rid=MUSIC_' . $this->cache['id'] . '&response=url&needanti=0' . randomUUID());
+				// show_json(false, $url);
+				// if(str_starts_with($url, 'http://') || str_starts_with($url, 'https://')) {
+				// 	preg_match('/(https?:\/\/)(.*?)(\.kuwo\.cn\/.*)/',$url,$arr);
+				// 	if($arr) {
+				// 		$url = $arr[1] . str_replace('.','-',$arr[2]) . $arr[3];
+				// 	}
+				// 	$this->cache['url'] = $url;
+				// } else {
+				// 	$this->cache['url'] = '';
+				// }
+
+				// API on 2023-02-25
+				// @$url=kuwo_search_httpget('https://www.kuwo.cn/api/v1/www/music/playUrl?mid='.$this->cache['id'].'&type=convert_url3&response=url&httpsStatus=1&br=192kmp3&reqId=' . randomUUID() . '&plat=web_www&from=');
+				// show_json(false, $url);
+				// @$url=json_decode($url,true);
+				// if(!is_array($url) || !is_array($url['data'] ?? null)) {
+				// 	$url = ['data' => ['url' => '']];
+				// }
+				// $this->cache['url']=$url['data']['url'];
+				
+				// API on 2023-07-19, now working again
+				@$url=ex_url_get_contents('https://kuwo.cn/bd/search/getSongUrlByMid?type=convert_url2&format=mp3&bitrate=192&sig=0&mid=' . $this->cache['id'] . '&priority=bitrate&bdfrom=xshow&c=nfmbhi6fxwaj',['User-Agent'=>'Dalvik/2.1.0 (Linux; U; Android 7.1.2; LIO-AN00 Build/N2G47O)']); // This f*cking thing isn't working
 				@$url=json_decode($url,true);
-				if(!is_array($url) || !is_array($url['data'])) {
+				if(!is_array($url) || !is_array($url['data'] ?? null)) {
 					$url = ['data' => ['url' => '']];
 				}
-				$this->cache['url']=$url['data']['url'];
+				$url = $url['data']['url'];
+				$arr = [];
+				preg_match('/(https?:\/\/)(.*?)(\.kuwo\.cn\/.*)/',$url,$arr);
+				if($arr) {
+					$url = $arr[1] . str_replace('.','-',$arr[2]) . $arr[3];
+				}
+				if(strstr($url, '?')) { // sanitizing
+					$url = substr($url, 0, strpos($url, '?'));
+				}
+				$this->cache['url'] = $url;
+
+				// $this->cache['url'] = '';
 			} else {
-				@$url=ex_url_get_contents('https://www.kuwo.cn/api/v1/www/music/playUrl?mid='.$this->cache['id'].'&type=music&httpsStatus=1&br=192kmp3&reqId=' . randomUUID());
+				// Web API url
+				@$url=kuwo_search_httpget('https://www.kuwo.cn/api/v1/www/music/playUrl?mid='.$this->cache['id'].'&type=music&httpsStatus=1&br=192kmp3&reqId=' . randomUUID() . '&plat=web_www&from=');
 				@$url=json_decode($url,true);
-				if(!is_array($url) || !is_array($url['data'])) {
+				if(!is_array($url) || !is_array($url['data'] ?? null)) {
 					$url = ['data' => ['url' => '']];
 				}
 				$this->cache['url']=$url['data']['url'];
@@ -376,7 +492,7 @@ class kuwoCrawler {
 		}
 		return $this->cache['url'];
 	}
-	function url($remain_retry = 5) {
+	function url($remain_retry = 2) {
 		if($remain_retry <= 0) return '';
 		$res = $this->_url();
 		if('' == trim($res)) {
