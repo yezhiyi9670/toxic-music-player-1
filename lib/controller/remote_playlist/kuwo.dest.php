@@ -7,7 +7,7 @@ $_GET['return'] = true;
 $_GET['key'] = '^' . $GLOBALS['remote_playlist_id'];
 $_GET['pageid'] = '1';
 $GLOBALS['remote_playlist'] = kuwoSearchSong();
-if($GLOBALS['remote_playlist']['code'] != 200) {
+if($GLOBALS['remote_playlist']['code'] ?? 404 != 200) {
 	print404('Not Found');
 } else {
 	include_header();

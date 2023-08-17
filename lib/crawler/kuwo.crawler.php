@@ -31,7 +31,7 @@ function kuwo_encrypt_iuvt($value, $key) {
 
 	$r = intval(floor(strlen($n) / 5));
 	$o = intval(
-		$n[$r] . $n[2 * $r] . $n[3 * $r] . $n[4 * $r] . $n[5 * $r]
+		$n[$r] . $n[2 * $r] . $n[3 * $r] . $n[4 * $r] . ($n[5 * $r] ?? '')
 	);
 
 	$l = intval(ceil(strlen($key) / 2));
@@ -40,7 +40,7 @@ function kuwo_encrypt_iuvt($value, $key) {
 		return '';
 	}
 
-	$d = mt_rand(0, 1000000000) % 1000000000;
+	$d = mt_rand(0, 1000000000) % 100000000;
 	$n .= sprintf("%d", $d);
 	// $times = 0;
 	// while(strlen($n) > 10) {
@@ -53,7 +53,7 @@ function kuwo_encrypt_iuvt($value, $key) {
 	// 	}
 	// }
 	// those above is not working, so dirty hack.
-	$n = '59910099';
+	$n = '59910098';
 
 	$n = ($o * intval($n) + $l) % $c;
 	$h = '';
@@ -91,16 +91,18 @@ function kuwo_search_httpget($url) {
 	// 随机生成 iuvt
 	$str = '0123456789QWERTYUIOPASDFGHJKLKZXCVBNMqwertyuiopasdfghjklzxcvbnm';
 	$iuvt = '';
-	for($i = 0; $i < 32; $i ++) {
+	for($i = 0; $i < 31; $i ++) {
 		$idx = mt_rand(0,strlen($str) - 1);
 		$iuvt .= $str[$idx];
 	}
-	$iuvt_key = 'Hm_Iuvt_cdb524f42f0ce19b169b8072123a4727';
+	$iuvt .= 'A';
+	$iuvt_key = 'Hm_Iuvt_cdb524f42f0cer9b268e4v7y734w5esq24';
+	$secret = kuwo_encrypt_iuvt($iuvt, $iuvt_key);
 
 	return ex_url_get_contents($url,[
 		'Referer: https://kuwo.cn/',
 		'Cookie: kw_token=' . $token . ';' . $iuvt_key . '=' . $iuvt,
-		'Secret: ' . kuwo_encrypt_iuvt($iuvt, $iuvt_key),
+		'Secret: ' . $secret,
 		'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/116.0',
 		'csrf: '.$token,
 		'X-Forwarded-For: 223.5.5.5',
