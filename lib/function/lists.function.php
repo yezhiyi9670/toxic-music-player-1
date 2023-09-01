@@ -104,11 +104,23 @@ function printRmpList($item,$dataType=false) {
 	if($dataType) {
 		$item['rid'] = $item['id'];
 		$item['name'] = $item['songName'];
+	} else {
+		$rewrittenItem = [];
+		foreach($item as $k => $v) {
+			$rewrittenItem[strtolower($k)] = $v;
+		}
+		$item = $rewrittenItem;
+		if(!isset($item['rid'])) {
+			$item['rid'] = $item['dc_targetid'];
+		}
+		if(!isset($item['score100'])) {
+			$item['score100'] = '???';
+		}
 	}
 	$cl = rgb2hex(hashed_saturate_gradient($item['name'] . ' - ' . $item['artist'])[0]);
 	echo '  <li style="color:#'.$cl.';" class="song-item song-item-rp">';
 	echo '<a href="'.BASIC_URL.'K_'.$item['rid'].'" target="_blank" style="color:#'.$cl.';" data-id="'.'K_'.$item['rid'].'">';
-	echo ($item['name']).' - '.($item['artist']);
+	echo htmlspecial2($item['name']).' - '.htmlspecial2($item['artist']);
 	echo '</a>';
 	echo '<br>';
 	echo '<span class="addition-cmt"';
@@ -120,11 +132,9 @@ function printRmpList($item,$dataType=false) {
 	echo '<span class="txmp-tag tag-length">' . fa_icon('clock-o') . formatDuration($item['duration']) . '</span>';
 	// 质量
 	echo bitrate_tag(192);
-	// 上传日期
-	// if(!$dataType) echo '<span class="txmp-tag tag-purple-g">'.fa_icon('calendar').$item['releaseDate'].'</span>';
 	// 专辑名称
 	if($item['album']) {
-		echo '<span class="txmp-tag tag-orange-g txmp-tag-album">'.fa_icon('book').($item['album']).'</span>';
+		echo '<span class="txmp-tag tag-orange-g txmp-tag-album">'.fa_icon('book').htmlspecial2($item['album']).'</span>';
 	}
 	// 评价（我们发现存在 102%）
 	echo '<span class="txmp-tag tag-blue-g">'.fa_icon('asterisk').$item['score100'].'%</span>';

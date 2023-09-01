@@ -110,14 +110,14 @@ function kuwo_search_httpget($url) {
 }
 
 // 反复尝试（搜索接口看起来不太稳定）
-function kuwo_search_get_json($url) {
+function kuwo_search_get_json($url, $extras = []) {
 	$remain_retry = _CT('rp_search_retry');
 	$delay = _CT('rp_search_retry_delay');
 	$data = kuwo_search_httpget($url);
 	while(trim($data)[0] != '{' && strlen($data) < 400 && $remain_retry > 0) {
 	  $remain_retry--;
 	  sleep($delay);
-	  $data = kuwo_search_httpget($url);
+	  $data = kuwo_search_httpget($url, $extras);
 	}
 	return $data;
   }
@@ -180,7 +180,6 @@ function kuwoSearchSong() {
 			$purpose = trim(substr($_GET['key'],1));
 			if($purpose == '__mp_suggestions__') {
 				// 数据串全局匹配歌单信息。
-				// [修复] 酷我音乐试图将变量置入播放量位置干掉爬虫。v127a-pre10。
 				$matcher = '/name:"(.+?)",listencnt:([0-9A-Za-z]+),id:(\d+)/';
 				@$text = kuwo_search_get_json('https://kuwo.cn/');
 
@@ -285,25 +284,32 @@ function kuwoSearchSong() {
 
 		//普通搜索
 		$res=[];
-		if($_GET['key'][0]!='%') @$res=kuwo_search_get_json('https://kuwo.cn/api/www/search/searchMusicBykeyWord?key='.urlencode($_GET['key']).'&pn='.$_GET['pageid'].'&rn=50'); //常规搜索
+		if($_GET['key'][0]!='%') @$res=kuwo_search_get_json('https://search.kuwo.cn/r.s?client=kt&all='.urlencode($_GET['key']).'&pn='.($_GET['pageid'] - 1).'&rn=50'.'&uid=-1&ver=kwplayer_ar_8.5.4.2&vipver=1&ft=music&encoding=utf8&rformat=json&mobi=1'); //常规搜索
 		else @$res=kuwo_search_get_json('https://kuwo.cn/api/www/artist/artistMusic?artistid='.urlencode(substr($_GET['key'],1)).'&pn='.$_GET['pageid'].'&rn=50'); //指定歌手
 		@$res=json_decode($res,true);
-		if(($res['code'] ?? -1) == -1) {
+		if(($res['code'] ?? 0) == -1) {
 			echo LNG('rp.search.null');
 			exit;
 		}
-		if($res['data']['total']==0 || !isset($res['data']['total'])) {
+		if(!isset($res['TOTAL'])) {
+			$totalCount = $res['data']['total'];
+			$songList = $res['data']['list'];
+		} else {
+			$totalCount = $res['TOTAL'];
+			$songList = $res['abslist'];
+		}
+		if($totalCount ==0 || !isset($totalCount)) {
 			echo LNG('rp.search.fail');
 			exit;
 		}
 
-		$npage=ceil($res['data']['total']/50.0);
+		$npage=ceil($totalCount/50.0);
 		$startid=50*$_GET['pageid']-49;
 		$endid=50*$_GET['pageid'];
 
-		echo '<p>' . LNG('page.total',$res['data']['total']) . '</p>' . "\n";
+		echo '<p>' . LNG('page.total',$totalCount) . '</p>' . "\n";
 		echo '<ol>' . "\n";
-		foreach($res['data']['list'] as $item) {
+		foreach($songList as $item) {
 			printRmpList($item);
 			echo "\n";
 		}
@@ -312,7 +318,7 @@ function kuwoSearchSong() {
 
 		echo LNG('page.pagedesc',$_GET['pageid'],$npage);
 		echo '&nbsp;&nbsp;';
-		echo LNG('page.itemdesc',$res['data']['total'],$startid,min($endid,$res['data']['total']));
+		echo LNG('page.itemdesc',$totalCount,$startid,min($endid,$totalCount));
 
 		echo '&nbsp;&nbsp;<a onclick="'.($_GET['pageid']>=$npage?'':'kuwo_search(curr_pageid+1,'."'".jsspecial($_GET['key'])."'".')').'">' . LNG('page.next') . ' &gt;</a>&nbsp;&nbsp;<a onclick="kuwo_search('.$npage.','."'".jsspecial($_GET['key'])."'".')">' . LNG('page.last') . '</a></p>';
 		echo '<p>' . LNG('rp.search.kuworef','https://kuwo.cn/') .'</p>' . "\n";
