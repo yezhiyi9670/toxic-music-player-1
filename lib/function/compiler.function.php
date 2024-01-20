@@ -548,7 +548,7 @@ function parseCmpLyric($u,$parseTags = true, $debug = false,$ADD_ERROR='cmpi_ADD
 		}
 		if(!$meta['meta']['P'] || $meta['meta']['P'] == '-') {
 			$meta['meta']['P'] = $u . '/avatar';
-			if(!file_exists(getPicturePath(FILES . $u . '/avatar'))) {
+			if(!isKuwoId($u) && !file_exists(getPicturePath(FILES . $u . '/avatar'))) {
 				$meta['meta']['P'] = '';
 			}
 		}

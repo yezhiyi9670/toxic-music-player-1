@@ -4,7 +4,7 @@
 	<img src="<?php
 			echo 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
 		?>" title="<?php LNGe('player.cover_image') ?>"
-		style="width: 100%; height: 100%;" ondragstart="return false;" data-spin-delta="0.4" />
+		style="width: 100%; height: 100%;" ondragstart="return false;" />
 </div>
 <?php } ?>
 <?php if(!is_wap()) { ?><center style="margin-bottom:-18px;"><?php } ?>
