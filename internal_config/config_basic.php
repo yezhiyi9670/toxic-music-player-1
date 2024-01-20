@@ -22,6 +22,7 @@ define("APP_PREFIX",'nesic-player');
 /**
  * 歌曲文件存储位置
  * 可以修改到其他地方，例如另一个硬盘。修改后需要手动移动文件。
+ * 注意末尾斜杠不可省略。
  */
 define("FILES", DATA_PATH . "music/");
 
