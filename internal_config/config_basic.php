@@ -19,6 +19,12 @@ define("BASIC_URL",str_replace('__hostname__',$_SERVER['HTTP_HOST'],"http://__ho
  */
 define("APP_PREFIX",'nesic-player');
 
+/**
+ * 歌曲文件存储位置
+ * 可以修改到其他地方，例如另一个硬盘。修改后需要手动移动文件。
+ */
+define("FILES", DATA_PATH . "music/");
+
 //////// 密码 ////////
 
 /**

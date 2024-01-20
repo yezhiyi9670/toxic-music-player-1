@@ -17,7 +17,6 @@ define("VLUSER",LIB_PATH."vluser/");
 define("I18N",LIB_PATH."i18n/lang/");
 
 define("DATA_PATH",BASIC_PATH."data/");
-define("FILES",DATA_PATH."music/");
 define("REMOTE_CACHE",DATA_PATH."remotecache/");
 if(!file_exists(REMOTE_CACHE) && file_exists(DATA_PATH)) mkdir(REMOTE_CACHE); //117a
 define("STATISTICS",DATA_PATH."stat/");
@@ -37,6 +36,11 @@ if(!file_exists(DATA_PATH)) {
 require(FUNCTIONS."index.function.php");
 require(LIB_PATH.'dev_config.php');
 require(BASIC_PATH.'internal_config/config_basic.php');
+
+if(!defined("FILES")) {
+	define("FILES",DATA_PATH."music/");
+}
+
 require(LIB_PATH.'i18n/i18nCore.php');
 require(ROUTER."DataDrivenRouter.router.php");
 require(BASIC_PATH.'internal_config/config_misc.php');
