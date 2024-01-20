@@ -431,7 +431,7 @@ class kuwoCrawler {
 	//由于大多数音乐网站有[反盗链系统]，通常每次使用音频都要重新获取地址。
 	function _url() {
 		if(!isset($this->cache['url'])){
-			if(rp_can_pay_play()) {
+			if(rp_can_pay_play() || true) {
 				// API on 2021-10-30
 				// @$url=ex_url_get_contents('https://kuwo.cn/bd/search/getSongUrlByMid?mid='.$this->cache['id'].'&format=mp3&br=192kmp3&bdfrom=xshow&c=nfmbhi6fxwaj',['User-Agent'=>'Dalvik/2.1.0 (Linux; U; Android 7.1.2; LIO-AN00 Build/N2G47O)']); // This f*cking thing isn't working
 				// show_json(false, $url);
@@ -488,13 +488,13 @@ class kuwoCrawler {
 
 				// $this->cache['url'] = '';
 			} else {
-				// Web API url
-				@$url=kuwo_search_httpget('https://www.kuwo.cn/api/v1/www/music/playUrl?mid='.$this->cache['id'].'&type=music&httpsStatus=1&br=192kmp3&reqId=' . randomUUID() . '&plat=web_www&from=');
-				@$url=json_decode($url,true);
-				if(!is_array($url) || !is_array($url['data'] ?? null)) {
-					$url = ['data' => ['url' => '']];
-				}
-				$this->cache['url']=$url['data']['url'];
+				// Web API url (not working)
+				// @$url=kuwo_search_httpget('https://www.kuwo.cn/api/v1/www/music/playUrl?mid='.$this->cache['id'].'&type=music&httpsStatus=1&br=192kmp3&reqId=' . randomUUID() . '&plat=web_www&from=');
+				// @$url=json_decode($url,true);
+				// if(!is_array($url) || !is_array($url['data'] ?? null)) {
+				// 	$url = ['data' => ['url' => '']];
+				// }
+				// $this->cache['url']=$url['data']['url'];
 			}
 			$this->cache['url'] = str_replace('http://','https://',$this->cache['url']);
 		}

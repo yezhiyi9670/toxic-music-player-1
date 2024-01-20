@@ -4,8 +4,8 @@ TOXIC Music Player 1 (txmp)
 ![][latest_version] ![][build_date]  
 [![][license]][license_link] ![][dev_php_version]![][should_work_php_version]  
 
-[latest_version]: https://img.shields.io/badge/Version-128p-green.svg?style=flat-square
-[build_date]: https://img.shields.io/badge/Build%20Date-20230901-blue.svg?style=flat-square
+[latest_version]: https://img.shields.io/badge/Version-128q-green.svg?style=flat-square
+[build_date]: https://img.shields.io/badge/Build%20Date-20240120-blue.svg?style=flat-square
 [dev_php_version]: https://img.shields.io/badge/PHP-8.1.10-green.svg?style=flat-square
 [should_work_php_version]: https://img.shields.io/badge/7.1+-lightgreen.svg?style=flat-square
 [license]: https://img.shields.io/badge/License-MIT-green.svg?style=flat-square

@@ -370,7 +370,7 @@ function permissionNames($i = "") {
 		"music/getdoc"=>LNG('perm.doc.action'),
 		"admin/edit"=>LNG('perm.edit'),
 	);
-	if($i) return $arr[$i];
+	if($i) return $arr[$i] ?? null;
 	return $arr;
 }
 
