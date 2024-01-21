@@ -90,8 +90,13 @@ function kuwo_search_httpget($url) {
 
 	// 随机生成 iuvt
 	$str = '0123456789QWERTYUIOPASDFGHJKLKZXCVBNMqwertyuiopasdfghjklzxcvbnm';
+	$str0 = 'QWERTYUIOPASDFGHJKLKZXCVBNMqwertyuiopasdfghjklzxcvbnm';
 	$iuvt = '';
-	for($i = 0; $i < 32; $i ++) {
+	for($i = 0; $i < 1; $i ++) {
+		$idx = mt_rand(0,strlen($str0) - 1);
+		$iuvt .= $str0[$idx];
+	}
+	for($i = 1; $i < 32; $i ++) {
 		$idx = mt_rand(0,strlen($str) - 1);
 		$iuvt .= $str[$idx];
 	}
@@ -138,6 +143,10 @@ function kuwoPayStatus($val) {
 		'pay_play' => ($play == 0xF),
 		'pay_download' => ($download == 0xF)
 	];
+}
+
+function kuwoSearchSong_print_fail() {
+	echo LNG('rp.search.fail', 'try{kuwo_search(curr_pageid,'."'".jsspecial($_GET['key'])."'".')}catch(_){turn_page(curr_pageid)}');
 }
 
 // 歌曲搜索接口（直接处理_GET数据，直接输出搜索结果）
@@ -223,7 +232,7 @@ function kuwoSearchSong() {
 				$endid=50*$_GET['pageid'];
 
 				if(!isset($data['data']['musicList'])) {
-					echo LNG('rp.search.fail');
+					kuwoSearchSong_print_fail();
 
 					exit;
 				}
@@ -256,7 +265,7 @@ function kuwoSearchSong() {
 				exit;
 			}
 			if(!isset($res['data']['total'])) {
-				echo LNG('rp.search.fail');
+				kuwoSearchSong_print_fail();
 				exit;
 			}
 
@@ -300,7 +309,7 @@ function kuwoSearchSong() {
 			$songList = $res['abslist'] ?? [];
 		}
 		if($totalCount ==0 || !isset($totalCount)) {
-			echo LNG('rp.search.fail');
+			kuwoSearchSong_print_fail();
 			exit;
 		}
 

@@ -15,8 +15,11 @@ body {
 	right: 32px;
 	bottom: 32px;
 	font-size: 23px;
-	padding-left: 5.5px;
-	padding-top: 4px;
+	line-height: 22px;
+	text-align: center;
+}
+.fab-gotop>* {
+	transform: translate(0, 1px);
 }
 
 .am-list-item-hd {

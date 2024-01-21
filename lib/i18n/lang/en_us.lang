@@ -737,7 +737,7 @@ rp.search.invalid_id = Invalid ID format.
 rp.search.no_such_id = Song with such ID does not exist.
 rp.search.invalid_purpose = Invalid search command.
 rp.search.null = Nothing found.
-rp.search.fail = Query failed. Please try again.
+rp.search.fail = Query failed. Please <a onclick="${0}">try again</a>.
 rp.search.kuworef = If a more powerful search tool is required, please refer to <a rel="noreferrer noopener" href="${0}" target="_blank">Kuwo Music</a>.
 rp.search.notres = Results are displayed according to data grabbed from Kuwo Music. The application is not reponsible for the results.
 

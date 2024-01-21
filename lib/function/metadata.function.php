@@ -281,12 +281,22 @@ function GSM($x) {
 }
 function GCM() {
 	if(!$GLOBALS['isMusicCurrent']) {
-		return [
-			'A' => MAIN_COLOR,
-			'X' => darkenColorHex(MAIN_COLOR),
-			'G1' => GC_COLOR_1,
-			'G2' => GC_COLOR_2,
-		];
+		if(isset($GLOBALS['colorOverride'])) {
+			$cl = $GLOBALS['colorOverride'];
+			return [
+				'A' => $cl,
+				'X' => darkenColorHex($cl),
+				'G1' => $cl,
+				'G2' => $cl,
+			];
+		} else {
+			return [
+				'A' => MAIN_COLOR,
+				'X' => darkenColorHex(MAIN_COLOR),
+				'G1' => GC_COLOR_1,
+				'G2' => GC_COLOR_2,
+			];
+		}
 	}
 	$t = GSM(cid());
 	return $t;

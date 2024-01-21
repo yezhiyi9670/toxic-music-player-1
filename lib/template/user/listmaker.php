@@ -19,7 +19,7 @@
 	set_section_name(LNG('led.title'));
 </script>
 <style>
-	/* 禁止移动端过滑行为 */
+	/* 禁止移动端过滑行为，防止意外刷新丢失更改 */
 	body {
 		overscroll-behavior-y: none;
 	}
@@ -258,7 +258,7 @@ var cloudLenLimit = <?php echo _CT('user_playlist_limit') ?>;
 		</div>
 	</div>
 
-	<a class="float-btn shadowed fab-gotop" href="javascript:;" onclick="scrollto(0, 'body')">
+	<a class="float-btn shadowed fab-gotop" href="javascript:;" onclick="scrollto(0, 'html')">
 		<i class="fa fa-arrow-up"></i>
 	</a>
 

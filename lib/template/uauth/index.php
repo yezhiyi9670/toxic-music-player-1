@@ -40,15 +40,15 @@
 				}
 				$sum /= count($listdata['playlist']);
 
-				echo '<li style="color:'.$meta['A'].';padding-bottom:6px;">';
-				echo '<a href="'.BASIC_URL.'playlist/'.$user.'/'.$id.'" target="_blank" style="color:'.$meta['A'].';">';
+				echo '<li style="color:#'.$meta['A'].';padding-bottom:6px;">';
+				echo '<a href="'.BASIC_URL.'playlist/'.$user.'/'.$id.'" target="_blank" style="color:#'.$meta['A'].';">';
 				if($danger) {
 					echo '<span class="text-danger" title="'.LNG('uc.playlist.danger.tips').'">'.LNG('uc.playlist.danger').'</span> ';
 				}
 				echo htmlspecial($listdata['title']);
 				echo '</a>';
 				echo '&nbsp;&nbsp;&nbsp;&nbsp;';
-				echo '<a href="'.BASIC_URL.'list-maker/'.$id.'" target="_blank" style="color:'.$meta['A'].';">';
+				echo '<a href="'.BASIC_URL.'list-maker/'.$id.'" target="_blank" style="color:#'.$meta['A'].';">';
 				echo '['.LNG('uc.playlist.edit').']';
 				echo '</a>';
 				echo '<br>';

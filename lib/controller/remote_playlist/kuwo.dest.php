@@ -2,7 +2,7 @@
 
 $GLOBALS['remote_playlist_id'] = $_REQUEST['list_id'];
 
-$_GET['_lnk'] = '$FFA000';
+$GLOBALS['colorOverride'] = 'FFA000';
 $_GET['return'] = true;
 $_GET['key'] = '^' . $GLOBALS['remote_playlist_id'];
 $_GET['pageid'] = '1';
