@@ -21,7 +21,7 @@ function indent_count($x) {
 
 $data = [];
 
-$txt = file_get_contents('changelog.txt');
+$txt = file_get_contents('../changelog/changelog.txt');
 $txt = str_replace(["\r\n","\r"],["\n","\n"],$txt);
 
 $txt = explode("\n",$txt);
@@ -187,4 +187,4 @@ print_log('Writing ' . count($data['versions']) . ' versions');
 $final_str = str_replace('    ',"\t",
 	json_encode($data,JSON_PRETTY_PRINT*0+JSON_UNESCAPED_UNICODE+JSON_UNESCAPED_SLASHES)
 );
-file_put_contents('versions.json',$final_str);
+file_put_contents('../changelog/versions.json',$final_str);

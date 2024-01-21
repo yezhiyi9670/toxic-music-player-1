@@ -2,12 +2,12 @@
 error_reporting(~E_ALL);
 
 define("IN_SYSTEM",'WMSDFCL/txmp');
-define("VERSION","129a-pre2");
+define("BASIC_PATH",str_replace("\\","/",__DIR__)."/");
+define("LIB_PATH",BASIC_PATH."lib/");
+define("VERSION",trim(file_get_contents(BASIC_PATH . 'VERSION')));
 define("CSV_VERSION","1");
 define("DATAVER","201805");
-define("BASIC_PATH",str_replace("\\","/",__DIR__)."/");
 
-define("LIB_PATH",BASIC_PATH."lib/");
 define("ROUTER",LIB_PATH."router/");
 define("CONTROLLER",LIB_PATH."controller/");
 define("TEMPLATE",LIB_PATH."template/");

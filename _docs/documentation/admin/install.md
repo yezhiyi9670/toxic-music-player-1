@@ -4,9 +4,11 @@
 
 ## Building from source
 
-Put `changelog` `data.init` `internal_config` `lib` `static` `.htaccess` `LICENSE` `index.php` into an archive. This is the full or release archive.
+~~Put `changelog` `data.init` `internal_config` `lib` `static` `.htaccess` `LICENSE` `index.php` into an archive. This is the full or release archive.~~
 
-Put `changelog` `lib` `static` `index.php` into an archive. This is the update archive.
+~~Put `changelog` `lib` `static` `index.php` into an archive. This is the update archive.~~
+
+Use `build-util/build-zips.bat` if possible.
 
 ## Installation
 
