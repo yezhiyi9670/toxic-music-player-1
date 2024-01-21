@@ -10,9 +10,15 @@ $is_preview = -1 != strpos($version, '-pre');
 
 $full_zip = '_build/' . $base . '-v' . $version . '-' . ($is_preview ? 'full' : 'release') . '.zip';
 print('Full zip: ' . $full_zip . "\n");
+if(file_exists($full_zip)) {
+	unlink($full_zip);
+}
 
 $update_zip = '_build/' . $base . '-v' . $version . '-' . ($is_preview ? 'update' : 'update') . '.zip';
 print('Update zip: ' . $update_zip . "\n");
+if(file_exists($update_zip)) {
+	unlink($update_zip);
+}
 
 sleep(3);
 
