@@ -4,6 +4,9 @@
 		'login': {
 			dest: 'uauth/login'
 		},
+		'register': {
+			dest: 'uauth/register'
+		},
 		'logout': {
 			dest: 'uauth/logout'
 		},

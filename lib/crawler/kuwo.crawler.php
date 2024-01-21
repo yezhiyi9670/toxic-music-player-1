@@ -53,7 +53,7 @@ function kuwo_encrypt_iuvt($value, $key) {
 	// 	}
 	// }
 	// those above is not working, so dirty hack.
-	$n = '59910098';
+	$n = '599102';
 
 	$n = ($o * intval($n) + $l) % $c;
 	$h = '';
@@ -91,12 +91,11 @@ function kuwo_search_httpget($url) {
 	// 随机生成 iuvt
 	$str = '0123456789QWERTYUIOPASDFGHJKLKZXCVBNMqwertyuiopasdfghjklzxcvbnm';
 	$iuvt = '';
-	for($i = 0; $i < 31; $i ++) {
+	for($i = 0; $i < 32; $i ++) {
 		$idx = mt_rand(0,strlen($str) - 1);
 		$iuvt .= $str[$idx];
 	}
-	$iuvt .= 'A';
-	$iuvt_key = 'Hm_Iuvt_cdb524f42f0cer9b268e4v7y734w5esq24';
+	$iuvt_key = 'Hm_Iuvt_cdb524f42f0cer9b268e4v7y735ewrq2324';
 	$secret = kuwo_encrypt_iuvt($iuvt, $iuvt_key);
 
 	return ex_url_get_contents($url,[
@@ -120,7 +119,7 @@ function kuwo_search_get_json($url, $extras = []) {
 	  $data = kuwo_search_httpget($url, $extras);
 	}
 	return $data;
-  }
+}
 
 // 全局ID是否符合
 function kuwo_classify_id($x) {
@@ -149,8 +148,10 @@ function kuwoSearchSong() {
 	} else {
 		header('Content-Type: text/plain');
 
-		if($_GET['key'][0]==':' || preg_match('/^K_(\d+)$/',$_GET['key'])) {
-			if($_GET['key'][0] != ':') {
+		$type_indicator = $_GET['key'][0] ?? '';
+
+		if($type_indicator==':' || preg_match('/^K_(\d+)$/',$_GET['key'])) {
+			if($type_indicator != ':') {
 				$_GET['key'] = ':' . $_GET['key'];
 			}
 			$item='K_'.substr($_GET['key'],1);
@@ -176,7 +177,7 @@ function kuwoSearchSong() {
 		}
 
 		// 特殊目的
-		if($_GET['key'][0]=='>') {
+		if($type_indicator=='>') {
 			$purpose = trim(substr($_GET['key'],1));
 			if($purpose == '__mp_suggestions__') {
 				// 数据串全局匹配歌单信息。
@@ -210,14 +211,14 @@ function kuwoSearchSong() {
 		}
 
 		// 直接访问一个歌单。（方便起见，有两种数据格式）
-		if($_GET['key'][0]=='^') {
+		if($type_indicator=='^') {
 			$id = trim(substr($_GET['key'],1));
 			@$data = json_decode(kuwo_search_get_json('https://kuwo.cn/api/www/playlist/playListInfo?pid='.$id.'&pn='.$_GET['pageid'].'&rn=50'),true);
 
 			if(isset($_GET['raw'])) echo encode_data($data);
 			else if(isset($_GET['return'])) {header('Content-Type: text/html');return $data;}
 			else {
-				$npage=ceil($data['data']['total']/50.0);
+				$npage=ceil(($data['data']['total'] ?? 0)/50.0);
 				$startid=50*$_GET['pageid']-49;
 				$endid=50*$_GET['pageid'];
 
@@ -246,11 +247,11 @@ function kuwoSearchSong() {
 		}
 
 		//歌手名称搜索
-		if($_GET['key'][0]=='@') {
+		if($type_indicator=='@') {
 			$res=[];
 			@$res=kuwo_search_get_json('https://kuwo.cn/api/www/search/searchArtistBykeyWord?key='.urlencode(substr($_GET['key'],1)).'&pn='.$_GET['pageid'].'&rn=50'); //获取歌手列表
 			@$res=json_decode($res,true);
-			if($res['data']['total']==0) {
+			if(($res['data']['total'] ?? 0)==0) {
 				echo LNG('rp.search.null');
 				exit;
 			}
@@ -284,7 +285,7 @@ function kuwoSearchSong() {
 
 		//普通搜索
 		$res=[];
-		if($_GET['key'][0]!='%') @$res=kuwo_search_get_json('https://search.kuwo.cn/r.s?client=kt&all='.urlencode($_GET['key']).'&pn='.($_GET['pageid'] - 1).'&rn=50'.'&uid=-1&ver=kwplayer_ar_8.5.4.2&vipver=1&ft=music&encoding=utf8&rformat=json&mobi=1'); //常规搜索
+		if($type_indicator!='%') @$res=kuwo_search_get_json('https://search.kuwo.cn/r.s?client=kt&all='.urlencode($_GET['key']).'&pn='.($_GET['pageid'] - 1).'&rn=50'.'&uid=-1&ver=kwplayer_ar_8.5.4.2&vipver=1&ft=music&encoding=utf8&rformat=json&mobi=1'); //常规搜索
 		else @$res=kuwo_search_get_json('https://kuwo.cn/api/www/artist/artistMusic?artistid='.urlencode(substr($_GET['key'],1)).'&pn='.$_GET['pageid'].'&rn=50'); //指定歌手
 		@$res=json_decode($res,true);
 		if(($res['code'] ?? 0) == -1) {
@@ -292,11 +293,11 @@ function kuwoSearchSong() {
 			exit;
 		}
 		if(!isset($res['TOTAL'])) {
-			$totalCount = $res['data']['total'];
-			$songList = $res['data']['list'];
+			$totalCount = $res['data']['total'] ?? 0;
+			$songList = $res['data']['list'] ?? [];
 		} else {
-			$totalCount = $res['TOTAL'];
-			$songList = $res['abslist'];
+			$totalCount = $res['TOTAL'] ?? 0;
+			$songList = $res['abslist'] ?? [];
 		}
 		if($totalCount ==0 || !isset($totalCount)) {
 			echo LNG('rp.search.fail');

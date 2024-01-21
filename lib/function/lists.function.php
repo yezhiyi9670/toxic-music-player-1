@@ -214,7 +214,6 @@ function printPlayerList($item, $isCloud = false, $isNull = false) {
 		$txt .= '<br />';
 
 		$txt.='<span class="addition-cmt"';
-		if(is_wap()) $txt.=' style="line-height:180%"';
 		$txt.='>';
 
 

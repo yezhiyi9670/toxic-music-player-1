@@ -215,7 +215,7 @@ setting.item.font.name = 字体/名称【未实现】
 setting.item.font.input = 字体/输入框
 setting.item.font.code = 字体/代码【未实现】
 setting.item.newlook = 使用新外观 (Y/n)
-setting.item.randplay = 全部播放时随即切换 (Y/n)
+setting.item.randplay = 全部播放时随机切换 (Y/n)
 setting.item.no_color = 禁用主题色切换 (y/N)
 setting.item.limited_select = 限制文本选择 (y/N)
 setting.item.ag_op = 激进的优化 (y/N)
@@ -224,14 +224,23 @@ setting.item.wap_scale = 移动端尺寸比例
 setting.save = 保存
 # - Login
 login.title = 用户登录
-login.login.caption = 输入用户名和密码
-login.reg.caption = 没有账户？
+login.caption = 输入用户名和密码
 login.field.username = 用户名
 login.field.password = 密码
 login.field.login = 登录
-login.field.password2 = 再次输入密码
-login.field.reg = 注册
-login.reg.notallow = 本站不开放注册
+login.reg.hint = 没有账户？
+login.reg.action = 注册
+# - Register
+reg.title = 注册
+reg.caption = 注册：输入新的用户名和密码
+reg.field.username = 用户名
+reg.field.password = 密码
+reg.field.password2 = 再次输入密码
+reg.field.reg = 注册
+reg.notallow = 本站不开放注册
+reg.exceeded = 注册的用户数量已经到达上限
+reg.login.hint = 已经注册过了？
+reg.login.action = 登录
 # - Password Edit
 pass.err.notlogin = 请先登录。
 pass.err.wrongpass = 原密码错误。

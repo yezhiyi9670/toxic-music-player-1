@@ -18,3 +18,16 @@ body {
 	padding-left: 5.5px;
 	padding-top: 4px;
 }
+
+.am-list-item-hd {
+	line-height: 100%;
+}
+
+.am-list-item-hd > * {
+	line-height: 1.6;
+}
+
+.am-list-item-hd {
+	padding-top: 8px !important;
+	padding-bottom: 8px !important;
+}

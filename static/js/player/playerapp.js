@@ -351,7 +351,7 @@ $('document').ready(function(){
 		// 非列表：切歌按钮改为刷新
 		$('#skip-ico').removeClass('fa-arrow-right');
 		$('#skip-ico').addClass('fa-rotate-right');
-		$('#skip-button').css({'padding-top':'6px','padding-left':'3px'});
+		$('#skip-button').addClass('refresh')
 	}
 
 	// 歌词高亮&进度显示&播放按钮【刻函数】
@@ -481,7 +481,7 @@ $('document').ready(function(){
 	}
 
 	// 显示菜单按钮
-	$('#right-fold-menu').css('display','inline-block');
+	$('#right-fold-menu').css('display','inline');
 
 	// 设置菜单标签行为
 	$('.rmenu-tab').click(function(){

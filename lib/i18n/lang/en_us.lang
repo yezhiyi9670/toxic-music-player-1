@@ -224,14 +224,23 @@ setting.item.wap_scale = Mobile Scale
 setting.save = Save
 # - Login
 login.title = User Login
-login.login.caption = Input Username and Password
-login.reg.caption = No username?
+login.caption = Input Username and Password
 login.field.username = Username
 login.field.password = Password
 login.field.login = Login
-login.field.password2 = Password again
-login.field.reg = Register
-login.reg.notallow = Cannot register at the site.
+login.reg.hint = Not registered?
+login.reg.action = Register
+# - Register
+reg.title = Register
+reg.caption = Register: Input New Username and Password
+reg.field.username = Username
+reg.field.password = Password
+reg.field.password2 = Password again
+reg.field.reg = Register
+reg.notallow = This site is not open to registers
+reg.exceeded = Registration limit is reached
+reg.login.hint = Already registered?
+reg.login.action = Login
 # - Password Edit
 pass.err.notlogin = Please login first.
 pass.err.wrongpass = Incorrect original password.

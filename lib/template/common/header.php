@@ -5,7 +5,7 @@
 	$isLimSel = ($isLimSel == 'Y' || $isLimSel == 'y');
 	$isAgOp = setting_gt('aggressive-optimize','N');
 	$isAgOp = ($isAgOp == 'Y' || $isAgOp == 'y');
-?>
+?><!DOCTYPE HTML>
 <head>
 	<title><?php LNGe('ui.loading') ?> - <?php echo htmlspecial2(_CT('app_name_title')) ?></title>
 	<?php if(is_wap()){
