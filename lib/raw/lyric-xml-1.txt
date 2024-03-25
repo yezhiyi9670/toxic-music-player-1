@@ -610,6 +610,8 @@
             <w:documentProtection w:enforcement="off" />
             <w:punctuationKerning/>
             <w:doNotEmbedSystemFonts/>
+            <w:hideSpellingErrors/>
+            <w:hideGrammaticalErrors/>
             <w:bordersDontSurroundHeader/>
             <w:bordersDontSurroundFooter/>
             <w:defaultTabStop w:val="420" />
