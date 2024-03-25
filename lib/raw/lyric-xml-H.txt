@@ -13,7 +13,7 @@
                             <w:sz w:val="32" />
                             <w:lang w:val="EN-US" w:fareast="ZH-CN" /></w:rPr>
                         <w:pict>
-                            <v:shape id="_x0000_s1133" o:spid="_x0000_s1026" o:spt="202" type="#_x0000_t202" style="position:absolute;left:0pt;margin-left:7.5pt;margin-top:159.85pt;height:117.7pt;width:539.25pt;mso-position-vertical-relative:page;z-index:251660288;mso-width-relative:page;mso-height-relative:page;"
+                            <v:shape id="_x0000_s1133" o:spid="_x0000_s1026" o:spt="202" type="#_x0000_t202" style="position:absolute;left:0;text-align:left;margin-left:.05pt;margin-top:148.75pt;width:510pt;height:117.7pt;z-index:351;mso-position-vertical-relative:page;mso-width-relative:page;mso-height-relative:page"
                             filled="f" stroked="f" coordsize="21600,21600">
                                 <v:path/>
                                 <v:fill on="f" focussize="0,0" />
@@ -71,7 +71,7 @@
                             <w:sz w:val="32" />
                             <w:lang w:val="EN-US" w:fareast="ZH-CN" /></w:rPr>
                         <w:pict>
-                            <v:shape id="_x0000_s1134" o:spid="_x0000_s1027" o:spt="202" type="#_x0000_t202" style="position:absolute;left:0pt;margin-left:8.25pt;margin-top:749.4pt;height:65.9pt;width:539.25pt;mso-position-vertical-relative:page;z-index:251664384;mso-width-relative:page;mso-height-relative:page;"
+                            <v:shape id="_x0000_s1134" o:spid="_x0000_s1027" o:spt="202" type="#_x0000_t202" style="position:absolute;left:0;text-align:left;margin-left:.05pt;margin-top:718.85pt;width:509.3pt;height:65.9pt;z-index:352;mso-position-vertical-relative:page;mso-width-relative:page;mso-height-relative:page"
                             filled="f" stroked="f" coordsize="21600,21600">
                                 <v:path/>
                                 <v:fill on="f" focussize="0,0" />

@@ -472,7 +472,9 @@
                 <w:basedOn w:val="a1" />
                 <w:link w:val="a14" />
                 <w:pPr>
-                    <w:spacing w:line="440" w:line-rule="exact" /></w:pPr>
+                    <w:keepNext/>
+                    <w:spacing w:line="440" w:line-rule="exact" />
+                </w:pPr>
                 <w:rPr>
                     <w:rFonts w:ascii=@fontname w:h-ansi=@fontname w:fareast=@fontname w:hint="default" />
                     <w:b/>
@@ -517,6 +519,28 @@
                 <w:rPr>
                     <w:rFonts w:ascii=@fontname w:h-ansi=@fontname w:fareast=@fontname w:hint="default" />
                     <w:sz w:val="22" /></w:rPr>
+            </w:style>
+            <w:style w:type="paragraph" w:styleId="a51">
+                <w:name w:val="目录内容" />
+                <w:basedOn w:val="a1" />
+                <w:link w:val="a17" />
+                <w:pPr>
+                    <w:snapToGrid w:val="off"/>
+                    <w:spacing w:line="240" w:line-rule="auto"/>
+                </w:pPr>
+                <w:rPr>
+                    <w:rFonts w:ascii=@fontname w:h-ansi=@fontname w:fareast=@fontname w:hint="default" />
+                    <w:sz w:val="22" />
+                </w:rPr>
+            </w:style>
+            <w:style w:type="character" w:styleId="a52">
+                <w:name w:val="目录内容 Char" />
+                <w:basedOn w:val="a5" />
+                <w:link w:val="a51" />
+                <w:rPr>
+                    <w:rFonts w:ascii=@fontname w:h-ansi=@fontname w:fareast=@fontname w:hint="default" />
+                    <w:sz w:val="22" />
+                </w:rPr>
             </w:style>
             <w:style w:type="character" w:styleId="a16">
                 <w:name w:val="信息块 Char" />

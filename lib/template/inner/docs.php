@@ -93,7 +93,7 @@ if($internal) {
 			?>"><br />
 			<span class="cmt"><?php LNGe('docs.label.canonical.tips') ?></span>
 		</p>
-		<p>
+		<p style="display:none;">
 			<?php LNGe('docs.label.cache_id') ?><input type="text" name="cacheid" disabled value="<?php echo md5(rand()) ?>"><br />
 			<span class="cmt"><?php LNGe('docs.label.cache_id.tips',_CT('temp_expire')) ?></span>
 		</p>
@@ -127,7 +127,7 @@ if($internal) {
 	<?php } ?>
 </div>
 <script>
-"DocsFontSave BEGIN";
+"mod DocsFontSaveApp";
 
 <?php if(!isset($_GET['list']) && !$internal) { ?>
 if(storeData('docs.dl_font')) {
