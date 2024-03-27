@@ -535,7 +535,7 @@
             </w:style>
             <w:style w:type="character" w:styleId="a52">
                 <w:name w:val="目录内容 Char" />
-                <w:basedOn w:val="a5" />
+                <w:basedOn w:val="a1" />
                 <w:link w:val="a51" />
                 <w:rPr>
                     <w:rFonts w:ascii=@fontname w:h-ansi=@fontname w:fareast=@fontname w:hint="default" />

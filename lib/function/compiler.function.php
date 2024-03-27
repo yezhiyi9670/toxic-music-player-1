@@ -1,6 +1,5 @@
 <?php if(!defined('IN_SYSTEM')) exit;//Silence is golden ?><?php
 
-define('TS_IS_COMMENT', 1610612736);
 $GLOBALS['compiler_cache'] = [];
 
 // 寻找 NBTTagCompound[] 中 $v[$key] == $value 的一个值，并返回其值。
@@ -843,7 +842,7 @@ function parseCmpLyric($u,$parseTags = true, $debug = false,$ADD_ERROR='cmpi_ADD
 							cmpi_invoke($ADD_ERROR, $supressed, $msg,'unstd','fullspace',$h['__line'] ?? 0);
 						}
 						// 不规范间奏标记
-						if(onlyConsistsOf($str,['-'])) {
+						if($str != '' && onlyConsistsOf($str,['-'])) {
 							cmpi_invoke($ADD_ERROR, $supressed, $msg,'warn','wronginterval',$h['__line'] ?? 0);
 						}
 						$ret_str = concat_arguments($h,1);

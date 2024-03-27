@@ -69,7 +69,7 @@
 	?>
 	<script>
 		// --- global data ---
-		G = {};
+		window.G = {};
 		G.basic_url = '<?php echo BASIC_URL ?>';
 		G.username = '<?php echo uauth_username(); ?>';
 		G.csrf_s1 = '<?php echo $GLOBALS['sess']; ?>';
@@ -84,6 +84,7 @@
 		G.app_prefix = '<?php echo APP_PREFIX ?>';
 		G.dataver = '<?php echo DATAVER ?>';
 		G.can_pay_play = <?php echo rp_can_pay_play() ? 'true' : 'false' ?>;
+		G.TS_IS_COMMENT = <?php echo TS_IS_COMMENT ?>;
 	</script>
 	<script>
 		// --- audio url ---

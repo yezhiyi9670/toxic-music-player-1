@@ -7,6 +7,7 @@ define("LIB_PATH",BASIC_PATH."lib/");
 define("VERSION",trim(file_get_contents(LIB_PATH . 'VERSION')));
 define("CSV_VERSION","1");
 define("DATAVER","201805");
+define('TS_IS_COMMENT', 1610612736); // do not touch this line
 
 define("ROUTER",LIB_PATH."router/");
 define("CONTROLLER",LIB_PATH."controller/");

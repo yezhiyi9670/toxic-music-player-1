@@ -209,6 +209,17 @@ body {
 	font-weight:bold;
 }
 
+.lrc-item.lrc-whitespace .lrcline-id {
+	display: none;
+}
+
+.lrc-item.lrc-whitespace .lrcline-id {
+	display: none;
+}
+.lrc-item.lrc-whitespace {
+	line-height: 0;
+}
+
 /* 角色1：红 */
 .lrc-active .active-color-1 {
 	color:#EF5350 !important;
@@ -320,7 +331,7 @@ body {
 }
 .para-title{
 	font-weight:bold;
-	color:#EEE;
+	color:#CCC;
 }
 .para-active>.para-title{
 	color:#9b9b9b;

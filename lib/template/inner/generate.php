@@ -107,7 +107,7 @@ function _W($s,$tms,$tmd,$flag = false)
 function _N($a) {
 	$ret=0;
 	foreach ($a as $v) {
-		if($v['ts']<=1610612735) $ret++;
+		if($v['ts'] < TS_IS_COMMENT) $ret++;
 	}
 	return "".$ret;
 }
@@ -227,7 +227,7 @@ function _SINGLE($dest,$isfirst=true,$islast=true) {
 				_E($dest,_T(2,array(
 					'%{xid}','%{c}','@fontname'
 				),array(
-					($v['ts']<=1610612735 ? '15':'18'),_W($v['c'],$W_1,$W_2,true),'"'.htmlspecial3($font).'"',
+					($v['ts'] < TS_IS_COMMENT ? '15':'18'),_W($v['c'],$W_1,$W_2,true),'"'.htmlspecial3($font).'"',
 				)));
 			}
 		}

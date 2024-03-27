@@ -1039,9 +1039,8 @@ function playInit(){
 
 	//设定歌词
 	var F=document.querySelectorAll('.lrc-text');
-	for(i=0;i<F.length;i++)
-	{
-		if(F[i].getAttribute('data-time')<=1610612735) {
+	for(i=0;i<F.length;i++) {
+		if(F[i].getAttribute('data-time') < G.TS_IS_COMMENT) {
 			(function() {
 				var clicked_time = -998244353;
 				$(F[i]).on('click', function(e){
