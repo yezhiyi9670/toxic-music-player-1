@@ -272,7 +272,7 @@ function setWapLyricState(ch) {
 		$('#coverpage-button').removeClass('float-btn-active');
 		setTimeout(() => {tick_func();}, 1); // 立即更新元素位置
 	}
-	autofit();
+	if(window.autofit) autofit();
 }
 /**
  * 切换移动端页面
@@ -477,6 +477,9 @@ $('document').ready(function(){
 		// 歌词行双击回开头
 		$('.txmp-coverpage-lrc-line-current').on('click', () => {
 			$('.lrc-wap-title .lrc-text').click();
+		});
+		$('.txmp-coverpage-lrc-line-current').on('dblclick', (e) => {
+			e.preventDefault();
 		});
 	}
 
@@ -1041,9 +1044,9 @@ function playInit(){
 	var F=document.querySelectorAll('.lrc-text');
 	for(i=0;i<F.length;i++) {
 		if(F[i].getAttribute('data-time') < G.TS_IS_COMMENT) {
-			(function() {
+			(function(element) {
 				var clicked_time = -998244353;
-				$(F[i]).on('click', function(e){
+				$(element).on('click', function(e){
 					if(!G.is_real_wap || new Date().getTime() - clicked_time < 600) {
 						A.currentTime = this.getAttribute("data-time")/10 + ct_eps;
 						if(!A.paused) {
@@ -1056,7 +1059,15 @@ function playInit(){
 					clicked_time = new Date().getTime();
 					e.preventDefault();
 				});
-			})();
+				if(G.is_real_wap) {
+					$(element).on('dblclick', function(e){
+						e.preventDefault(); // Tested useless on Firefox
+						var innerHTML = element.innerHTML;
+						element.innerHTML = '';
+						element.innerHTML = innerHTML;
+					});
+				}
+			})(F[i]);
 		}
 		//F[i].title="右键跳到本句歌词："+ftime(F[i].getAttribute("data-time"));
 	}

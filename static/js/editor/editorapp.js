@@ -400,8 +400,6 @@ $('document').ready(function(){
 	});
 	// $('#lyricfile').val('');
 
-	autofit();
-
 	$('.txmp-page-right')[0].scrollTop=37777;
 
 	$('#input-time-button').click(function() {

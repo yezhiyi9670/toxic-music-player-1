@@ -4,6 +4,7 @@ var markItem = null;
 var myRating = [];
 var myIds = [];
 var shouldGenerateUrl = false;
+var shouldOpenUrl = false;
 var genUrlTime = 0;
 
 var scroller_sqrt = [];
@@ -113,14 +114,20 @@ $('document').ready(function() {
 	$('.tooltip-box input[type=text]').on('input',generateUrl);
 	$('.tooltip-box input[type=number]').on('input',generateUrl);
 	$('.tooltip-box input[type=checkbox]').on('input',generateUrl);
+	$('.temp-list-flags input[type=checkbox]').on('input',generateUrl);
 	$('.tooltip-box select').on('input',generateUrl);
 
 	setInterval(function(){
-		if(shouldGenerateUrl && new Date().getTime() - genUrlTime >= 200) {
+		if(shouldGenerateUrl && new Date().getTime() - genUrlTime >= 100) {
 			shouldGenerateUrl = false;
 			_generateUrl();
 		}
-	},200);
+		if(!shouldGenerateUrl && shouldOpenUrl) {
+			var args = shouldOpenUrl;
+			shouldOpenUrl = false;
+			_openUrl.apply(null, args);
+		}
+	},20);
 });
 
 function generateUrl() {
@@ -195,7 +202,7 @@ function _generateUrl() {
 	}
 	if(idList.length>1 && $('#isRand')[0].checked) txt+='&randList';
 	if(idList.length>1 && $('#isRandShuffle')[0].checked) txt+='&randShuffle';
-	if($('#isIframe')[0].checked) txt+='&iframe';
+	if($('#isIframe')[0].checked) txt += idList.length>1 ? '&iframe' : '?iframe';
 
 	$('#g-url')[0].value=txt;
 	if(isCloudSave) $('#g-url')[0].value=home+'playlist/'+G.username+'/'+cloudId;
@@ -549,10 +556,15 @@ async function display_raw(xurl) {
 var is_changed = false;
 function mark_changed() {
 	is_changed = true;
-	$('.list-submit').text(LNG('led.action.save'));
+	if(isCloudSave) {
+		$('.list-submit').text(LNG('led.action.save'));
+	}
 }
 
-async function openUrl(ffflag = 0,doOpen = 1) {
+function openUrl(ffflag = 0,doOpen = 1) {
+	shouldOpenUrl = [ ffflag, doOpen ]
+}
+async function _openUrl(ffflag = 0,doOpen = 1) {
 	if(isCloudSave) {
 		if(ffflag == 0 && doOpen == 1 && !is_changed) {
 			location.href = home + 'playlist/' + G.username + '/' + cloudId;
@@ -617,6 +629,7 @@ async function openUrl(ffflag = 0,doOpen = 1) {
 			}
 		});
 	} else if(doOpen != 0) {
+		is_changed = false;  // Mark as saved before opening
 		location.href=$('#g-url')[0].value;
 	}
 }
@@ -790,6 +803,7 @@ function internal_cloudsave() {
 				modal_alert(LNG('ui.error'), LNG('led.alert.save.error') + LNG('punc.colon') + e);
 			}
 			else {
+				is_changed = false;  // Mark as saved before opening online version
 				location.href = home+'list-maker/'+e.substr(1);
 			}
 		}

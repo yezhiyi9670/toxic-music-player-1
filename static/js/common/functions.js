@@ -431,7 +431,7 @@ $(() => {
 
 // 自动调节
 $(() => {
-	if(autofit) {
+	if(window.autofit) {
 		autofit();
 	}
 });

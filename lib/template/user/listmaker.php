@@ -154,7 +154,7 @@ var cloudLenLimit = <?php echo _CT('user_playlist_limit') ?>;
 	<div>
 		<?php LNGe('led.label.url') ?><br>
 		<input type="text" id="g-url" autocomplete="off" placeholder="<?php LNGe('led.label.url.val') ?>" style="margin-right:8px;"><button type="button" class="am-btn am-btn-primary list-submit" disabled onclick="openUrl()"><?php echo LNG('led.action.open') ?></button>
-		<p <?php if($listType == 'internal') echo 'style="display:none;"'; ?>><input type="checkbox" placeholder="" id="isRand" /> <?php LNGe('led.temp.rand_next') ?>&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" placeholder="" id="isRandShuffle" /> <?php LNGe('led.temp.rand_shuffle') ?>&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" placeholder="" disabled id="isIframe" /> <?php LNGe('led.temp.integrated') ?></p>
+		<p <?php if($listType == 'internal') echo 'style="display:none;"'; ?> class="temp-list-flags"><label><input type="checkbox" placeholder="" id="isRand" /> <?php LNGe('led.temp.rand_next') ?></label>&nbsp;&nbsp;&nbsp;&nbsp;<label><input type="checkbox" placeholder="" id="isRandShuffle" /> <?php LNGe('led.temp.rand_shuffle') ?></label>&nbsp;&nbsp;&nbsp;&nbsp;<label><input type="checkbox" disabled placeholder="" id="isIframe" /> <?php LNGe('led.temp.integrated') ?></label></p>
 		<p><?php LNGe('led.data_len') ?><code class="list-len-show">0/0</code></p>
 	</div>
 	<?php if($listType == 'internal') { ?>
@@ -165,9 +165,9 @@ var cloudLenLimit = <?php echo _CT('user_playlist_limit') ?>;
 				<input value="<?php echo htmlspecial($listdata['title']) ?>" type="text" id="cloudTitle" />
 			</p>
 			<p>
-				<input <?php if($listdata['public']) echo 'checked'; ?> type="checkbox" placeholder="" id="cloudPublic" /> <?php LNGe('led.online.public') ?><br>
-				<input <?php if($listdata['transform']['pick'] == 'rand') echo 'checked'; ?> type="checkbox" placeholder="" id="cloudIsRand" /> <?php LNGe('led.online.rand_next') ?><br>
-				<input <?php if($listdata['transform']['random_shuffle']) echo 'checked'; ?> type="checkbox" placeholder="" id="cloudRandShuffle" /> <?php LNGe('led.online.rand_shuffle') ?>
+				<label><input <?php if($listdata['public']) echo 'checked'; ?> type="checkbox" placeholder="" id="cloudPublic" /> <?php LNGe('led.online.public') ?></label><br>
+				<label><input <?php if($listdata['transform']['pick'] == 'rand') echo 'checked'; ?> type="checkbox" placeholder="" id="cloudIsRand" /> <?php LNGe('led.online.rand_next') ?></label><br>
+				<label><input <?php if($listdata['transform']['random_shuffle']) echo 'checked'; ?> type="checkbox" placeholder="" id="cloudRandShuffle" /> <?php LNGe('led.online.rand_shuffle') ?></label>
 			</p>
 			<p>
 				(1) <?php LNGe('led.online.cons.1') ?>&nbsp;
@@ -232,7 +232,7 @@ var cloudLenLimit = <?php echo _CT('user_playlist_limit') ?>;
 		<div class="am-list-news-bd">
 			<ul class="am-list maker-list">
 				<li class="am-g am-list-item-dated maker-list-example" style="display:block;" data-order="0" data-id="undefined">
-					<a class="am-list-item-hd " style="margin-right:50px" ondblclick="selectItem(this)" onclick="_focus_to(this.parentElement)">
+					<a class="am-list-item-hd " style="margin-right:50px" ondblclick="selectItem(this);return false" onclick="_focus_to(this.parentElement)">
 						<span><?php LNGe('led.list.default') ?></span>
 						<br>
 						<span class="addition-cmt"><?php LNGe('led.list.default.tips') ?></span>
