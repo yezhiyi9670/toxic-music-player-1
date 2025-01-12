@@ -61,7 +61,8 @@ header('Referrer-Policy: same-origin');
  * 注意：请勿修改其中的配置选项。要修改配置，使用 configuration.php。
  */
 function _CT($i){
-	if(isset(_C()[$i])) return _C()[$i];
+	$userConfig = _C();
+	if(isset($userConfig[$i])) return $userConfig[$i];
 	$arr = array(
 		"app_name" => LNG('config.app_name'), // 软件名称自定义
 		"app_name_title" => LNG('config.app_title'),
@@ -72,7 +73,8 @@ function _CT($i){
 		"cache_expire_invalid" => 24*60*60*2, // RemotePlay 失败缓存有效时长
 		"cache_refresh_chance" => 0.35, // RemotePlay 在特定条件下自动尝试刷新缓存的概率
 		"temp_expire" => 3600, // 歌词本临时缓存有效时长
-
+		
+		"rp_enabled" => false, // 允许使用 RemotePlay，可能拖慢系统速度
 		"rp_search_retry" => 4, // RemotePlay 搜索查询失败后的最大重试次数
 		"rp_search_retry_delay" => 0.1,
 		"rp_can_pay_play" => false,

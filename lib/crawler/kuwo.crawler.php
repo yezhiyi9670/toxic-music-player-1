@@ -151,6 +151,15 @@ function kuwoSearchSong_print_fail() {
 
 // 歌曲搜索接口（直接处理_GET数据，直接输出搜索结果）
 function kuwoSearchSong() {
+	if(!_CT('rp_enabled')) {
+		if(isset($_GET['raw'])) echo encode_data([]);
+		else if(isset($_GET['return'])) {header('Content-Type: text/html');return [];}
+		else {
+			kuwoSearchSong_print_fail();
+			exit;
+		}
+	}
+
 	if(isset($_GET['json'])) {
 		header('Content-Type: application/json');
 		echo kuwo_search_httpget('https://kuwo.cn/api/www/search/searchMusicBykeyWord?key='.urlencode($_GET['key']).'&pn='.$_GET['pageid'].'&rn=50');
@@ -359,6 +368,11 @@ class kuwoCrawler {
 	//   * 如果在flag处传入true，那么系统总是会重新抓取并刷新缓存。
 	function enCache($id,$flag = false) {
 		global $retrial_remain;
+
+		if(!_CT('rp_enabled')) {
+			$this->success=false;
+			return;
+		}
 		
 		$cachefile = REMOTE_CACHE.$id.'.json';
 		if(!$flag && file_exists($cachefile)) {
@@ -440,6 +454,10 @@ class kuwoCrawler {
 	//获取音频地址并[存入内存]
 	//由于大多数音乐网站有[反盗链系统]，通常每次使用音频都要重新获取地址。
 	function _url() {
+		if(!_CT('rp_enabled')) {
+			return '';
+		}
+
 		if(!isset($this->cache['url'])){
 			if(rp_can_pay_play() || true) {
 				// API on 2021-10-30

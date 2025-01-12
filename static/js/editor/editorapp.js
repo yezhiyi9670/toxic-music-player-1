@@ -398,6 +398,9 @@ $('document').ready(function(){
 			return {};
 		}
 	});
+	if(window.autofit) {
+		autofit();
+	}
 	// $('#lyricfile').val('');
 
 	$('.txmp-page-right')[0].scrollTop=37777;

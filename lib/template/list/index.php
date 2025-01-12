@@ -31,8 +31,8 @@ if(isset($_GET['isSubmit'])) {
 		<p><?php LNGe('list.source.select') ?>&nbsp;&nbsp;
 			<a class="txmp-list-sel-legacy" onclick="$('.txmp-list-type').css('display','none');
 				$('#list-legacy').css('display','block');"><?php LNGe('list.source.internal') ?></a>&nbsp;&nbsp;&nbsp;&nbsp;
-			<a class="txmp-list-sel-kuwo" onclick="$('.txmp-list-type').css('display','none');
-				$('#list-kuwo').css('display','block');"><?php LNGe('list.source.kuwo') ?></a>&nbsp;&nbsp;&nbsp;&nbsp;
+			<?php if(_CT('rp_enabled')) { ?><a class="txmp-list-sel-kuwo" onclick="$('.txmp-list-type').css('display','none');
+				$('#list-kuwo').css('display','block');"><?php LNGe('list.source.kuwo') ?></a>&nbsp;&nbsp;&nbsp;&nbsp;<?php } ?>
 			<a class="txmp-list-sel-id" onclick="$('.txmp-list-type').css('display','none');
 				$('#list-id').css('display','block');"><?php LNGe('list.source.id') ?></a>
 		</p>
@@ -58,18 +58,20 @@ if(isset($_GET['isSubmit'])) {
 			?>
 		</ul>
 	</div>
-	<div id="list-kuwo" class="txmp-list-type" style="display:none;">
-		<p><strong><?php LNGe('list.caption.kuwo.featured') ?></strong></p>
-		<div id="list-kuwo-suggestion">
-			<button id="kuwo-show-suggestion" class="am-btn am-btn-primary" onclick="kuwo_search(1,'> __mp_suggestions__','#list-kuwo-suggestion')"><?php LNGe('ui.show') ?></button>
+	<?php if(_CT('rp_enabled')) { ?>
+		<div id="list-kuwo" class="txmp-list-type" style="display:none;">
+			<p><strong><?php LNGe('list.caption.kuwo.featured') ?></strong></p>
+			<div id="list-kuwo-suggestion">
+				<button id="kuwo-show-suggestion" class="am-btn am-btn-primary" onclick="kuwo_search(1,'> __mp_suggestions__','#list-kuwo-suggestion')"><?php LNGe('ui.show') ?></button>
+			</div>
+			<p><strong><?php LNGe('list.caption.kuwo.search') ?></strong></p>
+			<input name="kuwo-keyword" id="kuwo-keyword" type="text" data-wcl-enter-target=".txmp-kuwo-go" />
+			<button type="button" class="am-btn am-btn-primary txmp-kuwo-go" onclick="kuwo_search(1)"><?php LNGe('ui.search') ?></button>
+			<p id="list-kuwo-show">
+				<!-- -->
+			</p>
 		</div>
-		<p><strong><?php LNGe('list.caption.kuwo.search') ?></strong></p>
-		<input name="kuwo-keyword" id="kuwo-keyword" type="text" data-wcl-enter-target=".txmp-kuwo-go" />
-		<button type="button" class="am-btn am-btn-primary txmp-kuwo-go" onclick="kuwo_search(1)"><?php LNGe('ui.search') ?></button>
-		<p id="list-kuwo-show">
-			<!-- -->
-		</p>
-	</div>
+	<?php } ?>
 	<div id="list-id" class="txmp-list-type" style="display:none;">
 		<p><strong><?php LNGe('list.caption.id') ?></strong></p>
 		<p><?php echo LNG('list.desc.id') ?></p>

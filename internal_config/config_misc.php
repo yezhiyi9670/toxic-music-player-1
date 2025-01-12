@@ -12,7 +12,8 @@ function _C(){
 		"cache_expire_inivalid" => 24*60*60*2,
 		"cache_refresh_chance" => 0.35, // RemotePlay 在特定条件下自动尝试刷新缓存的概率
 		"temp_expire" => 3600, //歌词本缓存时间（用于下载。建议1小时）
-
+		
+		"rp_enabled" => false, // 允许使用 RemotePlay，可能拖慢系统速度
 		"rp_search_retry" => 4, // RemotePlay 搜索查询失败后的最大重试次数
 		"rp_search_retry_delay" => 0.1,
 		"rp_can_pay_play" => false, // 目前已不再支持

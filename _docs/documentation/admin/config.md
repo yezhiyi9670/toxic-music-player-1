@@ -65,6 +65,9 @@ Location: `internal_config/config_misc.php`
 // Lyrics book cache life, in seconds
 "temp_expire" => 3600,
 
+// Change rp_enabled to `true` to allow RemotePlay.
+// May have risk of slowing down the service.
+"rp_enabled" => false,
 // Retries of RemotePlay search. Default values are recommended
 "rp_search_retry" => 4,
 "rp_search_retry_delay" => 0.1,

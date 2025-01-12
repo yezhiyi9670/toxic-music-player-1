@@ -12,7 +12,7 @@ class VlUserSyscall {
 		$obj['title'] = $name;
 		$obj['playlist'] = [];
 		foreach($menu as $item) {
-			if(isValidMusic($item,false) && (getPerm($item)['music/index'] || is_root())) {
+			if(isValidMusic($item,false) && ((getPerm($item)['list/show'] && getPerm($item)['music/index']) || is_root())) {
 				$obj['playlist'][count($obj['playlist'])] = [
 					'id' => $item,
 					'canonical' => $item,
@@ -45,7 +45,7 @@ class VlUserSyscall {
 				}
 			}
 			// 酷我音乐的全部播放
-			if(strlen($name) > 4 && substr($name,0,4) == '1701') {
+			if(_CT('rp_enabled') && strlen($name) > 4 && substr($name,0,4) == '1701') {
 				$id = substr($name,4);
 				@$data = json_decode(kuwo_search_httpget('https://kuwo.cn/api/www/playlist/playListInfo?pid='.$id.'&pn=1&rn=1024'),true);
 				if($data['code'] != '200') {
