@@ -202,7 +202,7 @@
 		code += preDefine;
 
 		return await new Promise((resolve,reject) => {
-			var worker = new Worker('data:text/javascript,' + hd + code);
+			var worker = new Worker('data:text/javascript,' + encodeURIComponent(hd + code));
 
 			worker.onmessage = (e) => {
 				worker.terminate();
