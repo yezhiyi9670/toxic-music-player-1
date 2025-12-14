@@ -47,13 +47,13 @@ function write_data($n,$t) {
 
 /**
  * 生成随机盐
- * （无需使用密码级随机数）
+ * （密码学随机数）
  */
 function uauth_salt_gen($len = 64) {
 	$charset = '1234567890QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm';
 	$ret = '';
 	for($i = 0; $i < $len; $i++) {
-		$ret .= $charset[mt_rand(0, strlen($charset) - 1)];
+		$ret .= $charset[random_int(0, strlen($charset) - 1)];
 	}
 	return $ret;
 }
@@ -250,8 +250,8 @@ function uauth_login($name,$pass,$flag = false) {
 		return 'ban';
 	}
 
-	$sess = uauth_salt_gen(32);
-	$token = uauth_salt_gen(32);
+	$sess = randAlnumString(32);
+	$token = randAlnumString(32);
 
 	$slist[$sess] = [
 		'token' => $token,

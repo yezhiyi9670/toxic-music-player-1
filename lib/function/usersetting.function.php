@@ -2,13 +2,13 @@
 
 function setting_def() {
 	return array(
-		'global-font'=>'\'Noto Sans SC\'',
-		'lyric-font-formal'=>'\'Noto Sans SC\'',
-		'lyric-font-title'=>'\'Noto Sans SC\'',
-		'lyric-font-comment'=>'\'Noto Sans SC\'',
-		'title-font'=>'\'Noto Sans SC\'',
-		'name-font'=>'\'Noto Sans SC\'',
-		'input-font'=>'\'Noto Sans SC\'',
+		'global-font'=>'sans-serif',
+		'lyric-font-formal'=>'sans-serif',
+		'lyric-font-title'=>'sans-serif',
+		'lyric-font-comment'=>'sans-serif',
+		'title-font'=>'sans-serif',
+		'name-font'=>'sans-serif',
+		'input-font'=>'sans-serif',
 		'code-font'=>'Consolas,Monospace',
 		'allplay-rand'=>'Y',
 		'no-color-switch'=>'N',

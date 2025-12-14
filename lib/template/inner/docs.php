@@ -94,7 +94,7 @@ if($internal) {
 			<span class="cmt"><?php LNGe('docs.label.canonical.tips') ?></span>
 		</p>
 		<p style="display:none;">
-			<?php LNGe('docs.label.cache_id') ?><input type="text" name="cacheid" disabled value="<?php echo md5(rand()) ?>"><br />
+			<?php LNGe('docs.label.cache_id') ?><input type="text" name="cacheid" disabled value="<?php echo randAlnumString(32) ?>"><br />
 			<span class="cmt"><?php LNGe('docs.label.cache_id.tips',_CT('temp_expire')) ?></span>
 		</p>
 		<p><?php LNGe('docs.label.font') ?><input type="text" class="field-remember" id="mfont" name="font" value="Noto Serif SC"></p>

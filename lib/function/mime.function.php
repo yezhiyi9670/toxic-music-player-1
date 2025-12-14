@@ -14,13 +14,18 @@ function onlyConsistsOf($haystack,$needle=[]) {
 	return true;
 }
 
-// 随机字符串
-function randString($len,$charset='0123456789') {
+// 随机字符串（指定字符集，采用密码学安全随机数）
+function randString($len,$charset) {
 	$ret = '';
 	for($i = 0; $i < $len; $i++) {
-		$ret .= $charset[mt_rand(0,strlen($charset)-1)];
+		$ret .= $charset[random_int(0,strlen($charset)-1)];
 	}
 	return $ret;
+}
+
+// 随机字符串（数字和字母，采用密码学安全随机数）
+function randAlnumString($len) {
+	return randString($len, '0123456789qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM');
 }
 
 // 随机UUID

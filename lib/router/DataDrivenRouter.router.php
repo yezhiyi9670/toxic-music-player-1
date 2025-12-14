@@ -34,8 +34,8 @@ function checkCSRF($isCheck) {
 		}
 	}
 	if(!isset($_COOKIE['X-'.APP_PREFIX.'-csrf']) || !is_array($_COOKIE['X-'.APP_PREFIX.'-csrf']) || count($_COOKIE['X-'.APP_PREFIX.'-csrf'])==0) {
-		$GLOBALS['sess'] = md5(rand()); // 创建新会话
-		$GLOBALS['token'] = md5(rand());
+		$GLOBALS['sess'] = randAlnumString(32); // 创建新会话
+		$GLOBALS['token'] = randAlnumString(32);
 		setcookie('X-'.APP_PREFIX.'-csrf['.$GLOBALS['sess'].']',$GLOBALS['token'],time()+86400,'/');
 	} else {
 		if(is_array($_COOKIE['X-'.APP_PREFIX.'-csrf'])) {
