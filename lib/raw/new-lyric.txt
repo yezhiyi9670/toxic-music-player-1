@@ -1,13 +1,14 @@
 !dataver %{V}
 [Info]
 N  Untitled
-S  Unknown_Singer
+S  Unknown_Artists
 C  --
-LA --
-MA --
 G1 #777777
 G2 #AAAAAA
 O  URL_Here
+// D  0.0
+// MA --
+// LA --
 
 [Para M0 Notice]
 L 1.0 No Lyrics

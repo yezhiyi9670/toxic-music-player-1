@@ -356,6 +356,137 @@ function editor_formatheading(){
 	has_pending_changes = true;
 }
 
+async function editor_import_lrc() {
+	var obj = lyricEditor;
+	var scp = obj.getScrollInfo();
+	var sep = obj.listSelections()[0];
+	var str = obj.getValue().replace(/\r\n/g,"\n");
+
+	function parse_lrc_time_seconds(timestamp) {
+		if(!/^\d+(:\d+)*(\.[0-9]*)?$/.test(timestamp)) {
+			return undefined
+		}
+		let seen_dot = false
+		let unit = 1.0
+		let cumulative = 0
+		let current = 0
+		let zero = '0'.charCodeAt(0)
+		let nine = '9'.charCodeAt(0)
+		for(let ch of timestamp) {
+			let chc = ch.charCodeAt(0)
+			if(chc >= zero && chc <= nine) {
+				if(!seen_dot) {
+					current = current * 10 + (chc - zero)
+				} else {
+					unit /= 10
+					current += unit * (chc - zero)
+				}
+			} else if(ch == ':') {
+				cumulative += current
+				current = 0
+				seen_dot = false
+				cumulative *= 60
+			} else if(ch == '.') {
+				seen_dot = true
+			}
+		}
+		cumulative += current
+		return cumulative
+	}
+	function parse_lrc_line(line) {
+		let right_bracket_index = -1
+		let time_values = []
+		while(line.length > 0 && line[0] == '[' && (right_bracket_index = line.indexOf(']')) != -1) {
+			let timestamp = line.substring(1, right_bracket_index)
+			line = line.substring(right_bracket_index + 1)
+			let time_value = parse_lrc_time_seconds(timestamp)
+			if(time_value == undefined) {
+				return null
+			}
+			time_values.push(time_value)
+		}
+		if(time_values.length == 0) {
+			return null
+		}
+		return [
+			time_values, line
+		]
+	}
+
+	let lines = str.split('\n')
+	let newLines = []
+	let lrcItems = []
+	for(let line of lines) {
+		let parsed = parse_lrc_line(line)
+		if(parsed == null) {
+			newLines.push(line)
+		} else {
+			let [ time_values, content ] = parsed
+			time_values = time_values.map(v => Math.round(v * 1000) / 1000) // round to ms
+			for(let time_value of time_values) {
+				lrcItems.push([time_value, content])
+			}
+		}
+	}
+
+	lrcItems.sort(([t1, _c1], [t2, _c2]) => {
+		return t1 - t2
+	})
+
+	let sameTimeHandling = 'unknown'
+	let lastEntry = undefined
+	let lastTimestamp = undefined
+	for(let entry of lrcItems) {
+		if(lastTimestamp == entry[0]) {
+			if(sameTimeHandling == 'unknown') {
+				if(!await modal_confirm_p(
+					LNG('editor.action.import_lrc.same_time_handling'),
+					LNG('editor.action.import_lrc.same_time_handling.1'),
+					LNG('editor.action.import_lrc.same_time_handling.all'),
+					LNG('editor.action.import_lrc.same_time_handling.one')
+				)) {
+					sameTimeHandling = 'all'
+				} else {
+					if(!await modal_confirm_p(
+						LNG('editor.action.import_lrc.same_time_handling'),
+						LNG('editor.action.import_lrc.same_time_handling.2'),
+						LNG('editor.action.import_lrc.same_time_handling.first'),
+						LNG('editor.action.import_lrc.same_time_handling.last')
+					)) {
+						sameTimeHandling = 'first'
+					} else {
+						sameTimeHandling = 'last'
+					}
+				}
+			}
+			if(sameTimeHandling == 'first') {
+				entry[0] = -1
+			} else if(sameTimeHandling == 'last') {
+				lastEntry[0] = -1
+			}
+		}
+		lastEntry = entry
+		if(lastEntry[0] != -1) {
+			lastTimestamp = lastEntry[0]
+		}
+	}
+
+	str = newLines.join('\n')
+	if(lrcItems.length > 0) {
+		str += '\n'
+		str += '[Para All ' + LNG('editor.action.import_lrc.all_lyrics') + ']\n'
+		for(let entry of lrcItems) {
+			str += 'L ' + (entry[0] < 0 ? '-' : entry[0]) + ' ' + entry[1] + '\n'
+		}
+	}
+
+	obj.setValue(str);
+	obj.setSelection(sep.anchor,sep.head);
+	obj.scrollTo(scp.left,scp.top);
+
+	has_pending_changes = true;
+}
+
 $('document').ready(function(){
 	// 启动 CodeMirror
 	window.lyricEditor = CodeMirror.fromTextArea($('#lyricfile')[0],{

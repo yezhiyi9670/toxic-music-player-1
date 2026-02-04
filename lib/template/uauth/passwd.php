@@ -72,9 +72,10 @@ else {echo '<script>location.href=location.href;</script>';exit;}
 </script>
 <div class="txmp-page-full">
 	<h3><?php LNGe('pass.title') ?></h3>
+	<p><?php LNGe('pass.notice') ?></p>
 	<?php showToastMessage(); ?>
 	<?php if(uauth_username()) { ?>
-	<p><form method="post">
+	<form method="post">
 		<input type="hidden" name="csrf-token-name" value="<?php echo $GLOBALS['sess'] ?>">
 		<input type="hidden" name="csrf-token-value" value="<?php echo $GLOBALS['token'] ?>">
 		<input type="hidden" name="isSubmit" value="passwd">
@@ -82,19 +83,27 @@ else {echo '<script>location.href=location.href;</script>';exit;}
 		<input style="margin-bottom:8px;" type="password" name="newpass" autocomplete="off" placeholder="<?php LNGe('pass.field.new') ?>"><br>
 		<input style="margin-bottom:8px;" type="password" name="newpassagain" autocomplete="off" placeholder="<?php LNGe('pass.field.new2') ?>"><br>
 		<input type="submit" class="am-btn am-btn-secondary" value="<?php LNGe('pass.field.change') ?>">
-	</form></p>
+	</form>
 	<hr>
 	<p><strong><?php LNGe('pass.remove.caption') ?></strong></p>
-	<p><form method="post">
+	<p><?php LNGe('pass.remove.warning') ?></p>
+	<button id="remove-user-show-form-button" class="am-btn am-btn-danger" onclick="
+		$('#remove-user-show-form-button').hide()
+		$('#remove-user-form').show()
+	">
+		<?php LNGe('pass.field.show_form') ?>
+	</button>
+	<form method="post" id="remove-user-form" style="display:none;">
 		<input type="hidden" name="csrf-token-name" value="<?php echo $GLOBALS['sess'] ?>">
 		<input type="hidden" name="csrf-token-value" value="<?php echo $GLOBALS['token'] ?>">
 		<input type="hidden" name="isSubmit" value="remove">
 		<input style="margin-bottom:8px;" type="text" name="rm_uname" autocomplete="off" placeholder="<?php LNGe('pass.field.username') ?>"><br>
 		<input style="margin-bottom:8px;" type="password" name="pass" autocomplete="off" placeholder="<?php LNGe('pass.field.pass') ?>"><br>
 		<input type="submit" class="am-btn am-btn-danger" value="<?php LNGe('pass.field.delete') ?>">
-	</form></p>
+	</form>
 	<hr>
 	<p><strong><?php LNGe('pass.dump.caption') ?></strong></p>
+	<p><?php LNGe('pass.dump.notice') ?></p>
 	<p><button class="am-btn am-btn-warning" onclick="dump_cookie()"><?php LNGe('pass.dump.action') ?></button></p>
 	<script>
 		async function dump_cookie() {

@@ -36,16 +36,19 @@ load_js('js/editor/editorapp');
 	<div class="txmp-page-left" style="position:<?php echo is_wap()?"auto":"fixed" ?>;">
 		<div id="toolbox">
 			<span class="am-dropdown" data-am-dropdown>
-				<button type="button" class="am-btn am-dropdown-toggle"><?php LNGe('editor.cate.basic') ?></button>
+				<button type="button" class="am-btn am-dropdown-toggle"><?php LNGe('editor.cate.shortcut') ?></button>
 				<ul class="am-dropdown-content" style="max-height:480px;overflow:auto;" onclick="$('.am-dropdown').dropdown('close')">
-					<li class="am-dropdown-header"><?php LNGe('editor.cate.basic') ?></li>
+					<li class="am-dropdown-header"><?php LNGe('editor.cate.shortcut') ?></li>
 					<li><a onclick="editor_nl()"><?php LNGe('editor.action.trim') ?></a></li>
 					<li><a onclick="editor_addl()"><?php LNGe('editor.action.addl') ?></a></li>
 					<li><a onclick="editor_rmsym()"><?php LNGe('editor.action.strip') ?></a></li>
-					<li><a onclick="editor_formatheading()"><?php LNGe('editor.action.reformat') ?></a></li>
+					<li class="am-divider"></li>
 					<li><a onclick="editor_cleartime('-')"><?php LNGe('editor.action.deletetime') ?></a></li>
 					<li><a onclick="editor_cleartime('__LT__')"><?php LNGe('editor.action.emptytime') ?></a></li>
+					<li class="am-divider"></li>
+					<li><a onclick="editor_formatheading()"><?php LNGe('editor.action.reformat') ?></a></li>
 					<li><a onclick="editor_fixtime('__LT__')"><?php LNGe('editor.action.fixtime') ?></a></li>
+					<li><a onclick="editor_import_lrc()"><?php LNGe('editor.action.import_lrc') ?></a></li>
 				</ul>
 			</span>
 			<span class="am-dropdown" data-am-dropdown>

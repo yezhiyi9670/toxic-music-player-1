@@ -2,14 +2,14 @@
 
 function setting_def() {
 	return array(
-		'global-font'=>'sans-serif',
-		'lyric-font-formal'=>'sans-serif',
-		'lyric-font-title'=>'sans-serif',
-		'lyric-font-comment'=>'sans-serif',
-		'title-font'=>'sans-serif',
-		'name-font'=>'sans-serif',
-		'input-font'=>'sans-serif',
-		'code-font'=>'Consolas,Monospace',
+		'global-font'=>'',
+		'lyric-font-formal'=>'',
+		'lyric-font-title'=>'',
+		'lyric-font-comment'=>'',
+		'title-font'=>'',
+		'name-font'=>'',
+		'input-font'=>'',
+		'code-font'=>'',
 		'allplay-rand'=>'Y',
 		'no-color-switch'=>'N',
 		'limited-selection'=>'Y',

@@ -17,7 +17,7 @@ function wait_file($n) {
 			unlock_file($n);
 			break;
 		}
-		sleep(0.8);
+		usleep(800 * 1000);
 	}
 }
 

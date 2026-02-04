@@ -857,21 +857,23 @@ function setNextIndex(isRandomSelect) {
 			$('#song-list-item-' + list[i]).addClass('songlist-status-deny');
 		}
 	}
-	// 非云歌单不可能发生此情况，因为入口点必为可访问项目。
+	// ~~非云歌单不可能发生此情况，因为入口点必为可访问项目。~~ 非也，这个歌曲可能不可播放。
 	if(nxtList.length == 0) {
-		var action = cloudData['transform']['termination'];
-		if(action == 'end') nxt_idx = false;
-		else if(action == 'loop') nxt_idx = curr_idx;
-		else {
-			// 重新构造
-			nxtList = [];
-			for(let i=0;i<list.length;i++) {
-				if(listMeta[i] != null && listMeta[i].cant_play != true) {
-					nxtList[nxtList.length] = list[i];
+		if(isCloudSave) {
+			var action = cloudData['transform']['termination'];
+			if(action == 'end') nxt_idx = false;
+			else if(action == 'loop') nxt_idx = curr_idx;
+			else {
+				// 重新构造
+				nxtList = [];
+				for(let i=0;i<list.length;i++) {
+					if(listMeta[i] != null && listMeta[i].cant_play != true) {
+						nxtList[nxtList.length] = list[i];
+					}
 				}
+				var sel = nxtList[Math.floor(Math.random() * nxtList.length)];
+				nxt_idx = list_idx[sel];
 			}
-			var sel = nxtList[Math.floor(Math.random() * nxtList.length)];
-			nxt_idx = list_idx[sel];
 		}
 	} else if(isRandomSelect) {
 		var sel = nxtList[Math.floor(Math.random() * nxtList.length)];
@@ -926,7 +928,20 @@ function playPreInit() {
 	$('.menu-curr-display').html(listName[curr_idx]);
 	$('.menu-curr-display > .addition-cmt > .txmp-tag.tag-blue-g').remove();
 	$('.menu-curr-display > .addition-cmt > .txmp-tag.tag-purple-g').remove();
-	$('.menu-curr-display > .addition-cmt').append($('<span class="txmp-tag tag-cyan-g">'+fa_icon('pencil')+escapeXml(listMeta[curr_idx]['LA'])+' | '+escapeXml(listMeta[curr_idx]['MA'])+'</span>'+'<span class="txmp-tag tag-orange-g">'+fa_icon('book')+escapeXml(listMeta[curr_idx]['C'])+'</span>'));
+	if(['', '--'].indexOf(listMeta[curr_idx]['LA']) == -1 || ['', '--'].indexOf(listMeta[curr_idx]['MA']) == -1) {
+		$('.menu-curr-display > .addition-cmt').append($(
+			'<span class="txmp-tag tag-cyan-g">' +
+			fa_icon('pencil') +
+			escapeXml(listMeta[curr_idx]['LA']) + ' | ' + escapeXml(listMeta[curr_idx]['MA']) +
+			'</span>'
+		));
+	}
+	$('.menu-curr-display > .addition-cmt').append($(
+		'<span class="txmp-tag tag-orange-g">' +
+		fa_icon('book') +
+		escapeXml(listMeta[curr_idx]['C']) +
+		'</span>'
+	));
 
 	updated_lrcpos = [null,null];
 

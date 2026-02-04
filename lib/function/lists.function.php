@@ -14,7 +14,9 @@ function printFuncLink($id) {
 
 // 主页上的列表
 function printIndexList($item,$url=true) {
-	echo '<li style="color:#'.htmlspecial2(GSM($item)['A']).';" class="song-item" id="item-' . strval($item) . '">';
+	$meta = GSM($item);	
+
+	echo '<li style="color:#'.htmlspecial2($meta['A']).';" class="song-item" id="item-' . strval($item) . '">';
 	if(!$url) echo '<span class="am-dropdown song-item-title" data-am-dropdown>';
 	echo '<a';
 	if($url) {
@@ -22,25 +24,25 @@ function printIndexList($item,$url=true) {
 		echo ' class="song-item-title"';
 	}
 	else echo ' class="am-dropdown-toggle"';
-	echo ' style="color:#'.GSM($item)['A'].';" data-id="'.$item.'">';
-	echo htmlspecial2(GSM($item)['N']).' - '.htmlspecial2(GSM($item)['S']);
+	echo ' style="color:#'.$meta['A'].';" data-id="'.$item.'">';
+	echo htmlspecial2($meta['N']).' - '.htmlspecial2($meta['S']);
 	echo '</a>';
 	if(!$url) {
 		echo '<ul class="am-dropdown-content" onclick="$(\'.am-dropdown\').dropdown(\'close\')">';
 		// 编辑
-		echo '<li><a href="'.BASIC_URL.$item.'/edit" style="color:#'.htmlspecial2(GSM($item)['A']).';">' . LNG('list.action.edit') . '</a></li>';
+		echo '<li><a href="'.BASIC_URL.$item.'/edit" style="color:#'.htmlspecial2($meta['A']).';">' . LNG('list.action.edit') . '</a></li>';
 		// 资源管理
-		echo '<li><a href="'.BASIC_URL.$item.'/resource" style="color:#'.htmlspecial2(GSM($item)['A']).';">' . LNG('list.action.resource') . '</a></li>';
+		echo '<li><a href="'.BASIC_URL.$item.'/resource" style="color:#'.htmlspecial2($meta['A']).';">' . LNG('list.action.resource') . '</a></li>';
 		// 查看
-		echo '<li><a href="'.BASIC_URL.$item.'" target="_blank" style="color:#'.htmlspecial2(GSM($item)['A']).';">' . LNG('list.action.view') . '</a></li>';
+		echo '<li><a href="'.BASIC_URL.$item.'" target="_blank" style="color:#'.htmlspecial2($meta['A']).';">' . LNG('list.action.view') . '</a></li>';
 		// 文档
-		echo '<li><a href="'.BASIC_URL.$item.'/docs" target="_blank" style="color:#'.htmlspecial2(GSM($item)['A']).';">' . LNG('list.action.doc') . '</a></li>';
+		echo '<li><a href="'.BASIC_URL.$item.'/docs" target="_blank" style="color:#'.htmlspecial2($meta['A']).';">' . LNG('list.action.doc') . '</a></li>';
 		// 调试代码
-		echo '<li><a href="'.BASIC_URL.$item.'/code" target="_blank" style="color:#'.htmlspecial2(GSM($item)['A']).';">' . LNG('list.action.code') . '</a></li>';
+		echo '<li><a href="'.BASIC_URL.$item.'/code" target="_blank" style="color:#'.htmlspecial2($meta['A']).';">' . LNG('list.action.code') . '</a></li>';
 		// 下载
-		echo '<li><a href="'.getDownloadUrl($item).'" target="_blank" style="color:#'.htmlspecial2(GSM($item)['A']).';">' . LNG('list.action.download') . '</a></li>';
+		echo '<li><a href="'.getDownloadUrl($item).'" target="_blank" style="color:#'.htmlspecial2($meta['A']).';">' . LNG('list.action.download') . '</a></li>';
 		// 权限设置
-		echo '<li><a href="'.BASIC_URL.$item.'/permission" style="color:#'.htmlspecial2(GSM($item)['A']).';">'.permissionMarks(getPerm($item)).'</a></li>';
+		echo '<li><a href="'.BASIC_URL.$item.'/permission" style="color:#'.htmlspecial2($meta['A']).';">'.permissionMarks(getPerm($item)).'</a></li>';
 		echo '</ul>';
 	}
 	if(!$url) echo '</span>';
@@ -61,15 +63,17 @@ function printIndexList($item,$url=true) {
 		echo '<span class="txmp-tag tag-red-l">' . fa_icon('exclamation-triangle') . LNG('quality.err') . '</span>';
 	}
 	// 作者
-	echo '<span class="txmp-tag tag-cyan-g txmp-tag-author">'.fa_icon('pencil').htmlspecial2(GSM($item)['LA']).' | '.htmlspecial2(GSM($item)['MA']).'</span>';
+	if(!in_array($meta['LA'], ['', '--']) || !in_array($meta['MA'], ['', '--'])) {
+		echo '<span class="txmp-tag tag-cyan-g txmp-tag-author">'.fa_icon('pencil').htmlspecial2($meta['LA']).' | '.htmlspecial2($meta['MA']).'</span>';
+	}
 	// 专辑
-	echo '<span class="txmp-tag tag-orange-g txmp-tag-album">'.fa_icon('book').htmlspecial2(GSM($item)['C']).'</span>';
+	echo '<span class="txmp-tag tag-orange-g txmp-tag-album">'.fa_icon('book').htmlspecial2($meta['C']).'</span>';
 	// 上传日期
 	if(!$url && getAudioPath(FILES . $item . '/song',false)) echo '<span class="txmp-tag tag-blue-g">'.fa_icon('calendar').date('Y/m/d H:i:s',getAudioMtime(FILES . $item . '/song')).'</span>';
 	// 权限
 	if(!$url) echo '<span class="txmp-tag tag-purple-g">'.fa_icon('key').permissionMarks(getPerm($item)).'</span>';
 	// 没有封面
-	if(!$url && !GSM($item)['P']) {
+	if(!$url && !$meta['P']) {
 		echo '<span class="txmp-tag tag-deep-orange-l">'.fa_icon('exclamation-circle').LNG('list.tag.no_cover').'</span>';
 	}
 	echo '</span>';
@@ -196,11 +200,13 @@ function printKListList($item) {
 
 // 歌单上的listname
 function printPlayerList($item, $isCloud = false, $isNull = false) {
+	$meta = GSM($item);
+
 	$txt="";
 	$txt.='<span';
 	$txt.='>';
 	if(!$isNull) {
-		$txt .= htmlspecial2(GSM($item)['N']).' - '.htmlspecial2(GSM($item)['S']);
+		$txt .= htmlspecial2($meta['N']).' - '.htmlspecial2($meta['S']);
 	} else {
 		// 歌曲不可用
 		$txt .= htmlspecial2(LNG('comp.invalid_song')) . ' ';
@@ -231,8 +237,8 @@ function printPlayerList($item, $isCloud = false, $isNull = false) {
 
 		// if(is_wap()) $txt.='<br>';
 		// $txt.='<span class="txmp-tag tag-cyan-g"';
-		// if(!is_wap()) $txt.='>'.LNG('list.tag.author').htmlspecial2(GSM($item)['LA']).' | '.htmlspecial2(GSM($item)['MA']).'</span>';
-		// $txt.='<span class="txmp-tag tag-orange-g">'.LNG('list.tag.cate').htmlspecial2(GSM($item)['C']).'</span>';
+		// if(!is_wap()) $txt.='>'.LNG('list.tag.author').htmlspecial2($meta['LA']).' | '.htmlspecial2($meta['MA']).'</span>';
+		// $txt.='<span class="txmp-tag tag-orange-g">'.LNG('list.tag.cate').htmlspecial2($meta['C']).'</span>';
 		// 查看次数
 		$txt.='<span class="txmp-tag tag-blue-g txmp-tag-times">'.fa_icon('eye').'<span id="list-playtimes-'.$item.'">&nbsp;</span></span>';
 		// 权值
